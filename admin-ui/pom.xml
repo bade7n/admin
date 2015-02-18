@@ -11,11 +11,6 @@
 	<artifactId>admin-ui</artifactId>
 	<name>admin-ui</name>
 	<packaging>war</packaging>
-	<properties>
-		<hibernate.version>4.3.6.Final</hibernate.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<scope>provided</scope>
-	</properties>
 
 	<dependencies>
 

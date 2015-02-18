@@ -14,7 +14,7 @@ import ru.yar.vi.rm.data.OfficeDO;
 import java.util.Collection;
 
 public class DurationTest extends BaseTest {
-	@Test
+	//@Test
     @Ignore
 	public void officeFilterTest() {
 		OfficeDO office = new OfficeDO();

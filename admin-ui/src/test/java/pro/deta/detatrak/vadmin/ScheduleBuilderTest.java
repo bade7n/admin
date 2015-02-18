@@ -14,7 +14,7 @@ import java.util.List;
 public class ScheduleBuilderTest {
 
 
-    @Test
+    //@Test
     public void tokenizerTest() throws Exception {
         List<SchedulePattern> patterns = ScheduleBuilder
                 .stringToModel("10:00-13:00+14:00-15:00|6;10:00-13:00+14:00-17:00|245&39,41;10:00-12:00|135&1-23,3,2");

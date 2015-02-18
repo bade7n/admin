@@ -15,7 +15,7 @@ import java.util.Collection;
 
 public class ScheduleTest extends BaseTest {
 
-	@Test
+	//@Test
     @Ignore
     public void scheduleFilterTest() {
     	Filter filter = new Compare.Equal("object.office", 1);

@@ -17,7 +17,7 @@ import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 
 public class WeekendTest extends BaseTest {
-	@Test
+	//@Test
 	public void officeFilterTest() {
 		OfficeDO office = new OfficeDO();
 		office.setId(5);
@@ -46,7 +46,7 @@ public class WeekendTest extends BaseTest {
 
 	}
 
-	@Test
+	//@Test
 	public void weekendFilterTest() {
 		OfficeDO office = new OfficeDO();
 		office.setId(1);
