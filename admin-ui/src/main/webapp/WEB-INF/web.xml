@@ -40,7 +40,7 @@
 		<init-param>
 			<description>Application widgetset</description>
 			<param-name>productionMode</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 	</servlet>
 	
