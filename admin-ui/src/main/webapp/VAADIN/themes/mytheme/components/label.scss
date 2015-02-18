@@ -1,0 +1,42 @@
+@mixin admin-label {
+	
+	/* TODO fix in base theme */
+	.v-label {
+		overflow: visible;
+	}
+	
+	.v-label.h1 {
+		font-size: 54px;
+    	font-weight: 100;
+		line-height: 1;
+		margin-bottom:10px;
+		-webkit-font-smoothing: antialiased;
+	/* 	color: #404346; */
+	}
+	
+	.v-label.h2 {
+		color: #404346;
+		font-size: 22px;
+		line-height: 1;
+		font-weight: normal;
+		padding: .5em 0;
+		-webkit-font-smoothing: antialiased;
+	}
+	
+	.v-label-error {
+		color: RGB(186, 0, 0);
+		display: block;
+	}
+	
+	.v-label.h4, .welcome {
+		font-weight: bold;
+		text-transform: uppercase;
+		color: #349aff;
+	}
+	
+	.v-label-small {
+		font-size: 85%;
+		display: inline;
+	}
+
+}

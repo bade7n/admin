@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/vadmin">
+  <ResourceLink 
+            name="jdbc/RecordManagerDS"
+            global="jdbc/RecordManagerDS"
+            type="javax.sql.DataSource"/>
+</Context>

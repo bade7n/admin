@@ -1,0 +1,8 @@
+@mixin admin-scheduleelement {
+
+  .v-scheduleelement {
+
+    @include border-radius(3px);
+    background: #eee;
+  }
+}

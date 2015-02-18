@@ -1,0 +1,12 @@
+@mixin admin-schedulelayout {
+
+  .v-horizontallayout-schedule {
+
+    @include border-radius(3px);
+    border: 1px solid #c9c8c7;
+    border-top-color: #d8d7d6;
+
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(51,50,49,.07);
+  }
+}

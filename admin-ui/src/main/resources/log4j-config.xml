@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration>
+	<appender name="f1" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/detatrak.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c %t: %m%n" />
+		</layout>
+	</appender>
+	<category name="ru">
+		<priority value="warn" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="pro">
+		<priority value="warn" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="org.apache.struts">
+		<priority value="error" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="org.hibernate">
+		<priority value="error" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="org.hibernate.SQL" additivity="false">
+		<priority value="warn" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="org.hibernate.HQL" additivity="false">
+		<priority value="warn" />
+		<appender-ref ref="f1" />
+	</category>
+	<category name="org.hibernate.type" additivity="false">
+		<priority value="warn" />
+		<appender-ref ref="f1" />
+	</category>
+</log4j:configuration>

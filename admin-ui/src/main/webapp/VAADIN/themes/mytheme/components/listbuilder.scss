@@ -1,0 +1,41 @@
+@mixin listbuilder {
+/* Styles for the ListBuilder add-on */
+.v-modified .v-listbuilder-selections,
+.v-modified .v-listbuilder-options {
+	background: #ffffe0;
+}
+.v-listbuilder {
+	white-space: nowrap;
+}
+
+/* Styles for the list boxes and their captions */
+.v-listbuilder-options {
+	float: left;
+}
+.v-listbuilder-caption-left {
+	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.v-listbuilder-selections {
+	float: left;
+}
+.v-listbuilder-caption-right {
+	float: right;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Custom Button styles */
+.v-listbuilder-buttons {
+	float: left;
+	text-align: center;
+}
+.v-listbuilder-buttons .v-listbuilder-deco {
+	clear: both;
+}
+.v-listbuilder-buttons .v-button {
+	float: none;
+}
+ 
+}

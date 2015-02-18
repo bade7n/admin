@@ -1,0 +1,120 @@
+@mixin admin-button {
+
+  $outline: 0 0 0 2px rgba(49,50,51,.07);
+
+  .v-button, .v-datefield-button {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid rgba(0, 0, 0, 0);
+	border-radius: 4px 4px 4px 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 7px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+	color: #ffffff;
+    background-color: #428BCA;
+    border-color: #357EBD;
+  }
+  
+  .v-button-link {
+  	background: none repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+    border: 0 none !important;
+    color: #357EBD !important;
+    padding: 0;
+    text-align: left !important;
+  }
+  
+  .v-datefield-button {
+  	padding: 0;
+  }
+  
+  .v-button:hover {
+    background-color: #3276b1;
+  	border-color: #285e8e;
+  }
+
+  .v-webkit & .v-button {
+    padding-bottom: .35em;
+  }
+
+  /* Align caption and icon vertically to middle when the button has an explicit height */
+  .v-has-height.v-button:before {
+    display: inline-block;
+    content: "";
+    vertical-align: middle;
+    height: 100%;
+    width: 0;
+  }
+
+  .v-pressed {
+	background-color: #3276B1;
+    border-color: #285E8E;
+  }
+
+  .wide.v-button {
+    padding-left: 1.8em;
+    padding-right: 1.8em;
+  }
+
+  .small.v-button {
+	line-height: initial;
+	padding: 5px 5px 5px 5px;
+    font-size: 12px;
+  }
+
+  .link.v-button,
+  .link.v-button:active,
+  .link.v-pressed.v-button,
+  .link.v-button:focus {
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: 0;
+    padding: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    text-shadow: inherit;
+    background-color: #3276B1;
+    border-color: #285E8E;
+  }
+
+
+  .icon-only.v-button {
+    padding-left: .8em;
+    padding-right: .8em;
+  }
+
+  .icon-only.v-button .v-button-caption {
+    display: none;
+  }
+  
+	.v-select-twincol-buttons .v-button {
+		background-color: #FFFFFF;
+    	border-color: #CCCCCC;
+    	color: #333333;
+	}
+	.v-select-twincol-buttons .v-button:hover {
+		background-color: #EBEBEB;
+    	border-color: #ADADAD;
+    	color: #333333;
+	}
+	
+	.std.v-button {
+		background-color: #FFFFFF;
+    	border-color: #CCCCCC;
+    	color: #333333;
+    	margin-left: 10px;
+	}
+	.std.v-button:hover {
+		background-color: #EBEBEB;
+    	border-color: #ADADAD;
+    	color: #333333;
+	}
+
+
+}

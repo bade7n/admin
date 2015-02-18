@@ -1,0 +1,275 @@
+@import "../base/base.scss";
+
+@import "icons/fontello.scss";
+@import "fonts/open-sans.scss";
+@import "fonts/glyphicons.scss";
+@import "keyframes.scss";
+
+/* TODO move common mixins to base theme */
+@import "mixins.scss";
+@import "common.scss";
+
+@import "components/button.scss";
+@import "components/label.scss";
+@import "components/tabsheet.scss";
+@import "components/table.scss";
+@import "components/combobox.scss";
+@import "components/textfield.scss";
+@import "components/window.scss";
+@import "components/twincolselect.scss";
+@import "components/textarea.scss";
+@import "components/schedulelayout.scss";
+@import "components/sheduleelement.scss";
+@import "components/listbuilder.scss";
+
+
+@mixin mytheme {
+  @include base;
+    
+  @include mytheme-common;
+  /* Include all the styles from the reindeer theme */
+  @include admin-label;
+  @include admin-table;
+  @include admin-tabsheet;
+  @include admin-combobox;
+  @include admin-textfield;
+  @include admin-window;
+  @include admin-twincolselect;
+  @include admin-textarea;
+  @include admin-schedulelayout;
+  @include admin-scheduleelement;
+  @include admin-button;
+  @include font-glyphicons;
+  @include listbuilder;
+  
+  .tabsheet-content {
+  	padding: 15px 15px 15px 15px;
+  	background-color: #ffffff;
+  }
+
+  /* Insert your theme rules here */
+  
+  .slot-view-content {
+  	padding: 15px 15px 15px 15px;
+  	background-color: #f0f0f0;
+  }
+   
+  .sidebar {
+    background: #414243 url(img/sidebar-gradient.png) repeat-y top right;
+    @include move-right;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .sidebar .menu {
+    overflow: auto;
+    height: 100%;
+  }
+
+  .head {
+    border: 2px inset #bfc0c1;
+    border-radius: 4px;
+    background: silver;
+    height: 35px;
+  }
+
+  .sidebar .menu .v-ddwrapper-over {
+    padding: 0;
+    border: 2px solid #2d90f3;
+    background: transparent;
+    @include border-radius(4px);
+  }
+
+  .sidebar .menu .v-nativebutton {
+    -webkit-appearance: none;
+
+    display: block;
+    padding: 8px 8px 8px 8px;
+    width: 100%;
+    border: none;
+    margin: 0;
+    position: relative;
+
+    border-top: 1px solid #4b4c4d;
+    //border-top-color: rgba(255,255,255,.05);
+
+    border-bottom: 2px solid #e1e1e1;
+    //border-bottom-color: rgba(255,255,255,.88);
+
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.05) -moz-use-text-color rgba(0, 0, 0, 0.18);
+
+    color: #888a8c;
+    font-weight: normal;
+    text-shadow: 0 1px 0 rgba(0,0,0,.5);
+    text-align: center;
+  }
+  
+  .v-tabsheet-tabitem .v-caption {
+  	width: 100% !important;
+  }
+
+
+  .sidebar .menu:after {
+    content: "";
+    display: block;
+    border-top: 1px solid #4b4c4d;
+    border-top-color: rgba(255,255,255,.05);
+    height: 0;
+  }
+
+  .sidebar .menu .v-nativebutton-caption {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+//    margin: .2em 0 0 0;
+  }
+
+  .sidebar .menu .v-nativebutton:focus {
+    outline: none;
+  }
+
+  .sidebar .menu .v-nativebutton:hover,
+  .sidebar .menu .v-nativebutton-selected,
+  .sidebar .menu .v-nativebutton:focus {
+    color: #e1e1e1;
+  }
+
+  .sidebar .menu .v-nativebutton:before {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+/* Office navigation bar and current user display styles. */
+  .navbar {
+  	background-color: #F8F8F8;
+  	border: 1px solid #E7E7E7;
+  	border-radius: 4px;
+  	min-height: 50px;
+  	line-height: 50px;
+  	-moz-box-sizing: border-box;
+  	padding: 0px 20px 0px 0px;
+  }
+
+	.navbar:after {
+		clear: both;
+	}
+	
+	.navbar:before, .navbar:after {
+		content: " ";
+		display: table;
+	}
+	
+	
+	.v-select select {
+		background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    vertical-align: middle;
+    width: 100%;
+	}
+	
+	.v-select-small select {
+		border-radius: 3px;
+    	font-size: 12px;
+    	height: 30px;
+    	line-height: 1.5;
+    	padding: 5px 10px;
+	}
+	
+	.v-select-small {
+		vertical-align: middle;
+	}
+
+	.glyphicon {
+		margin: 0px 0px 0px 10px;
+	}
+	
+	.v-formlayout {
+		padding: 1em;
+	}
+	
+	.v-formlayout-captioncell .v-caption {
+		font-weight: bold;
+		color: #5A6066;
+	}
+	.v-formlayout-captioncell {
+		vertical-align: top;
+		width: 2%;
+	}
+	.v-textfield, .v-filterselect {
+		width: 100%;
+	}
+	.v-select-twincol-buttons {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	.v-slot-login-bg {
+    	background: radial-gradient(ellipse farthest-corner at center center , #4C4D4E 0%, #303131 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+	}
+
+	.v-slot-login-bg:before {
+	    content: "";
+	}
+
+	.v-slot-login-bg .login-panel {
+		animation: 800ms cubic-bezier(0.165, 0.84, 0.44, 1) 0s normal none 1 move-up-100;
+	    background-color: #f0f0f0;
+	    border-radius: 4px;
+	    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	    padding: 2em 2em 3em;
+	}
+	
+	@-moz-keyframes move-up-100 {
+    	0% {
+        	opacity: 0;
+	        transform: translateY(100px);
+	    }
+	}
+	
+	.v-textfield-login {
+		font-size: 14px;
+	}
+	
+	.welcome {
+		display: block;
+		padding-bottom: 15px;
+	}
+	
+	.v-textfield-login {
+		font-size: 15px;
+		padding: 6px 12px !important;
+		margin-right: 10px;
+	}
+	
+	.v-slot-login {
+		padding-right: 5px;
+	}
+	
+	// confirmation dialog
+	#confirmdialog-message {
+		text-align: center;
+	}
+
+	.v-table-cell-wrapper {
+    	white-space: normal;
+	}
+	
+	.v-textarea-hidden {
+		overflow: hidden;
+	}
+}
+
