@@ -48,12 +48,20 @@
 	transform: $t;
 }
 
+/*
 @mixin animation ($name, $duration, $easing) {
 	-webkit-animation: $name $duration $easing;
 	-moz-animation: $name $duration $easing;
 	-ms-animation: $name $duration $easing;
 	-o-animation: $name $duration $easing;
 	animation: $name $duration $easing;
+}
+*/
+
+@mixin animation ($anim) {
+    -webkit-animation: $anim;
+    -moz-animation: $anim;
+    animation: $anim;
 }
 
 @mixin animation-duration ($duration) {
