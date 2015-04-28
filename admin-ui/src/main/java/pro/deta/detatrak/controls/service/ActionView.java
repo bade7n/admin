@@ -1,10 +1,6 @@
 package pro.deta.detatrak.controls.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.data.ActionDO;
@@ -23,8 +19,6 @@ public class ActionView extends JPAEntityViewBase<ActionDO> {
 	private JPAContainer<ValidatorDO> validatorContainer = JPAUtils.createCachingJPAContainer(ValidatorDO.class);
 	private JPAContainer<ObjectTypeItemDO> objectTypeContainer = JPAUtils.createCachingJPAContainer(ObjectTypeItemDO.class);
 	private JPAContainer<NotificationDO> notificationContainer = JPAUtils.createCachingJPAContainer(NotificationDO.class);
-	
-	ListBuilder listBuilder = null;
 	
     public ActionView() {
     	super(ActionDO.class);
@@ -58,14 +52,7 @@ public class ActionView extends JPAEntityViewBase<ActionDO> {
 
 	}
 	
-	@Override
-	public void saveEntity(ActionDO obj) {
-		listBuilder.commit();
-		obj.getType().clear();
-		for(Integer id: (List<Integer>)listBuilder.getValue()) {
-			obj.getType().add(objectTypeContainer.getItem(id).getEntity());
-		}
-	}
+
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;
