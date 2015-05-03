@@ -128,4 +128,17 @@
     <module>admin-ui</module>
     <module>admin-production</module>
   </modules>
+  
+  	<profiles>
+		<profile>
+			<id>gbd</id>
+			<activation><activeByDefault>true</activeByDefault></activation>
+			<properties>
+				<db.username>gbd</db.username>
+				<db.password>gbd1</db.password>
+				<db.url>jdbc:postgresql://127.0.0.1:5432/gbd?autoReconnect=true</db.url>
+			</properties>
+		</profile>
+	
+	</profiles>
 </project>
