@@ -3,7 +3,7 @@ package pro.deta.detatrak;
 import java.util.ArrayList;
 import java.util.List;
 
-import pro.deta.detatrak.controls.admin.RoleView;
+import pro.deta.detatrak.controls.service.ActionView;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.MyTwinColSelectStringConverter;
@@ -43,14 +43,14 @@ public class MyTestUI extends MyUI {
 //		user.setName("admin");
 		user.setDescription("Администратор");
 		buildOfficeChooser();
-		getNavigator().navigateTo(ScheduleTabsView.NAV_KEY);
+//		getNavigator().navigateTo(ScheduleTabsView.NAV_KEY);
 		
 		buildOfficeChooser();
 		root.removeAllComponents();
 		
 		setNavigator(new Navigator(this, root));
-		getNavigator().addView("roleView", new RoleView());
-		getNavigator().navigateTo("roleView/rm-oper");
+		getNavigator().addView("actionView", new ActionView());
+		getNavigator().navigateTo("actionView/1");
 	}
 
 	private void generate3(VerticalLayout root) {
