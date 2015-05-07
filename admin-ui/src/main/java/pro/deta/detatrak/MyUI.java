@@ -138,7 +138,7 @@ public class MyUI extends UI {
 
 
 	
-	private void buildMenu() {
+	protected void buildMenu() {
 		this.viewDisplay = new MyViewDisplay(content);
 		setNavigator(new Navigator(this, viewDisplay));
 		root.addStyleName("main-view");

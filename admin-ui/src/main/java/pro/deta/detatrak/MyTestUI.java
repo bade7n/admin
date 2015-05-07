@@ -45,12 +45,13 @@ public class MyTestUI extends MyUI {
 		buildOfficeChooser();
 //		getNavigator().navigateTo(ScheduleTabsView.NAV_KEY);
 		
-		buildOfficeChooser();
+//		buildOfficeChooser();
 		root.removeAllComponents();
-		
+//		buildMenu();
 		setNavigator(new Navigator(this, root));
 		getNavigator().addView("actionView", new ActionView());
-		getNavigator().navigateTo("actionView/1");
+//		getNavigator().navigateTo("actionView/1");
+		getNavigator().navigateTo("/service");
 	}
 
 	private void generate3(VerticalLayout root) {

@@ -1,13 +1,9 @@
 package pro.deta.detatrak.presenter;
 
-import java.util.List;
-
-import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.IAction;
 import pro.deta.detatrak.event.EventBase;
 import pro.deta.detatrak.event.EventDispatcher;
 
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;

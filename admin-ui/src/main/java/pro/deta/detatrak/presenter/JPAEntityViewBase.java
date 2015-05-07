@@ -55,7 +55,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 	}
 	
 	@Override
-	final protected void buildUI(String parameter) {
+	protected void buildUI(String parameter) {
 		item = null;
 		itemId = getItemId(parameter);
 		form.removeAllComponents();
@@ -76,24 +76,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 		
 	}
 
-	final protected void buildUI(EntityItem<E> item) {
-		this.item = item;
-		form.removeAllComponents();
-		
-		binder = new FieldGroup();
-//		binder.setBuffered(false);
-		if(item == null) {
-			// если создаём новый объект - не надо его делать через JPA, в режиме Bean
-			E bean = createBean();
-			addedBean = new BeanItem<E>(bean);
-			binder.setItemDataSource(addedBean);
-			initForm(binder,bean);
-		} else {
-			binder.setItemDataSource(item);
-			initForm(binder,item.getEntity());
-		}
-		
-	}
+	
 	
 	public E createBean() {
 		try {
