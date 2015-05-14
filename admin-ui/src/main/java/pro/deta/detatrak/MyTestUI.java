@@ -15,6 +15,7 @@ import ru.yar.vi.rm.data.WeekendDO;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -28,6 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
+@PreserveOnRefresh
 public class MyTestUI extends MyUI {
 	JPAContainer<ObjectDO> availableObjects = null;
 	private JPAContainer<WeekendDO> weekendItems;
@@ -36,6 +38,7 @@ public class MyTestUI extends MyUI {
 	BeanFieldGroup<WeekendDO> binder = null;
 	FieldGroup fieldBinder = null;
 	private ListBuilder listBuilder;
+	
 	
 	protected void postInit() {
 		user = new UserDO();
@@ -50,8 +53,8 @@ public class MyTestUI extends MyUI {
 //		buildMenu();
 		setNavigator(new Navigator(this, root));
 		getNavigator().addView("actionView", new ActionView());
-//		getNavigator().navigateTo("actionView/1");
-		getNavigator().navigateTo("/service");
+		getNavigator().navigateTo("actionView/1");
+//		getNavigator().navigateTo("/service");
 	}
 
 	private void generate3(VerticalLayout root) {

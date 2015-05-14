@@ -50,7 +50,7 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
 
 
     private TableBuilder createActionsTable() {
-    	ActionView view = new ActionView();
+    	ActionView view = new ActionView(actionContainer);
     	TableBuilder panel =
                 new TableBuilder()
                         .addColumn("name", bundle.getString("label.name"))

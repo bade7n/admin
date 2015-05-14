@@ -1,43 +1,85 @@
 package pro.deta.detatrak.presenter;
 
-import pro.deta.detatrak.common.ComponentsBuilder;
+import org.apache.log4j.Logger;
 
+import pro.deta.detatrak.view.layout.BuildLayoutParameter;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.LayoutDefinitionException;
+import ru.yar.vi.rm.data.ActionDO;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.Component;
 
 public abstract class NewEntityViewBase<E> extends JPAEntityViewBase<E>{
-	protected TabSheet tabSheet;
+	public static final Logger log = Logger.getLogger(NewEntityViewBase.class);
+
+	Layout formDefinition;
 
 	public NewEntityViewBase(Class<E> e) {
 		super(e);
+		formDefinition = getFormDefinition();
 	}
 
-	
+
+	public NewEntityViewBase(Class<E> class1,
+			JPAContainer<E> container) {
+		super(class1,container);
+		formDefinition = getFormDefinition();
+	}
+
+
 	@Override
 	protected void buildUI(String parameter) {
 		removeAllComponents();
-		tabSheet = new TabSheet();
-		root.addComponent(tabSheet);
+		try {
 
-		item = null;
-		itemId = getItemId(parameter);
-		
-		binder = new FieldGroup();
-		binder.setBuffered(false);
-		if(itemId == null) {
-			// если создаём новый объект - не надо его делать через JPA, в режиме Bean
-			E bean = createBean();
-			addedBean = new BeanItem<E>(bean);
-			binder.setItemDataSource(addedBean);
-			initForm(binder,bean);
-		} else {
-			item = container.getItem(itemId);
-			binder.setItemDataSource(item);
-			initForm(binder,item.getEntity());
+			item = null;
+			itemId = getItemId(parameter);
+
+			binder = new FieldGroup();
+			binder.setBuffered(false);
+			if(itemId == null) {
+				// если создаём новый объект - не надо его делать через JPA, в режиме Bean
+				E bean = createBean();
+				addedBean = new BeanItem<E>(bean);
+				binder.setItemDataSource(addedBean);
+				addComponent(buildDefinition(binder,bean));
+			} else {
+				item = container.getItem(itemId);
+				binder.setItemDataSource(item);
+				addComponent(buildDefinition(binder,item.getEntity()));
+			}
+		} catch (LayoutDefinitionException e) {
+			log.error("Error while building form definition for bean " + item +" by " + itemId + e.getMessage());
 		}
-		
+
 	}
+
+	private Component buildDefinition(final FieldGroup binder, final E bean) throws LayoutDefinitionException {
+		Component c;
+		c = formDefinition.build(new BuildLayoutParameter<E>() {
+			@Override
+			public FieldGroup getBinder() {
+				return binder;
+			}
+
+			@Override
+			public E getBean() {
+				return bean;
+			}
+		});
+		return c;
+	}
+
+
+	public abstract Layout getFormDefinition();
+
+	protected void initForm(FieldGroup binder,E bean) {
+		throw new RuntimeException("Not should be called. Call getFormDefinition/buildDefinition instead.");
+	}
+
 	/**
 	 * 
 	 */

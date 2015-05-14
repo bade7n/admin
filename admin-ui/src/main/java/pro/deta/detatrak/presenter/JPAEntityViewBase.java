@@ -38,6 +38,10 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 		type = e;
 	}
 
+	public JPAEntityViewBase(Class<E> e,JPAContainer<E> container) {
+		this.container = container;
+		type = e;
+	}
 	
 	public void setItem(EntityItem<E> item,JPAContainer<E> container,PopupView view) {
 		

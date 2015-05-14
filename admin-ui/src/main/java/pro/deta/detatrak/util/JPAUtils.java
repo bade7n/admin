@@ -12,7 +12,7 @@ import com.vaadin.addon.jpacontainer.provider.LocalEntityProvider;
 
 public class JPAUtils {
 	static public<T extends Object> JPAContainer<T> createCachingJPAContainer(Class<T> class1) {
-		JPAContainer<T> cont = JPAContainerFactory.make(class1, LazyHibernateEntityManagerProvider.getInstance().getEntityManager());
+		JPAContainer<T> cont = JPAContainerFactory.make(class1, (EntityManager) null);
 		CachingMutableLocalEntityProvider<T> entityProvider = new CachingMutableLocalEntityProvider<T>(class1);
 		entityProvider.setEntitiesDetached(false);
 		entityProvider.setCloneCachedEntities(false);
@@ -20,10 +20,10 @@ public class JPAUtils {
 //		entityProvider.setEntitiesDetached(true);
 		entityProvider.setLazyLoadingDelegate(new HibernateLazyLoadingDelegate());
 		
-		LocalEntityProvider<T> entityProvider1 = new LocalEntityProvider<T>(class1);
-		entityProvider1.setEntityManagerProvider(LazyHibernateEntityManagerProvider.getInstance());
-		entityProvider1.setLazyLoadingDelegate(new HibernateLazyLoadingDelegate());
-		entityProvider1.setEntitiesDetached(false);
+//		LocalEntityProvider<T> entityProvider1 = new LocalEntityProvider<T>(class1);
+//		entityProvider1.setEntityManagerProvider(LazyHibernateEntityManagerProvider.getInstance());
+//		entityProvider1.setLazyLoadingDelegate(new HibernateLazyLoadingDelegate());
+//		entityProvider1.setEntitiesDetached(false);
 		cont.setEntityProvider(entityProvider);
         return cont;
 	}

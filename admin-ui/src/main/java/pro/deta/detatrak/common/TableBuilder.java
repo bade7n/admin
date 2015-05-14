@@ -15,9 +15,11 @@ import pro.deta.detatrak.confirmdialog.ConfirmDialog;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.Property;
-import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
@@ -138,7 +140,17 @@ public class TableBuilder implements Serializable {
 					return null;
 			}
 		});
-
+		table.addItemClickListener(new ItemClickListener() {
+			
+			@Override
+			public void itemClick(ItemClickEvent event) {
+				if(event.isDoubleClick()) {
+					MyUI.getCurrentUI().getViewDisplay().setContainer(l1);
+					MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + event.getItemId());
+				}
+			}
+			
+		});
 		table.setSizeFull();
 		table.addStyleName("plain");
 		table.addStyleName("borderless");
@@ -166,13 +178,7 @@ public class TableBuilder implements Serializable {
 				editButton.setStyleName(BaseTheme.BUTTON_LINK);
 				editButton.addStyleName("glyphicon");
 				editButton.addStyleName("glyphicon-pencil");
-				editButton.addClickListener(new Button.ClickListener() {
-					@Override
-					public void buttonClick(Button.ClickEvent event) {
-						MyUI.getCurrentUI().getViewDisplay().setContainer(vlayout);
-						MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + itemId);
-					}
-				});
+				editButton.addClickListener(getEditClickListener(itemId));
 				layout.addComponent(editButton);
 				Button deleteButton = new Button();
 				deleteButton.setStyleName(BaseTheme.BUTTON_LINK);
@@ -198,6 +204,16 @@ public class TableBuilder implements Serializable {
 				});
 				layout.addComponent(deleteButton);
 				return layout;
+			}
+
+			private ClickListener getEditClickListener(final Object itemId) {
+				return new Button.ClickListener() {
+					@Override
+					public void buttonClick(Button.ClickEvent event) {
+						MyUI.getCurrentUI().getViewDisplay().setContainer(vlayout);
+						MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + itemId);
+					}
+				};
 			}
 		});
 	}
