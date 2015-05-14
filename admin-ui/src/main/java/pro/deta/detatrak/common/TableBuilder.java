@@ -12,9 +12,13 @@ import org.apache.log4j.Logger;
 
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.confirmdialog.ConfirmDialog;
+import ru.yar.vi.rm.data.TerminalLinkDO;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.data.Container;
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.event.Action;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.AbstractComponent;
@@ -44,6 +48,9 @@ public class TableBuilder implements Serializable {
 	protected Container container;
 	private String editItemKey;
 	private String caption;
+	static final Action ACTION_DELETE = new Action("Delete");
+	static final Action ACTION_EDIT = new Action("Edit");
+
 
 	public String getCaption() {
 		return caption;
@@ -98,18 +105,19 @@ public class TableBuilder implements Serializable {
 		this.editItemKey = key;
 		return this;
 	}
-	
+
 	CssLayout l1 = new CssLayout();
 	Table table = null;
-	
+
 	public Table getTable() {
 		return table;
 	}
-	
-	
+
+
 	public Container getContainer() {
 		return container;
 	}
+
 
 	public AbstractComponent createTable() {
 		l1.setSizeFull();
@@ -131,7 +139,7 @@ public class TableBuilder implements Serializable {
 		}
 		table.setVisibleColumns(columnsNames.toArray());
 		table.setCellStyleGenerator(new CellStyleGenerator() {
-			
+
 			@Override
 			public String getStyle(Table source, Object itemId, Object propertyId) {
 				if(smallColumns.containsKey(propertyId))
@@ -141,7 +149,7 @@ public class TableBuilder implements Serializable {
 			}
 		});
 		table.addItemClickListener(new ItemClickListener() {
-			
+
 			@Override
 			public void itemClick(ItemClickEvent event) {
 				if(event.isDoubleClick()) {
@@ -149,16 +157,41 @@ public class TableBuilder implements Serializable {
 					MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + event.getItemId());
 				}
 			}
-			
+
+		});
+
+		table.addActionHandler(new Action.Handler() {
+			public Action[] getActions(Object target, Object sender) {
+				return new Action[] { ACTION_EDIT,ACTION_DELETE };
+			}
+
+			public void handleAction(Action action, Object sender,final Object target) {
+				if(action == ACTION_DELETE) {
+					ConfirmDialog.show(MyUI.getCurrent(), "Подтверждение", "Вы уверены?",
+							"Да", "Нет", new ConfirmDialog.Listener() {
+
+						public void onClose(ConfirmDialog dialog) {
+							if (dialog.isConfirmed()) {
+								Item trg = container.getItem(target);
+								container.removeItem(target);
+							} else {
+							}
+						}
+					});
+				} else if(action == ACTION_EDIT) {
+					MyUI.getCurrentUI().getViewDisplay().setContainer(l1);
+					MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + target);
+				}
+			}
 		});
 		table.setSizeFull();
 		table.addStyleName("plain");
 		table.addStyleName("borderless");
-//		table.setImmediate(true);
+		//		table.setImmediate(true);
 		table.setPageLength(100);
-		
+
 		addServiceColumn();
-		
+
 		addPlusButton(layout);
 		layout.addComponent(table);
 		layout.setExpandRatio(table, 1.0f);
@@ -178,7 +211,13 @@ public class TableBuilder implements Serializable {
 				editButton.setStyleName(BaseTheme.BUTTON_LINK);
 				editButton.addStyleName("glyphicon");
 				editButton.addStyleName("glyphicon-pencil");
-				editButton.addClickListener(getEditClickListener(itemId));
+				editButton.addClickListener(new Button.ClickListener() {
+					@Override
+					public void buttonClick(Button.ClickEvent event) {
+						MyUI.getCurrentUI().getViewDisplay().setContainer(vlayout);
+						MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + itemId);
+					}
+				});
 				layout.addComponent(editButton);
 				Button deleteButton = new Button();
 				deleteButton.setStyleName(BaseTheme.BUTTON_LINK);
@@ -206,15 +245,6 @@ public class TableBuilder implements Serializable {
 				return layout;
 			}
 
-			private ClickListener getEditClickListener(final Object itemId) {
-				return new Button.ClickListener() {
-					@Override
-					public void buttonClick(Button.ClickEvent event) {
-						MyUI.getCurrentUI().getViewDisplay().setContainer(vlayout);
-						MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + itemId);
-					}
-				};
-			}
 		});
 	}
 
@@ -248,7 +278,7 @@ public class TableBuilder implements Serializable {
 					return "RowId: " + rowId +" ColId: " + colId;
 				}
 				return super.formatPropertyValue(rowId, colId, property);
-				
+
 			}
 		};
 	}
