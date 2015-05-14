@@ -23,11 +23,8 @@ public class ReportObjectView extends JPAEntityViewBase<ReportObjectDO> {
 	private JPAContainer<AdvertisementDO> advertContainer = JPAUtils.createCachingJPAContainer(AdvertisementDO.class);
 	
 
-	private ExtraTabsView extraTabsView;
-
     public ReportObjectView(ExtraTabsView extraTabsView) {
-    	super(ReportObjectDO.class);
-    	this.extraTabsView = extraTabsView;
+    	super(ReportObjectDO.class,extraTabsView.getReportObjectContainer());
     }
 
 	@Override
@@ -47,11 +44,6 @@ public class ReportObjectView extends JPAEntityViewBase<ReportObjectDO> {
 		super.saveEntity(obj);
 	}
 
-	@Override
-	public void postSaveEntity(ReportObjectDO obj) {
-		extraTabsView.getReportObjectContainer().refreshItem(itemId);
-	}
-	
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;

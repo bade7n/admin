@@ -37,7 +37,6 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 
 	public static final String NAV_KEY = "complexReportView";
 
-	private ExtraTabsView extraTabsView;
 	ListBuilder listBuilder = null;
 	private JPAContainer<ReportObjectDO> objectContainer = JPAUtils.createCachingJPAContainer(ReportObjectDO.class);
 	private Upload logo = null;
@@ -47,8 +46,7 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 	public MyImageSource imageSource;
 	
     public ComplexReportView(ExtraTabsView extraTabsView) {
-    	super(ComplexReportDO.class);
-    	this.extraTabsView = extraTabsView;
+    	super(ComplexReportDO.class,extraTabsView.getComplexReportContainer());
     }
 
 	@Override
@@ -105,11 +103,6 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 		
 	}
 
-	@Override
-	public void postSaveEntity(ComplexReportDO obj) {
-		extraTabsView.getComplexReportContainer().refreshItem(itemId);
-	}
-	
 	class ImageUploader implements Receiver, SucceededListener {
 	    public ByteArrayOutputStream file;
 	    

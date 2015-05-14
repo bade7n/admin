@@ -16,7 +16,12 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
 
 public class ScheduleView extends JPAEntityViewBase<ScheduleDO> {
-    public static final String NAV_KEY = "scheduleView";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2309345860681089162L;
+
+	public static final String NAV_KEY = "scheduleView";
 
     private JPAContainer<CustomerDO> customerDataSource =  JPAUtils.createCachingJPAContainer(CustomerDO.class);
 	private JPAContainer<CriteriaDO> criteriaDataSource =  JPAUtils.createCachingJPAContainer(CriteriaDO.class);
@@ -24,12 +29,8 @@ public class ScheduleView extends JPAEntityViewBase<ScheduleDO> {
 
 	private ScheduleBlock sb;
 
-	private ScheduleTabsView scheduleTabsView;
-
-
     public ScheduleView(ScheduleTabsView scheduleTabsView) {
-    	super(ScheduleDO.class);
-    	this.scheduleTabsView = scheduleTabsView;
+    	super(ScheduleDO.class,scheduleTabsView.getScheduleContainer());
     }
 
     
@@ -38,11 +39,6 @@ public class ScheduleView extends JPAEntityViewBase<ScheduleDO> {
     	sch.setSchedule(ScheduleBuilder.getScheduleString(sb));
     }
     
-    @Override
-    public void postSaveEntity(ScheduleDO obj) {
-    	scheduleTabsView.getScheduleContainer().refreshItem(itemId);
-    };
-
 	@Override
 	protected void initForm(FieldGroup binder,ScheduleDO schedule) {
         form.addComponent(ComponentsBuilder.createComboBoxWithDataSource("Объект",MyUI.getCurrentUI().getObjectContainer(),binder,"object","name"));

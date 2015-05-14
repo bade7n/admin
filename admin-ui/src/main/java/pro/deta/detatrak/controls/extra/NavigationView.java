@@ -34,7 +34,6 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 
 	public static final String NAV_KEY = "navigationView";
 
-	private ExtraTabsView extraTabsView;
 	private JPAContainer<TerminalLinkDO> linkContainer = JPAUtils.createCachingJPAContainer(TerminalLinkDO.class);
 	private Upload logo = null;
 	private Embedded image = new Embedded("Uploaded Image");
@@ -43,8 +42,7 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 	public MyImageSource imageSource;
 	
     public NavigationView(ExtraTabsView extraTabsView) {
-    	super(NavigationDO.class);
-    	this.extraTabsView = extraTabsView;
+    	super(NavigationDO.class,extraTabsView.getNavContainer());
     }
 
 	@Override
@@ -94,10 +92,6 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 		
 	}
 
-	@Override
-	public void postSaveEntity(NavigationDO obj) {
-		extraTabsView.getNavContainer().refreshItem(itemId);
-	}
 	
 	class ImageUploader implements Receiver, SucceededListener {
 	    public ByteArrayOutputStream file;

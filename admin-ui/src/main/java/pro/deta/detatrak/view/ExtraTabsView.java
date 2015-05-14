@@ -107,7 +107,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
                         .setEditItemKey(configurationView.getNavKey())
                         .setBeanContainer(configContainer);
         panel.setCaption("Конфигурация");
-        configurationView.setTableBuilder(panel);
+//        configurationView.setTableBuilder(panel);
         addForInitialization(configurationView);
         return panel;
     }
@@ -137,7 +137,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
 
     private TableBuilder createNavigationLinkTable() {
     	PopupView view = new PopupView(null,null);
-    	final TerminalLinkView v1 = new TerminalLinkView();
+    	final TerminalLinkView v1 = new TerminalLinkView(navLinkContainer);
 		view.setContent(new Content() {
 			
 			@Override

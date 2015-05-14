@@ -14,11 +14,9 @@ public class AdvertView extends JPAEntityViewBase<AdvertisementDO> {
 	 */
 	private static final long serialVersionUID = 8149684523796848250L;
 	public static final String NAV_KEY = "advertView";
-    private ExtraTabsView extra = null;
 
     public AdvertView(ExtraTabsView extraTabsView) {
-    	super(AdvertisementDO.class);
-    	this.extra = extraTabsView;
+    	super(AdvertisementDO.class,extraTabsView.getAdvertContainer());
     }
 
     @Override
@@ -28,11 +26,6 @@ public class AdvertView extends JPAEntityViewBase<AdvertisementDO> {
         form.addComponent(ComponentsBuilder.createTextArea("HTML",binder, "html"));
         form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
 	}
-    
-    @Override
-    public void postSaveEntity(AdvertisementDO obj) {
-    	extra.getAdvertContainer().refreshItem(itemId);
-    }
     
 	@Override
 	public String getNavKey() {

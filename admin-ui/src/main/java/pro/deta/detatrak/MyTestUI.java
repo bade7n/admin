@@ -52,7 +52,7 @@ public class MyTestUI extends MyUI {
 		root.removeAllComponents();
 //		buildMenu();
 		setNavigator(new Navigator(this, root));
-		getNavigator().addView("actionView", new ActionView());
+		getNavigator().addView("actionView", new ActionView(null));
 		getNavigator().navigateTo("actionView/1");
 //		getNavigator().navigateTo("/service");
 	}

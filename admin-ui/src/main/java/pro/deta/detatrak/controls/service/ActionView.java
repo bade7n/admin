@@ -1,6 +1,6 @@
 package pro.deta.detatrak.controls.service;
 
-import pro.deta.detatrak.presenter.NewEntityViewBase;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
 import pro.deta.detatrak.view.layout.FieldLayout;
@@ -16,7 +16,7 @@ import ru.yar.vi.rm.data.ValidatorDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-public class ActionView extends NewEntityViewBase<ActionDO> {
+public class ActionView extends LayoutEntityViewBase<ActionDO> {
 
     /**
 	 * 
@@ -28,9 +28,7 @@ public class ActionView extends NewEntityViewBase<ActionDO> {
     public ActionView(JPAContainer<ActionDO> container) {
     	super(ActionDO.class,container);
     }
-    public ActionView() {
-    	super(ActionDO.class);
-    }
+
     
 	public Layout getFormDefinition() {
 		JPAContainer<CustomFieldDO> fieldContainer = JPAUtils.createCachingJPAContainer(CustomFieldDO.class);

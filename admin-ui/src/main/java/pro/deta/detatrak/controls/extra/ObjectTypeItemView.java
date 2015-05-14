@@ -21,11 +21,8 @@ public class ObjectTypeItemView extends JPAEntityViewBase<ObjectTypeItemDO> {
 
     private EntityContainer<ObjectTypeDO> objectItemContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
 
-	private ExtraTabsView extraTabsView;
-
     public ObjectTypeItemView(ExtraTabsView extraTabsView) {
-    	super(ObjectTypeItemDO.class);
-    	this.extraTabsView = extraTabsView;
+    	super(ObjectTypeItemDO.class,extraTabsView.getObjectTypeItemContainer());
     }
 
 	@Override
@@ -35,11 +32,6 @@ public class ObjectTypeItemView extends JPAEntityViewBase<ObjectTypeItemDO> {
 		form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
 	}
 
-	@Override
-	public void postSaveEntity(ObjectTypeItemDO obj) {
-		extraTabsView.getObjectTypeItemContainer().refreshItem(itemId);
-	}
-	
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;

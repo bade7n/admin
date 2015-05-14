@@ -67,7 +67,7 @@ public class MyTreeUI extends MyUI {
 	Button bu = new Button("Загрузить");
 
 	protected void postInit() {
-		v1 = new TerminalLinkView();
+//		v1 = new TerminalLinkView();
 		user = new UserDO();
 		user.setName("admin");
 		user.setDescription("Администратор");

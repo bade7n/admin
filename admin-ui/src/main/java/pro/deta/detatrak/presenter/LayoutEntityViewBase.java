@@ -5,26 +5,17 @@ import org.apache.log4j.Logger;
 import pro.deta.detatrak.view.layout.BuildLayoutParameter;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.LayoutDefinitionException;
-import ru.yar.vi.rm.data.ActionDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Component;
 
-public abstract class NewEntityViewBase<E> extends JPAEntityViewBase<E>{
-	public static final Logger log = Logger.getLogger(NewEntityViewBase.class);
+public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
+	public static final Logger log = Logger.getLogger(LayoutEntityViewBase.class);
+	private Layout formDefinition;
 
-	Layout formDefinition;
-
-	public NewEntityViewBase(Class<E> e) {
-		super(e);
-		formDefinition = getFormDefinition();
-	}
-
-
-	public NewEntityViewBase(Class<E> class1,
-			JPAContainer<E> container) {
+	public LayoutEntityViewBase(Class<E> class1,JPAContainer<E> container) {
 		super(class1,container);
 		formDefinition = getFormDefinition();
 	}

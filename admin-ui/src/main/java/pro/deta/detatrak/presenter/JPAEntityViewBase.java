@@ -30,9 +30,10 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 	protected BeanItem<E> addedBean = null;
 	protected Class<E> type = null;
 	protected FieldGroup binder;
-	private TableBuilder tableBuilder;
+//	private TableBuilder tableBuilder;
 	private ItemSetChangeEvent event;
 
+	@Deprecated
 	public JPAEntityViewBase(Class<E> e) {
 		this.container = JPAUtils.createCachingJPAContainer(e);
 		type = e;
@@ -46,7 +47,10 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 	public void setItem(EntityItem<E> item,JPAContainer<E> container,PopupView view) {
 		
 	}
-	
+
+	/**
+	 * commented out due to not using.
+	 * @param tb
 	@SuppressWarnings("serial")
 	public void setTableBuilder(TableBuilder tb) {
 		this.tableBuilder = tb;
@@ -58,6 +62,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 		};
 	}
 	
+	 */
 	@Override
 	protected void buildUI(String parameter) {
 		item = null;
@@ -115,29 +120,28 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 			E e = addedBean.getBean();
 			saveEntity(e);
 			save(e);
-			postSaveEntity(e);
+//			postSaveEntity(e);
 		} else {
 			E e = item.getEntity();
 			saveEntity(e);
 			save(e);
-			postSaveEntity(e);
+//			postSaveEntity(e);
 		}
 	}
 	
 	private final void save(Object o) {
 		JPAUtils.save(o);
 		dispatchEvent(new EventBase("save"));
-		if(tableBuilder != null && tableBuilder.getTable()!= null) {
-			tableBuilder.getTable().containerItemSetChange(event);
-		}
+//		if(tableBuilder != null && tableBuilder.getTable()!= null) {
+//			tableBuilder.getTable().containerItemSetChange(event);
+//		}
 	}
 
 	public void saveEntity(E obj) {
 		
 	}
 	
-	public void postSaveEntity(E obj) {
-	}
+
 	
 	public void cancel() {
 		binder.discard();
