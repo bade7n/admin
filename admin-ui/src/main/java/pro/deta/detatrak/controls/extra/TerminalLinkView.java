@@ -4,14 +4,12 @@ import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.common.IAction;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import ru.yar.vi.rm.data.ReportObjectDO;
 import ru.yar.vi.rm.data.TerminalLinkDO;
 import ru.yar.vi.rm.data.TerminalPageDO;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.PopupView;
 
@@ -25,8 +23,8 @@ public class TerminalLinkView extends JPAEntityViewBase<TerminalLinkDO> implemen
 	private PopupView view;
 	private JPAContainer<TerminalPageDO> pageContainer;
 
-	public TerminalLinkView(JPAContainer<TerminalLinkDO> navLinkContainer) {
-		super(TerminalLinkDO.class,navLinkContainer);
+	public TerminalLinkView() {
+		super(TerminalLinkDO.class);
 		pageContainer = JPAUtils.createCachingJPAContainer(TerminalPageDO.class);
 	}
 

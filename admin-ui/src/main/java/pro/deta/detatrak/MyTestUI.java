@@ -7,7 +7,7 @@ import pro.deta.detatrak.controls.service.ActionView;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.MyTwinColSelectStringConverter;
-import pro.deta.detatrak.view.ScheduleTabsView;
+import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.UserDO;
 import ru.yar.vi.rm.data.WeekendDO;
@@ -52,7 +52,9 @@ public class MyTestUI extends MyUI {
 		root.removeAllComponents();
 //		buildMenu();
 		setNavigator(new Navigator(this, root));
-		getNavigator().addView("actionView", new ActionView(null));
+		ActionView av = new ActionView();
+		av.setEntityContainer(JPAUtils.createCachingJPAContainer(ActionDO.class));
+		getNavigator().addView("actionView", av);
 		getNavigator().navigateTo("actionView/1");
 //		getNavigator().navigateTo("/service");
 	}

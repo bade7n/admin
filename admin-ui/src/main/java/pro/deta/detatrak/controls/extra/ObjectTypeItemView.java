@@ -3,7 +3,6 @@ package pro.deta.detatrak.controls.extra;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.ObjectTypeDO;
 import ru.yar.vi.rm.data.ObjectTypeItemDO;
 
@@ -21,8 +20,8 @@ public class ObjectTypeItemView extends JPAEntityViewBase<ObjectTypeItemDO> {
 
     private EntityContainer<ObjectTypeDO> objectItemContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
 
-    public ObjectTypeItemView(ExtraTabsView extraTabsView) {
-    	super(ObjectTypeItemDO.class,extraTabsView.getObjectTypeItemContainer());
+    public ObjectTypeItemView() {
+    	super(ObjectTypeItemDO.class);
     }
 
 	@Override

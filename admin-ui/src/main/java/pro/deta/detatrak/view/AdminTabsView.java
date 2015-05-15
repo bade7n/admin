@@ -57,7 +57,7 @@ public class AdminTabsView extends RightPaneTabsView  implements Captioned,Initi
     	createTableBuilder(bundle.getString("label.notificationconnector.email"), view.getNavKey(), notificationEmailConnectorDataSource)
         .addColumn("name", bundle.getString("label.name"))
         .addColumn("type", bundle.getString("label.notification.type"));
-    	addForInitialization(view);
+    	addForInitialization(view,notificationEmailConnectorDataSource);
         return tb;
 	}
 
@@ -66,7 +66,7 @@ public class AdminTabsView extends RightPaneTabsView  implements Captioned,Initi
     	TableBuilder tb = createTableBuilder(bundle.getString("label.notificationconnector.sms"), view.getNavKey(), notificationSMSConnectorDataSource)
         .addColumn("name", bundle.getString("label.name"))
         .addColumn("type", bundle.getString("label.notification.type"));
-    	addForInitialization(view);
+    	addForInitialization(view,notificationSMSConnectorDataSource);
     	return tb;
     }
 
@@ -77,7 +77,7 @@ public class AdminTabsView extends RightPaneTabsView  implements Captioned,Initi
         .addColumn("name", bundle.getString("label.name"))
         .addColumn("event", bundle.getString("label.notification.event"))
         .addColumn("template", bundle.getString("label.notification.template"));
-    	addForInitialization(view);
+    	addForInitialization(view,notificationDataSource);
         return tb;
     }
 
@@ -87,7 +87,7 @@ public class AdminTabsView extends RightPaneTabsView  implements Captioned,Initi
     	createTableBuilder(bundle.getString("label.roles"), view.getNavKey(), rolesDataSource)
         .addColumn("name", bundle.getString("label.name"))
         .addColumn("description", bundle.getString("label.description"));
-    	addForInitialization(view);
+    	addForInitialization(view,rolesDataSource);
     	return tb;
     }
 
@@ -97,7 +97,7 @@ public class AdminTabsView extends RightPaneTabsView  implements Captioned,Initi
 		createTableBuilder(bundle.getString("label.users"), view.getNavKey(), usersDataSource)
         .addColumn("name", bundle.getString("label.name"))
         .addColumn("description", bundle.getString("label.description"));
-    	addForInitialization(view);
+    	addForInitialization(view,usersDataSource);
         return tb;
     }
 

@@ -10,12 +10,10 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.ComplexReportDO;
 import ru.yar.vi.rm.data.ReportObjectDO;
 
@@ -45,8 +43,8 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 
 	public MyImageSource imageSource;
 	
-    public ComplexReportView(ExtraTabsView extraTabsView) {
-    	super(ComplexReportDO.class,extraTabsView.getComplexReportContainer());
+    public ComplexReportView() {
+    	super(ComplexReportDO.class);
     }
 
 	@Override

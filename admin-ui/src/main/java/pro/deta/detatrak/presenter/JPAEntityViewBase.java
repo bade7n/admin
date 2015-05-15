@@ -3,51 +3,48 @@ package pro.deta.detatrak.presenter;
 
 import org.apache.log4j.Logger;
 
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.event.EventBase;
+import pro.deta.detatrak.util.EntityContainerHandler;
 import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.model.NumberWrapper;
 
+import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container;
-import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.PopupView;
 
 
-public abstract class JPAEntityViewBase<E> extends EditViewBase {
+public abstract class JPAEntityViewBase<E> extends EditViewBase implements EntityContainerHandler<E> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8600864478538693787L;
 	private static final Logger logger = Logger.getLogger(JPAEntityViewBase.class);
 	protected EntityItem<E> item = null;
-	protected JPAContainer<E> container = null;
+	protected EntityContainer<E> container = null;
 	protected Object itemId = null;
 	protected BeanItem<E> addedBean = null;
 	protected Class<E> type = null;
 	protected FieldGroup binder;
 //	private TableBuilder tableBuilder;
-	private ItemSetChangeEvent event;
+//	private ItemSetChangeEvent event;
 
-	@Deprecated
 	public JPAEntityViewBase(Class<E> e) {
-		this.container = JPAUtils.createCachingJPAContainer(e);
+//		this.container = JPAUtils.createCachingJPAContainer(e);
 		type = e;
 	}
 
-	public JPAEntityViewBase(Class<E> e,JPAContainer<E> container) {
-		this.container = container;
-		type = e;
-	}
-	
 	public void setItem(EntityItem<E> item,JPAContainer<E> container,PopupView view) {
 		
 	}
 
+	public void setEntityContainer(EntityContainer<E> container) {
+		this.container = container;
+	}
+	
 	/**
 	 * commented out due to not using.
 	 * @param tb

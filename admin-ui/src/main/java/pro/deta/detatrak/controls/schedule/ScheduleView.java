@@ -29,8 +29,8 @@ public class ScheduleView extends JPAEntityViewBase<ScheduleDO> {
 
 	private ScheduleBlock sb;
 
-    public ScheduleView(ScheduleTabsView scheduleTabsView) {
-    	super(ScheduleDO.class,scheduleTabsView.getScheduleContainer());
+    public ScheduleView() {
+    	super(ScheduleDO.class);
     }
 
     

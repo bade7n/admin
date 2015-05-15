@@ -12,7 +12,6 @@ import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.NavigationDO;
 import ru.yar.vi.rm.data.TerminalLinkDO;
 
@@ -41,8 +40,8 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 
 	public MyImageSource imageSource;
 	
-    public NavigationView(ExtraTabsView extraTabsView) {
-    	super(NavigationDO.class,extraTabsView.getNavContainer());
+    public NavigationView() {
+    	super(NavigationDO.class);
     }
 
 	@Override

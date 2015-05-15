@@ -25,8 +25,8 @@ public class ActionView extends LayoutEntityViewBase<ActionDO> {
 	
 	public static final String NAV_KEY = "actionView";
 	
-    public ActionView(JPAContainer<ActionDO> container) {
-    	super(ActionDO.class,container);
+    public ActionView() {
+    	super(ActionDO.class);
     }
 
     

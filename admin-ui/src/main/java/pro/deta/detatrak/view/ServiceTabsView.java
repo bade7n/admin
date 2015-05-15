@@ -1,7 +1,5 @@
 package pro.deta.detatrak.view;
 
-import java.util.HashMap;
-
 import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.controls.service.ActionView;
 import pro.deta.detatrak.controls.service.CriteriaView;
@@ -50,7 +48,7 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
 
 
     private TableBuilder createActionsTable() {
-    	ActionView view = new ActionView(actionContainer);
+    	ActionView view = new ActionView();
     	TableBuilder panel =
                 new TableBuilder()
                         .addColumn("name", bundle.getString("label.name"))
@@ -59,11 +57,14 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
                         .setBeanContainer(actionContainer)
                         ;
         panel.setCaption(bundle.getString("label.services"));
-        addForInitialization(view);
+        addForInitialization(view,actionContainer);
         return panel;
     }
 
-    private TableBuilder createFieldsTable() {
+   
+
+
+	private TableBuilder createFieldsTable() {
     	FieldView view = new FieldView();
     	TableBuilder panel =
                 new TableBuilder()
@@ -74,7 +75,7 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
                         .setEditItemKey(view.getNavKey())
                         .setBeanContainer(fieldContainer);
         panel.setCaption(bundle.getString("label.fields"));
-        addForInitialization(view);
+        addForInitialization(view,fieldContainer);
         return panel;
     }
 
@@ -86,7 +87,7 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
                         .setEditItemKey(view.getNavKey())
                         .setBeanContainer(criteriaContainer);
         panel.setCaption("Опция");
-        addForInitialization(view);
+        addForInitialization(view,criteriaContainer);
         return panel;
     }
 
@@ -99,7 +100,7 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
                         .setEditItemKey(view.getNavKey())
                         .setBeanContainer(validatorContainer);
         panel.setCaption("Проверки");
-        addForInitialization(view);
+        addForInitialization(view,validatorContainer);
         return panel;
     }
 
