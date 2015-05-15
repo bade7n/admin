@@ -1,5 +1,7 @@
 package pro.deta.detatrak.view.layout;
 
+import org.slf4j.LoggerFactory;
+
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 
@@ -19,7 +21,11 @@ public class DetaFormLayout implements Layout<FormParameter<Object>>{
 		FormLayout fl = new FormLayout();
 		fl.setCaption(caption);
 		for (Layout<FormParameter<Object>> l : layouts) {
-			fl.addComponent(l.build(p));
+			try {
+				fl.addComponent(l.build(p));
+			} catch (Exception e) {
+				LoggerFactory.getLogger(DetaFormLayout.class).error("Error while rendering layout for field " + l,e);
+			}
 		}
 		return fl;
 	}

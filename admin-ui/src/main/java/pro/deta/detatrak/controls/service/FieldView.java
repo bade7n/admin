@@ -28,6 +28,9 @@ public class FieldView extends LayoutEntityViewBase<CustomFieldDO> {
     
     @Override
 	public Layout getFormDefinition() {
+//        ComponentsBuilder.createComboBoxWithDataSource("Тип клиента", customerDataSource, binder, "customerId","name"));
+
+        
 		TabSheetLayout l = new TabSheetLayout();
 		l.addTab(new DetaFormLayout("Основные настройки",
 					new FieldLayout("Название параметра", "name", FieldLayout.FieldType.TEXTFIELD),

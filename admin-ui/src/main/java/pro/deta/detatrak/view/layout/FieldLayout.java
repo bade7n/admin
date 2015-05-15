@@ -79,4 +79,9 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "[FieldLayout for field="+field+ "]";
+	}
+
 }
