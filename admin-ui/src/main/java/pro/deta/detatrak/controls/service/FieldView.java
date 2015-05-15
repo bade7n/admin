@@ -1,16 +1,20 @@
 package pro.deta.detatrak.controls.service;
 
-import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.presenter.JPAEntityViewBase;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
+import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.FieldLayout;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.SaveCancelLayout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
+import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.CriteriaDO;
 import ru.yar.vi.rm.data.CustomFieldDO;
 import ru.yar.vi.rm.data.CustomerDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.fieldgroup.FieldGroup;
 
-public class FieldView extends JPAEntityViewBase<CustomFieldDO> {
+public class FieldView extends LayoutEntityViewBase<CustomFieldDO> {
 
     public static final String NAV_KEY = "fieldView";
 
@@ -21,33 +25,36 @@ public class FieldView extends JPAEntityViewBase<CustomFieldDO> {
     	super(CustomFieldDO.class);
     	
     }
-
-
-	@Override
-	protected void initForm(FieldGroup binder,CustomFieldDO custom) {
-        form.addComponent(ComponentsBuilder.createTextField("Название параметра", binder, "name"));
-        form.addComponent(ComponentsBuilder.createComboBoxWithDataSource("Тип клиента", customerDataSource, binder, "customerId","name"));
-
-        form.addComponent(ComponentsBuilder.createCheckBox("Обязательный",binder,"required"));
-        form.addComponent(ComponentsBuilder.createTextField("Сообщение при ошибке заполнения",binder,"requiredMsg"));
-        form.addComponent(ComponentsBuilder.createTextField("Ограничение",binder,"mask"));
-        form.addComponent(ComponentsBuilder.createTextField("Сообщение при несовпадении",binder,"maskMsg"));
-        form.addComponent(ComponentsBuilder.createTextField("Пример",binder,"example"));
-        form.addComponent(ComponentsBuilder.createTextField("Поле",binder,"field"));
-
-        form.addComponent(ComponentsBuilder.createCheckBox("Показывать в отчётах",binder,"reporting"));
-        form.addComponent(ComponentsBuilder.createCheckBox("Показывать на терминале",binder,"onTerminal"));
-
-        form.addComponent(ComponentsBuilder.createTwinColSelect("Варианты",criteriaDataSource,binder,"criteria"));
-
-        addComponent(form);
-        addComponent(ComponentsBuilder.createSaveCancelButtons(this));
-
+    
+    @Override
+	public Layout getFormDefinition() {
+		TabSheetLayout l = new TabSheetLayout();
+		l.addTab(new DetaFormLayout("Основные настройки",
+					new FieldLayout("Название параметра", "name", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Тип клиента", "customerId", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(customerDataSource)),
+					new FieldLayout("Обязательный", "required", FieldLayout.FieldType.CHECKBOX),
+					new FieldLayout("Сообщение при ошибке заполнения", "requiredMsg", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Ограничение", "mask", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Сообщение при несовпадении", "maskMsg", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Пример", "example", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Поле", "field", FieldLayout.FieldType.TEXTFIELD),
+					new SaveCancelLayout(this)
+				));
+		l.addTab(new DetaFormLayout("Дополнительные настройки",
+				new FieldLayout("Показывать в отчётах", "reporting", FieldLayout.FieldType.CHECKBOX),
+				new FieldLayout("Показывать на терминале", "onTerminal", FieldLayout.FieldType.CHECKBOX),
+				new FieldLayout("Варианты", "criteria", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(criteriaDataSource)),
+				new SaveCancelLayout(this)
+			));
+		return l;
 	}
-	
+
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;
 	}
+
+
+	
 
 }

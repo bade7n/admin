@@ -92,6 +92,14 @@ public class ComponentsBuilder {
         return comboBox;
     }
 
+    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, EntityContainer<T> container,String captionField) {
+        ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField);
+		comboBox.setImmediate(true);
+        comboBox.setNullSelectionAllowed(true);
+        comboBox.setNullSelectionItemId(0);
+        return comboBox;
+    }
+    
     public static ComboBox createAccessComboBox(FieldGroup binder, String field) {
     	ComboBox c = createAccessComboBoxNoBind("Доступ");
         binder.bind(c, field);
@@ -109,6 +117,11 @@ public class ComponentsBuilder {
     }
 
     public static <T> ComboBox createCustomComboBox(String caption, Container container, FieldGroup binder, String field,String captionField) {
+        ComboBox combo = createCustomComboBoxNoBind(caption, container, captionField);
+        binder.bind(combo, field);
+        return combo;
+    }
+    public static <T> ComboBox createCustomComboBoxNoBind(String caption, Container container, String captionField) {
         ComboBox comboBox = new ComboBox(caption);
         comboBox.setContainerDataSource(container);
         comboBox.setTextInputAllowed(false);
@@ -117,10 +130,9 @@ public class ComponentsBuilder {
         comboBox.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         comboBox.setItemCaptionPropertyId(captionField);
         comboBox.setConverter(new SingleSelectConverter(comboBox));
-        binder.bind(comboBox, field);
         return comboBox;
     }
-
+    
     public static HorizontalLayout createSaveCancelButtons(final IAction iAction) {
         return new HorizontalLayout() {
             {
@@ -183,11 +195,14 @@ public class ComponentsBuilder {
         return ta;
 	}
 	
-	public static Component createCheckBox(String caption, FieldGroup binder,
-			String field) {
+	public static Component createCheckBox(String caption, FieldGroup binder,String field) {
+		CheckBox cb = createCheckBoxNoBind(caption);
+        binder.bind(cb, field);
+		return cb;
+	}
+	public static CheckBox createCheckBoxNoBind(String caption) {
         CheckBox cb = new CheckBox(caption);
 		cb.setImmediate(true);
-        binder.bind(cb, field);
 		return cb;
 	}
 

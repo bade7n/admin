@@ -8,7 +8,7 @@ import com.vaadin.ui.Field;
 
 public class FieldLayout implements Layout<FormParameter<Object>> {
 	public enum FieldType {
-		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX
+		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX
 	}
 	private String caption;
 	private String field;
@@ -59,6 +59,12 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			break;
 		case ACCESSCOMBOBOX:
 			c = ComponentsBuilder.createAccessComboBoxNoBind(caption);
+			break;
+		case COMBOBOX:
+			c = ComponentsBuilder.createComboBoxWithDataSourceNoBind(caption, valuesContainer.getContainer(), valuesContainer.getValueField());
+			break;
+		case CHECKBOX:
+			c = ComponentsBuilder.createCheckBoxNoBind(caption);
 			break;
 		}
 		if(c!= null) {

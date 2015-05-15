@@ -21,7 +21,7 @@ public class TabSheetLayout implements Layout<FormParameter<Object>> {
 				Component c = layout.build(p);
 				ts.addTab(c);
 			} catch(Throwable e) {
-				logger.error("Error while rendering layout " + layout +" error: " + e.getMessage());
+				logger.error("Error while rendering layout " + layout +" error: " + e.getMessage(),e);
 			}
 		}
 		ts.setSizeFull();
