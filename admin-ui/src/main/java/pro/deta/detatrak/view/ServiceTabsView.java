@@ -6,8 +6,12 @@ import pro.deta.detatrak.controls.service.CriteriaView;
 import pro.deta.detatrak.controls.service.FieldView;
 import pro.deta.detatrak.controls.service.ValidatorView;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.util.RightPaneTabsView;
+import pro.deta.detatrak.util.NewRightPaneTabsView;
 import pro.deta.detatrak.util.TopLevelMenuView;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
+import pro.deta.detatrak.view.layout.TableColumnLayout;
+import pro.deta.detatrak.view.layout.TableLayout;
 import pro.deta.security.SecurityElement;
 import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.CriteriaDO;
@@ -19,7 +23,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.TabSheet;
 
 @TopLevelMenuView(icon="icon-service")
-public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Initializable,Restrictable{
+public class ServiceTabsView extends NewRightPaneTabsView  implements Captioned,Initializable,Restrictable{
 
     /**
 	 * 
@@ -32,79 +36,44 @@ public class ServiceTabsView extends RightPaneTabsView  implements Captioned,Ini
     private JPAContainer<ValidatorDO> validatorContainer = new JPAContainer<>(ValidatorDO.class);
 
     @Override
-	public void initTabs(TabSheet tabs) {
+	public Layout getLayoutDefinition() {
     	actionContainer = JPAUtils.createCachingJPAContainer(ActionDO.class);
     	fieldContainer = JPAUtils.createCachingJPAContainer(CustomFieldDO.class);
     	criteriaContainer = JPAUtils.createCachingJPAContainer(CriteriaDO.class);
     	validatorContainer = JPAUtils.createCachingJPAContainer(ValidatorDO.class);
     	
+    	
+    	TabSheetLayout tsl = new TabSheetLayout();
+    	ActionView action = new ActionView();
+    	tsl.addTab(new TableLayout(actionContainer,bundle.getString("label.services"), action.getNavKey(), 
+    			new TableColumnLayout("name", bundle.getString("label.name")),
+    			new TableColumnLayout("security", "Доступ")
+    	));
+    	FieldView field = new FieldView();
+    	tsl.addTab(new TableLayout(fieldContainer, bundle.getString("label.fields"),field.getNavKey(), 
+    			new TableColumnLayout("name", bundle.getString("label.name")),
+    			new TableColumnLayout("type", "Тип клиента"),
+    			new TableColumnLayout("required", "Обязательный"),
+    			new TableColumnLayout("field", "Поле")
+    	));
+    	CriteriaView criteria = new CriteriaView();
+    	tsl.addTab(new TableLayout(criteriaContainer, "Опция",criteria.getNavKey(), 
+    			new TableColumnLayout("name", "Опция"),
+    			new TableColumnLayout("security", "Доступ")
+    	));
+    	ValidatorView validator = new ValidatorView();
+    	tsl.addTab(new TableLayout(validatorContainer, "Проверки",validator.getNavKey(), 
+    			new TableColumnLayout("name", bundle.getString("label.name")),
+    			new TableColumnLayout("clazz", "Класс")
+    	));
+
         addForInitialization(this);
-        
-    	addTab(createActionsTable());
-    	addTab(createFieldsTable());
-    	addTab(createCriteriaTable());
-    	addTab(createValidatorTable());
+        addForInitialization(action,actionContainer);
+        addForInitialization(field,fieldContainer);
+        addForInitialization(criteria,criteriaContainer);
+        addForInitialization(validator,validatorContainer);
+        return tsl;
     }
-
-
-    private TableBuilder createActionsTable() {
-    	ActionView view = new ActionView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", bundle.getString("label.name"))
-                        .addColumn("security", "Доступ")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(actionContainer)
-                        ;
-        panel.setCaption(bundle.getString("label.services"));
-        addForInitialization(view,actionContainer);
-        return panel;
-    }
-
-   
-
-
-	private TableBuilder createFieldsTable() {
-    	FieldView view = new FieldView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", bundle.getString("label.name"))
-                        .addColumn("type", "Тип клиента")
-                        .addColumn("required", "Обязательный")
-                        .addColumn("field", "Поле")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(fieldContainer);
-        panel.setCaption(bundle.getString("label.fields"));
-        addForInitialization(view,fieldContainer);
-        return panel;
-    }
-
-    private TableBuilder createCriteriaTable() {
-    	CriteriaView view = new CriteriaView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", "Опция")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(criteriaContainer);
-        panel.setCaption("Опция");
-        addForInitialization(view,criteriaContainer);
-        return panel;
-    }
-
-    private TableBuilder createValidatorTable() {
-    	ValidatorView view = new ValidatorView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", bundle.getString("label.name"))
-                        .addColumn("clazz", "Класс")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(validatorContainer);
-        panel.setCaption("Проверки");
-        addForInitialization(view,validatorContainer);
-        return panel;
-    }
-
-
 
 	@Override
 	public String getCaption() {

@@ -5,7 +5,7 @@ import pro.deta.detatrak.common.IAction;
 
 import com.vaadin.ui.Component;
 
-public class SaveCancelLayout implements Layout {
+public class SaveCancelLayout implements Layout<FormParameter<Object>> {
 	private IAction action;
 	
 	public SaveCancelLayout(IAction action) {
@@ -13,7 +13,7 @@ public class SaveCancelLayout implements Layout {
 	}
 	
 	@Override
-	public <T> Component build(BuildLayoutParameter<T> param) {
+	public Component build(BuildLayoutParameter<FormParameter<Object>> param) {
 		return ComponentsBuilder.createSaveCancelButtons(action);
 	}
 

@@ -45,6 +45,7 @@ public class ActionView extends LayoutEntityViewBase<ActionDO> {
 					new FieldLayout("Мин. время восстановления отменённой записи (в мин.)", "minimumRestore", FieldLayout.FieldType.TEXTFIELD),
 					new SaveCancelLayout(this)
 				));
+		
 		l.addTab(new DetaFormLayout("Электронная очередь",
 				new FieldLayout("Код талонов очереди", "code", FieldLayout.FieldType.TEXTFIELD),
 				new FieldLayout("Максимальная длина очереди для выдачи талонов", "cfmQueueLength", FieldLayout.FieldType.TEXTFIELD),

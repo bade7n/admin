@@ -6,7 +6,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 
 
-public class FieldLayout implements Layout {
+public class FieldLayout implements Layout<FormParameter<Object>> {
 	public enum FieldType {
 		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX
 	}
@@ -42,7 +42,8 @@ public class FieldLayout implements Layout {
 		this.field = field;
 	}
 
-	public <T> Component build(BuildLayoutParameter<T> param) throws LayoutDefinitionException {
+	@Override
+	public Component build(BuildLayoutParameter<FormParameter<Object>> param) throws LayoutDefinitionException {
 		validate();
 		@SuppressWarnings("rawtypes")
 		Field c = null;
@@ -60,8 +61,9 @@ public class FieldLayout implements Layout {
 			c = ComponentsBuilder.createAccessComboBoxNoBind(caption);
 			break;
 		}
-		if(c!= null)
-			param.getBinder().bind(c, field);
+		if(c!= null) {
+			param.getData().getBinder().bind(c, field);
+		}
 		return c;
 	}
 

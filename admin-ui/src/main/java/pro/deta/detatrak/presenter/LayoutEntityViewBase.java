@@ -3,6 +3,7 @@ package pro.deta.detatrak.presenter;
 import org.apache.log4j.Logger;
 
 import pro.deta.detatrak.view.layout.BuildLayoutParameter;
+import pro.deta.detatrak.view.layout.FormParameter;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.LayoutDefinitionException;
 
@@ -49,20 +50,17 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 
 	private Component buildDefinition(final FieldGroup binder, final E bean) throws LayoutDefinitionException {
 		Component c;
-		c = formDefinition.build(new BuildLayoutParameter<E>() {
+		final FormParameter<E> fp = new FormParameter<E>(bean, binder);
+		c = formDefinition.build(new BuildLayoutParameter<FormParameter<E>>() {
 			@Override
-			public FieldGroup getBinder() {
-				return binder;
-			}
-
-			@Override
-			public E getBean() {
-				return bean;
+			public FormParameter<E> getData() {
+				return fp;
 			}
 		});
 		return c;
 	}
 
+	
 
 	public abstract Layout getFormDefinition();
 

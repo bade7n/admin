@@ -44,7 +44,6 @@ public class TableBuilder implements Serializable {
 	private Map<String,ColumnGenerator> columnsGen = new HashMap<>();
 	private List<String> columnsCaptions = new LinkedList<>();
 	private List<String> columnsNames = new LinkedList<>();
-	private Map<String, String> smallColumns = new HashMap<>();
 	protected Container container;
 	private String editItemKey;
 	private String caption;
@@ -138,16 +137,7 @@ public class TableBuilder implements Serializable {
 				table.addGeneratedColumn(name, columnsGen.get(name));
 		}
 		table.setVisibleColumns(columnsNames.toArray());
-		table.setCellStyleGenerator(new CellStyleGenerator() {
 
-			@Override
-			public String getStyle(Table source, Object itemId, Object propertyId) {
-				if(smallColumns.containsKey(propertyId))
-					return "small";
-				else
-					return null;
-			}
-		});
 		table.addItemClickListener(new ItemClickListener() {
 
 			@Override
@@ -283,11 +273,5 @@ public class TableBuilder implements Serializable {
 		};
 	}
 
-	public TableBuilder addSmallColumn(String name, String caption, int i) {
-		columnsNames.add(name);
-		columnsCaptions.add(caption);
-		columnsWidth.put(name, i);
-		smallColumns.put(name, "1");
-		return this;
-	}
+	
 }
