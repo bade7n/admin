@@ -58,8 +58,7 @@ public class ServiceTabsView extends NewRightPaneTabsView  implements Captioned,
     	));
     	CriteriaView criteria = new CriteriaView();
     	tsl.addTab(new TableLayout(criteriaContainer, "Опция",criteria.getNavKey(), 
-    			new TableColumnLayout("name", "Опция"),
-    			new TableColumnLayout("security", "Доступ")
+    			new TableColumnLayout("name", "Опция")
     	));
     	ValidatorView validator = new ValidatorView();
     	tsl.addTab(new TableLayout(validatorContainer, "Проверки",validator.getNavKey(), 

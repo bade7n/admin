@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.TableBuilder;
@@ -143,7 +143,7 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 						return sdf.format(dateValue);
 					}
 				} catch(Exception e) {
-					Logger.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
+					LoggerFactory.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
 					return "RowId: " + rowId +" ColId: " + colId;
 				}
 				return super.formatPropertyValue(rowId, colId, property);

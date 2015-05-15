@@ -1,7 +1,8 @@
 package pro.deta.detatrak.presenter;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.event.EventBase;
 import pro.deta.detatrak.util.EntityContainerHandler;
@@ -22,7 +23,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 	 * 
 	 */
 	private static final long serialVersionUID = 8600864478538693787L;
-	private static final Logger logger = Logger.getLogger(JPAEntityViewBase.class);
+	public static final Logger logger = LoggerFactory.getLogger(JPAEntityViewBase.class);
 	protected EntityItem<E> item = null;
 	protected EntityContainer<E> container = null;
 	protected Object itemId = null;

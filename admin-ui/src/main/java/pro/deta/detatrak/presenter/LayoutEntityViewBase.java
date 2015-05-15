@@ -1,6 +1,7 @@
 package pro.deta.detatrak.presenter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.view.layout.BuildLayoutParameter;
 import pro.deta.detatrak.view.layout.FormParameter;
@@ -12,7 +13,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Component;
 
 public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
-	public static final Logger log = Logger.getLogger(LayoutEntityViewBase.class);
+	public static final Logger logger = LoggerFactory.getLogger(LayoutEntityViewBase.class);
 	private Layout formDefinition;
 
 	public LayoutEntityViewBase(Class<E> class1) {
@@ -43,7 +44,7 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 				addComponent(buildDefinition(binder,item.getEntity()));
 			}
 		} catch (LayoutDefinitionException e) {
-			log.error("Error while building form definition for bean " + item +" by " + itemId + e.getMessage());
+			logger.error("Error while building form definition for bean " + item +" by " + itemId + e.getMessage());
 		}
 
 	}
