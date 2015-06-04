@@ -24,7 +24,7 @@ public class DetaFormLayout implements Layout<FormParameter<Object>>{
 			try {
 				fl.addComponent(l.build(p));
 			} catch (Exception e) {
-				LoggerFactory.getLogger(DetaFormLayout.class).error("Error while rendering layout for field " + l,e);
+				LoggerFactory.getLogger(DetaFormLayout.class).error("Error while rendering layout for field " + l +" form caption " + caption,e);
 			}
 		}
 		return fl;
