@@ -69,7 +69,7 @@ public class ObjectsTabsView extends RightPaneTabsView implements Captioned,Init
         .addColumn("office.name", "Офис")
 		.setBeanContainer(objectsContainer)
 		.setEditItemKey(view.getNavKey());
-		addForInitialization(view);
+		addForInitialization(view,objectsContainer);
 		return tb;
 	}
 
@@ -83,7 +83,7 @@ public class ObjectsTabsView extends RightPaneTabsView implements Captioned,Init
 		.addColumn("schedule", "Расписание")
 		.setEditItemKey(view.getNavKey())
 		.setBeanContainer(officesContainer);
-		addForInitialization(view);
+		addForInitialization(view,officesContainer);
 		return tb;
 	}
 
@@ -94,7 +94,7 @@ public class ObjectsTabsView extends RightPaneTabsView implements Captioned,Init
 		.addColumn("name", bundle.getString("label.region"))
 		.setEditItemKey(view.getNavKey())
 		.setBeanContainer(regionsContainer);
-		addForInitialization(view);
+		addForInitialization(view,regionsContainer);
 		return panel;
 	}
 

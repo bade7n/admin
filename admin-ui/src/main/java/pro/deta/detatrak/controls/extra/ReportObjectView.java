@@ -4,7 +4,6 @@ import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.AdvertisementDO;
 import ru.yar.vi.rm.data.ReportObjectDO;
 import ru.yar.vi.rm.data.ReportObjectType;
@@ -23,11 +22,8 @@ public class ReportObjectView extends JPAEntityViewBase<ReportObjectDO> {
 	private JPAContainer<AdvertisementDO> advertContainer = JPAUtils.createCachingJPAContainer(AdvertisementDO.class);
 	
 
-	private ExtraTabsView extraTabsView;
-
-    public ReportObjectView(ExtraTabsView extraTabsView) {
+    public ReportObjectView() {
     	super(ReportObjectDO.class);
-    	this.extraTabsView = extraTabsView;
     }
 
 	@Override
@@ -47,11 +43,6 @@ public class ReportObjectView extends JPAEntityViewBase<ReportObjectDO> {
 		super.saveEntity(obj);
 	}
 
-	@Override
-	public void postSaveEntity(ReportObjectDO obj) {
-		extraTabsView.getReportObjectContainer().refreshItem(itemId);
-	}
-	
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;

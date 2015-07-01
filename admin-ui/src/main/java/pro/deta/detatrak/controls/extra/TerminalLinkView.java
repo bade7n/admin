@@ -27,30 +27,38 @@ public class TerminalLinkView extends JPAEntityViewBase<TerminalLinkDO> implemen
 		super(TerminalLinkDO.class);
 		pageContainer = JPAUtils.createCachingJPAContainer(TerminalPageDO.class);
 	}
-    
-    public void setItem(EntityItem<TerminalLinkDO> item,JPAContainer<TerminalLinkDO> container,PopupView view) {
-    	this.container = container;
-    	this.view = view;
-        buildUI(item);
-    }
+
+	public void setItem(EntityItem<TerminalLinkDO> item,JPAContainer<TerminalLinkDO> container,PopupView view) {
+		this.container = container;
+		this.view = view;
+		
+		this.item = item;
+		form.removeAllComponents();
+
+		binder = new FieldGroup();
+		binder.setItemDataSource(item);
+		initForm(binder,item.getEntity());
+	}
 
 	protected void initForm(FieldGroup binder,TerminalLinkDO type) {
 		binder.setBuffered(true);
-    	form.addComponent(ComponentsBuilder.createTextField("Заголовок",binder, "name"));
-        form.addComponent(ComponentsBuilder.createTextField("Icon",binder, "icon"));
-        ComboBox createComboBoxWithDataSource = ComponentsBuilder.createComboBoxWithDataSource("Страница", pageContainer, binder, "content","name");
-        createComboBoxWithDataSource.setNullSelectionItemId(null);
-        createComboBoxWithDataSource.setImmediate(false);
+		form.addComponent(ComponentsBuilder.createTextField("Заголовок",binder, "name"));
+		form.addComponent(ComponentsBuilder.createTextField("Icon",binder, "icon"));
+		ComboBox createComboBoxWithDataSource = ComponentsBuilder.createComboBoxWithDataSource("Страница", pageContainer, binder, "content","name");
+		createComboBoxWithDataSource.setNullSelectionItemId(null);
+		createComboBoxWithDataSource.setImmediate(false);
 		form.addComponent(createComboBoxWithDataSource);
-		
-        form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
+
+		form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
 	}
-    
+
 	@Override
-	public void postSaveEntity(TerminalLinkDO obj) {
+	public void saveEntity(TerminalLinkDO obj) {
+		// TODO Добавить валидацию что выбран только один объект - либо офис либо объект либо объявление.
+		super.saveEntity(obj);
 		view.setPopupVisible(false);
 	}
-	
+
 	@Override
 	public void postCancel() {
 		view.setPopupVisible(false);
@@ -60,5 +68,5 @@ public class TerminalLinkView extends JPAEntityViewBase<TerminalLinkDO> implemen
 	public String getNavKey() {
 		return NAV_KEY;
 	}
-	
+
 }

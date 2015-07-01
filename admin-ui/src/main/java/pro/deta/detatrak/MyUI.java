@@ -8,7 +8,8 @@ import java.util.ResourceBundle;
 
 import javax.persistence.EntityManager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.common.MyConverterFactory;
 import pro.deta.detatrak.controls.OfficeChooserView;
@@ -53,7 +54,7 @@ import com.vaadin.ui.UI;
 @Theme("mytheme")
 @SuppressWarnings("serial")
 public class MyUI extends UI {
-	public static final Logger logger = Logger.getLogger(MyUI.class);
+	public static final Logger logger = LoggerFactory.getLogger(MyUI.class);
 	private static List<Class<? extends View>> topLevelMenus = null;
 	
 	ResourceProperties bundle = null;
@@ -138,7 +139,7 @@ public class MyUI extends UI {
 
 
 	
-	private void buildMenu() {
+	protected void buildMenu() {
 		this.viewDisplay = new MyViewDisplay(content);
 		setNavigator(new Navigator(this, viewDisplay));
 		root.addStyleName("main-view");

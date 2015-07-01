@@ -10,12 +10,10 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.ComplexReportDO;
 import ru.yar.vi.rm.data.ReportObjectDO;
 
@@ -37,7 +35,6 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 
 	public static final String NAV_KEY = "complexReportView";
 
-	private ExtraTabsView extraTabsView;
 	ListBuilder listBuilder = null;
 	private JPAContainer<ReportObjectDO> objectContainer = JPAUtils.createCachingJPAContainer(ReportObjectDO.class);
 	private Upload logo = null;
@@ -46,9 +43,8 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 
 	public MyImageSource imageSource;
 	
-    public ComplexReportView(ExtraTabsView extraTabsView) {
+    public ComplexReportView() {
     	super(ComplexReportDO.class);
-    	this.extraTabsView = extraTabsView;
     }
 
 	@Override
@@ -105,11 +101,6 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 		
 	}
 
-	@Override
-	public void postSaveEntity(ComplexReportDO obj) {
-		extraTabsView.getComplexReportContainer().refreshItem(itemId);
-	}
-	
 	class ImageUploader implements Receiver, SucceededListener {
 	    public ByteArrayOutputStream file;
 	    

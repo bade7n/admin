@@ -77,6 +77,12 @@ public class ScheduleTabsView extends RightPaneTabsView implements Captioned,Ini
 		.addColumn("start", bundle.getString("label.start"),DATE_WIDTH)
 		.addColumn("end", bundle.getString("label.end"),DATE_WIDTH)
 		.addColumn("objects", "Объекты", 0.7f, new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 3867709237732181054L;
+
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				List<ObjectDO> objects = (List<ObjectDO>) source.getContainerProperty(itemId, "objects").getValue();
@@ -97,7 +103,7 @@ public class ScheduleTabsView extends RightPaneTabsView implements Captioned,Ini
 		.setEditItemKey(view.getNavKey())
 		.setBeanContainer(weekendContainer)
 		.setCaption(bundle.getString("label.weekend"));
-		addForInitialization(view);
+		addForInitialization(view,weekendContainer);
 		return weekendTabBuilder;
 	}
 
@@ -113,17 +119,22 @@ public class ScheduleTabsView extends RightPaneTabsView implements Captioned,Ini
 		.setEditItemKey(view.getNavKey())
 		.setBeanContainer(durationContainer)
 		.setCaption(bundle.getString("label.duration"));
-		addForInitialization(view);
+		addForInitialization(view,durationContainer);
 		return durationTabBuilder;
 	}
 
 	private TableBuilder createScheduleView() {
-		ScheduleView view = new ScheduleView(this);
+		ScheduleView view = new ScheduleView();
 		TableBuilder scheduleTabBuilder = new TableBuilder()
 		.addColumn("start", bundle.getString("label.start"),DATE_WIDTH)
 		.addColumn("end", bundle.getString("label.end"),DATE_WIDTH)
 		.addColumn("object.name", "Объект",0.3f)
 		.addColumn("schedule", "График", 0.7f, new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -2724424682295129487L;
+
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				String value = (String) source.getContainerProperty(itemId, "schedule").getValue();
@@ -154,7 +165,7 @@ public class ScheduleTabsView extends RightPaneTabsView implements Captioned,Ini
 		.setEditItemKey(view.getNavKey())
 		.setBeanContainer(scheduleContainer)
 		.setCaption(bundle.getString("label.schedule"));
-		addForInitialization(view);
+		addForInitialization(view,scheduleContainer);
 		return scheduleTabBuilder;
 	}
 

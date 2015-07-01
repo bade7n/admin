@@ -1,18 +1,5 @@
 package pro.deta.detatrak.util;
 
-import com.vaadin.addon.jpacontainer.EntityContainer;
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.EntityItemProperty;
-import com.vaadin.addon.jpacontainer.EntityProvider;
-import com.vaadin.addon.jpacontainer.metadata.EntityClassMetadata;
-import com.vaadin.addon.jpacontainer.metadata.MetadataFactory;
-import com.vaadin.addon.jpacontainer.metadata.PropertyMetadata;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.TransactionalPropertyWrapper;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.Converter.ConversionException;
-import com.vaadin.ui.AbstractSelect;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,7 +10,19 @@ import java.util.Set;
 
 import javax.persistence.ManyToMany;
 
+import com.vaadin.addon.jpacontainer.EntityContainer;
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.EntityItemProperty;
+import com.vaadin.addon.jpacontainer.metadata.EntityClassMetadata;
+import com.vaadin.addon.jpacontainer.metadata.MetadataFactory;
+import com.vaadin.addon.jpacontainer.metadata.PropertyMetadata;
+import com.vaadin.data.Property;
+import com.vaadin.data.util.TransactionalPropertyWrapper;
+import com.vaadin.data.util.converter.Converter;
+import com.vaadin.ui.AbstractSelect;
 
+
+@SuppressWarnings("serial")
 public class MyMultiSelectConverter<T> implements
 		Converter<Collection<Object>, Collection<T>> {
 	private final AbstractSelect select;
@@ -34,8 +33,9 @@ public class MyMultiSelectConverter<T> implements
 		this.select = select;
 	}
 
+	@SuppressWarnings("unchecked")
 	private EntityContainer<T> getContainer() {
-		return ((EntityContainer) this.select.getContainerDataSource());
+		return ((EntityContainer<T>) this.select.getContainerDataSource());
 	}
 
 	public Collection<Object> convertToPresentation(Collection<T> value,

@@ -8,21 +8,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.confirmdialog.ConfirmDialog;
 
 import com.vaadin.data.Container;
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
-import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.event.Action;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.CellStyleGenerator;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
@@ -38,10 +40,12 @@ public class TableBuilder implements Serializable {
 	private Map<String,ColumnGenerator> columnsGen = new HashMap<>();
 	private List<String> columnsCaptions = new LinkedList<>();
 	private List<String> columnsNames = new LinkedList<>();
-	private Map<String, String> smallColumns = new HashMap<>();
 	protected Container container;
 	private String editItemKey;
 	private String caption;
+	static final Action ACTION_DELETE = new Action("Delete");
+	static final Action ACTION_EDIT = new Action("Edit");
+
 
 	public String getCaption() {
 		return caption;
@@ -96,18 +100,19 @@ public class TableBuilder implements Serializable {
 		this.editItemKey = key;
 		return this;
 	}
-	
+
 	CssLayout l1 = new CssLayout();
 	Table table = null;
-	
+
 	public Table getTable() {
 		return table;
 	}
-	
-	
+
+
 	public Container getContainer() {
 		return container;
 	}
+
 
 	public AbstractComponent createTable() {
 		l1.setSizeFull();
@@ -128,25 +133,51 @@ public class TableBuilder implements Serializable {
 				table.addGeneratedColumn(name, columnsGen.get(name));
 		}
 		table.setVisibleColumns(columnsNames.toArray());
-		table.setCellStyleGenerator(new CellStyleGenerator() {
-			
+
+		table.addItemClickListener(new ItemClickListener() {
+
 			@Override
-			public String getStyle(Table source, Object itemId, Object propertyId) {
-				if(smallColumns.containsKey(propertyId))
-					return "small";
-				else
-					return null;
+			public void itemClick(ItemClickEvent event) {
+				if(event.isDoubleClick()) {
+					MyUI.getCurrentUI().getViewDisplay().setContainer(l1);
+					MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + event.getItemId());
+				}
 			}
+
 		});
 
+		table.addActionHandler(new Action.Handler() {
+			public Action[] getActions(Object target, Object sender) {
+				return new Action[] { ACTION_EDIT,ACTION_DELETE };
+			}
+
+			public void handleAction(Action action, Object sender,final Object target) {
+				if(action == ACTION_DELETE) {
+					ConfirmDialog.show(MyUI.getCurrent(), "Подтверждение", "Вы уверены?",
+							"Да", "Нет", new ConfirmDialog.Listener() {
+
+						public void onClose(ConfirmDialog dialog) {
+							if (dialog.isConfirmed()) {
+								Item trg = container.getItem(target);
+								container.removeItem(target);
+							} else {
+							}
+						}
+					});
+				} else if(action == ACTION_EDIT) {
+					MyUI.getCurrentUI().getViewDisplay().setContainer(l1);
+					MyUI.getCurrentUI().getNavigator().navigateTo(editItemKey + '/' + target);
+				}
+			}
+		});
 		table.setSizeFull();
 		table.addStyleName("plain");
 		table.addStyleName("borderless");
-//		table.setImmediate(true);
+		//		table.setImmediate(true);
 		table.setPageLength(100);
-		
+
 		addServiceColumn();
-		
+
 		addPlusButton(layout);
 		layout.addComponent(table);
 		layout.setExpandRatio(table, 1.0f);
@@ -199,6 +230,7 @@ public class TableBuilder implements Serializable {
 				layout.addComponent(deleteButton);
 				return layout;
 			}
+
 		});
 	}
 
@@ -228,20 +260,14 @@ public class TableBuilder implements Serializable {
 						return sdf.format(dateValue);
 					}
 				} catch(Exception e) {
-					Logger.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
+					LoggerFactory.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
 					return "RowId: " + rowId +" ColId: " + colId;
 				}
 				return super.formatPropertyValue(rowId, colId, property);
-				
+
 			}
 		};
 	}
 
-	public TableBuilder addSmallColumn(String name, String caption, int i) {
-		columnsNames.add(name);
-		columnsCaptions.add(caption);
-		columnsWidth.put(name, i);
-		smallColumns.put(name, "1");
-		return this;
-	}
+	
 }

@@ -3,7 +3,6 @@ package pro.deta.detatrak.controls.extra;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.ObjectTypeDO;
 import ru.yar.vi.rm.data.ObjectTypeItemDO;
 
@@ -21,11 +20,8 @@ public class ObjectTypeItemView extends JPAEntityViewBase<ObjectTypeItemDO> {
 
     private EntityContainer<ObjectTypeDO> objectItemContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
 
-	private ExtraTabsView extraTabsView;
-
-    public ObjectTypeItemView(ExtraTabsView extraTabsView) {
+    public ObjectTypeItemView() {
     	super(ObjectTypeItemDO.class);
-    	this.extraTabsView = extraTabsView;
     }
 
 	@Override
@@ -35,11 +31,6 @@ public class ObjectTypeItemView extends JPAEntityViewBase<ObjectTypeItemDO> {
 		form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
 	}
 
-	@Override
-	public void postSaveEntity(ObjectTypeItemDO obj) {
-		extraTabsView.getObjectTypeItemContainer().refreshItem(itemId);
-	}
-	
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;

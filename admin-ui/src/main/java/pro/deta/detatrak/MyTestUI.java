@@ -3,11 +3,11 @@ package pro.deta.detatrak;
 import java.util.ArrayList;
 import java.util.List;
 
-import pro.deta.detatrak.controls.admin.RoleView;
+import pro.deta.detatrak.controls.service.ActionView;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.MyTwinColSelectStringConverter;
-import pro.deta.detatrak.view.ScheduleTabsView;
+import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.UserDO;
 import ru.yar.vi.rm.data.WeekendDO;
@@ -15,6 +15,7 @@ import ru.yar.vi.rm.data.WeekendDO;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -28,6 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
+@PreserveOnRefresh
 public class MyTestUI extends MyUI {
 	JPAContainer<ObjectDO> availableObjects = null;
 	private JPAContainer<WeekendDO> weekendItems;
@@ -37,20 +39,24 @@ public class MyTestUI extends MyUI {
 	FieldGroup fieldBinder = null;
 	private ListBuilder listBuilder;
 	
+	
 	protected void postInit() {
 		user = new UserDO();
 		
 //		user.setName("admin");
 		user.setDescription("Администратор");
 		buildOfficeChooser();
-		getNavigator().navigateTo(ScheduleTabsView.NAV_KEY);
+//		getNavigator().navigateTo(ScheduleTabsView.NAV_KEY);
 		
-		buildOfficeChooser();
+//		buildOfficeChooser();
 		root.removeAllComponents();
-		
+//		buildMenu();
 		setNavigator(new Navigator(this, root));
-		getNavigator().addView("roleView", new RoleView());
-		getNavigator().navigateTo("roleView/rm-oper");
+		ActionView av = new ActionView();
+		av.setEntityContainer(JPAUtils.createCachingJPAContainer(ActionDO.class));
+		getNavigator().addView("actionView", av);
+		getNavigator().navigateTo("actionView/1");
+//		getNavigator().navigateTo("/service");
 	}
 
 	private void generate3(VerticalLayout root) {

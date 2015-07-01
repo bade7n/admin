@@ -43,6 +43,12 @@ public class ComponentsBuilder {
     }
     
     public static <T> TwinColSelect createTwinColSelect(String caption,EntityContainer<T> objectContainer,FieldGroup binder,String field,String valueCaptionField) {
+    	TwinColSelect tcs = createTwinColSelectNoBind(caption, objectContainer, valueCaptionField);
+        binder.bind(tcs, field);
+        return tcs;
+    }
+    
+    public static <T> TwinColSelect createTwinColSelectNoBind(String caption,EntityContainer<T> objectContainer,String valueCaptionField) {
     	TwinColSelect objectsSelect = new TwinColSelect(caption);
 		objectsSelect.setImmediate(true);
         objectsSelect.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
@@ -50,11 +56,16 @@ public class ComponentsBuilder {
         objectsSelect.setContainerDataSource(objectContainer);
         objectsSelect.setWidth("100%");
         objectsSelect.setConverter(new MyTwinColSelectStringConverter<T>(objectContainer));
-        binder.bind(objectsSelect, field);
         return objectsSelect;
     }
     
     public static <T> CKEditorTextField createCKEditorTextField(String title,FieldGroup binder, String field) {
+    	CKEditorTextField ck = createCKEditorTextFieldNoBind(title);
+    	binder.bind(ck, field);
+		return ck;
+    }
+    
+    public static <T> CKEditorTextField createCKEditorTextFieldNoBind(String title) {
 		CKEditorConfig config1 = new CKEditorConfig();
 		config1.useCompactTags();
 		config1.disableElementsPath();
@@ -66,7 +77,6 @@ public class ComponentsBuilder {
     	CKEditorTextField ckEditorTextField1 = new CKEditorTextField(config1);
     	ckEditorTextField1.setCaption(title);
 		ckEditorTextField1.setHeight("440px"); // account for 300px editor plus toolbars
-		binder.bind(ckEditorTextField1, field);
 		return ckEditorTextField1;
     }
     
@@ -82,18 +92,36 @@ public class ComponentsBuilder {
         return comboBox;
     }
 
+    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, EntityContainer<T> container,String captionField) {
+        ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField);
+		comboBox.setImmediate(true);
+        comboBox.setNullSelectionAllowed(true);
+        comboBox.setNullSelectionItemId(0);
+        return comboBox;
+    }
+    
     public static ComboBox createAccessComboBox(FieldGroup binder, String field) {
+    	ComboBox c = createAccessComboBoxNoBind("Доступ");
+        binder.bind(c, field);
+        return c;
+    }
+    
+    public static ComboBox createAccessComboBoxNoBind(String caption) {
     	Container container = createContainerFromSecurity();
-        ComboBox comboBox = new ComboBox("Доступ",container);
+        ComboBox comboBox = new ComboBox(caption,container);
         comboBox.setWidth(width);
         comboBox.setItemCaptionPropertyId("code");
         comboBox.setTextInputAllowed(false);
         comboBox.setNullSelectionAllowed(false);
-        binder.bind(comboBox, field);
         return comboBox;
     }
 
     public static <T> ComboBox createCustomComboBox(String caption, Container container, FieldGroup binder, String field,String captionField) {
+        ComboBox combo = createCustomComboBoxNoBind(caption, container, captionField);
+        binder.bind(combo, field);
+        return combo;
+    }
+    public static <T> ComboBox createCustomComboBoxNoBind(String caption, Container container, String captionField) {
         ComboBox comboBox = new ComboBox(caption);
         comboBox.setContainerDataSource(container);
         comboBox.setTextInputAllowed(false);
@@ -102,10 +130,9 @@ public class ComponentsBuilder {
         comboBox.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         comboBox.setItemCaptionPropertyId(captionField);
         comboBox.setConverter(new SingleSelectConverter(comboBox));
-        binder.bind(comboBox, field);
         return comboBox;
     }
-
+    
     public static HorizontalLayout createSaveCancelButtons(final IAction iAction) {
         return new HorizontalLayout() {
             {
@@ -146,15 +173,20 @@ public class ComponentsBuilder {
 
 	public static TextField createTextField(String caption, FieldGroup binder,
 			String field) {
+		TextField tf = createTextFieldNoBind(caption);
+		binder.bind(tf, field);
+		return tf;
+	}
+
+	public static TextField createTextFieldNoBind(String caption) {
 		TextField tf = new TextField(caption);
 		tf.setNullSettingAllowed(true);
 		tf.setNullRepresentation("");
 		tf.setImmediate(true);
-		binder.bind(tf, field);
 		tf.setWidth(width);
 		return tf;
 	}
-
+	
 	public static Component createTextArea(String caption, FieldGroup binder,
 			String field) {
 		TextArea ta = new TextArea(caption);
@@ -163,11 +195,14 @@ public class ComponentsBuilder {
         return ta;
 	}
 	
-	public static Component createCheckBox(String caption, FieldGroup binder,
-			String field) {
+	public static Component createCheckBox(String caption, FieldGroup binder,String field) {
+		CheckBox cb = createCheckBoxNoBind(caption);
+        binder.bind(cb, field);
+		return cb;
+	}
+	public static CheckBox createCheckBoxNoBind(String caption) {
         CheckBox cb = new CheckBox(caption);
 		cb.setImmediate(true);
-        binder.bind(cb, field);
 		return cb;
 	}
 

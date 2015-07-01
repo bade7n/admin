@@ -1,48 +1,54 @@
 package pro.deta.detatrak.presenter;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.event.EventBase;
+import pro.deta.detatrak.util.EntityContainerHandler;
 import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.model.NumberWrapper;
 
+import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container;
-import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.PopupView;
 
 
-public abstract class JPAEntityViewBase<E> extends EditViewBase {
+public abstract class JPAEntityViewBase<E> extends EditViewBase implements EntityContainerHandler<E> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8600864478538693787L;
-	private static final Logger logger = Logger.getLogger(JPAEntityViewBase.class);
+	public static final Logger logger = LoggerFactory.getLogger(JPAEntityViewBase.class);
 	protected EntityItem<E> item = null;
-	protected JPAContainer<E> container = null;
+	protected EntityContainer<E> container = null;
 	protected Object itemId = null;
 	protected BeanItem<E> addedBean = null;
 	protected Class<E> type = null;
 	protected FieldGroup binder;
-	private TableBuilder tableBuilder;
-	private ItemSetChangeEvent event;
+//	private TableBuilder tableBuilder;
+//	private ItemSetChangeEvent event;
 
 	public JPAEntityViewBase(Class<E> e) {
-		this.container = JPAUtils.createCachingJPAContainer(e);
+//		this.container = JPAUtils.createCachingJPAContainer(e);
 		type = e;
 	}
 
-	
 	public void setItem(EntityItem<E> item,JPAContainer<E> container,PopupView view) {
 		
 	}
+
+	public void setEntityContainer(EntityContainer<E> container) {
+		this.container = container;
+	}
 	
+	/**
+	 * commented out due to not using.
+	 * @param tb
 	@SuppressWarnings("serial")
 	public void setTableBuilder(TableBuilder tb) {
 		this.tableBuilder = tb;
@@ -54,8 +60,9 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 		};
 	}
 	
+	 */
 	@Override
-	final protected void buildUI(String parameter) {
+	protected void buildUI(String parameter) {
 		item = null;
 		itemId = getItemId(parameter);
 		form.removeAllComponents();
@@ -76,24 +83,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 		
 	}
 
-	final protected void buildUI(EntityItem<E> item) {
-		this.item = item;
-		form.removeAllComponents();
-		
-		binder = new FieldGroup();
-//		binder.setBuffered(false);
-		if(item == null) {
-			// если создаём новый объект - не надо его делать через JPA, в режиме Bean
-			E bean = createBean();
-			addedBean = new BeanItem<E>(bean);
-			binder.setItemDataSource(addedBean);
-			initForm(binder,bean);
-		} else {
-			binder.setItemDataSource(item);
-			initForm(binder,item.getEntity());
-		}
-		
-	}
+	
 	
 	public E createBean() {
 		try {
@@ -128,29 +118,28 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase {
 			E e = addedBean.getBean();
 			saveEntity(e);
 			save(e);
-			postSaveEntity(e);
+//			postSaveEntity(e);
 		} else {
 			E e = item.getEntity();
 			saveEntity(e);
 			save(e);
-			postSaveEntity(e);
+//			postSaveEntity(e);
 		}
 	}
 	
 	private final void save(Object o) {
 		JPAUtils.save(o);
 		dispatchEvent(new EventBase("save"));
-		if(tableBuilder != null && tableBuilder.getTable()!= null) {
-			tableBuilder.getTable().containerItemSetChange(event);
-		}
+//		if(tableBuilder != null && tableBuilder.getTable()!= null) {
+//			tableBuilder.getTable().containerItemSetChange(event);
+//		}
 	}
 
 	public void saveEntity(E obj) {
 		
 	}
 	
-	public void postSaveEntity(E obj) {
-	}
+
 	
 	public void cancel() {
 		binder.discard();

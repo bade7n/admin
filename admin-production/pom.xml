@@ -70,19 +70,9 @@
                                             <artifactId>admin-ui</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
-                                            <includes>VAADIN/themes/**/*</includes>
+                                            <includes>VAADIN/themes/**,META-INF/**,WEB-INF/classes/**,WEB-INF/web.xml</includes>
                                             <!-- If there already is a compiled theme, we want to recompile it -->
-                                            <excludes>VAADIN/themes/**/styles.css</excludes>
                                             <outputDirectory>${vaadin.resource.directory}</outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>${project.groupId}</groupId>
-                                            <artifactId>admin-widgetset</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>jar</type>
-                                            <includes>pro/deta/detatrak/**</includes>
-                                            <!-- Vaadin/GWT plug-in expects .gwt.xml to be in its warSourceDirectory -->
-                                            <outputDirectory>${vaadin.resource.directory}/WEB-INF/classes</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
                                     <overWriteIfNewer>true</overWriteIfNewer>
@@ -90,6 +80,25 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo>Displaying value of 'vaadin.resource.directory' property</echo>
+								<echo>[vaadin.resource.directory] ${vaadin.resource.directory}</echo>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
                     <plugin>
                         <groupId>net.alchim31.maven</groupId>
                         <artifactId>yuicompressor-maven-plugin</artifactId>
@@ -106,14 +115,13 @@
                             </execution>
                         </executions>
                     </plugin>
+                    
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
                         <configuration>
-                            <module>pro.deta.detatrak.MyAppWidgetset</module>
                             <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
                             <warSourceDirectory>${vaadin.resource.directory}</warSourceDirectory>
-                            <webappDirectory>${vaadin.resource.directory}/VAADIN/widgetsets</webappDirectory>
                             <draftCompile>false</draftCompile>
                             <compileReport>false</compileReport>
                             <style>OBF</style>
@@ -129,6 +137,8 @@
                             </execution>
                         </executions>
                     </plugin>
+                    
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
@@ -139,24 +149,10 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <overlays>
-                                <overlay>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>admin-ui</artifactId>
-                                    <excludes>
-                                        <!-- Exclude larger development time widgetset. -->
-                                        <!-- The relevant classes are copied to the WAR above. -->
-                                        <exclude>WEB-INF/lib/admin-widgetset-*.jar</exclude>
-                                        <!-- Exclude the Sass compiler and its dependencies. -->
-                                        <!-- The production WAR includes a precompiled theme. -->
-                                        <exclude>WEB-INF/lib/vaadin-sass-compiler-*.jar</exclude>
-                                        <exclude>WEB-INF/lib/sac-*.jar</exclude>
-                                        <exclude>WEB-INF/lib/flute-*.jar</exclude>
-                                    </excludes>
-                                </overlay>
-                            </overlays>
+                     		<packagingIncludes>META-INF/**,VAADIN/themes/**,WEB-INF/classes/**,WEB-INF/web.xml,WEB-INF/lib/ckeditor-wrapper-for-vaadin-*.jar,WEB-INF/lib/jpacontainer-*.jar,WEB-INF/lib/recordmanager-data-${project.version}.jar,WEB-INF/lib/admin-widgetset-${project.version}.jar,WEB-INF/lib/vaadin-server-*.jar</packagingIncludes>
                             <!-- Exclude some unnecessary files generated by the GWT compiler. -->
-                            <packagingExcludes>VAADIN/gwt-unitCache/**,VAADIN/widgetsets/WEB-INF/**</packagingExcludes>
+<!--                             <packagingExcludes>VAADIN/gwt-unitCache/**,VAADIN/widgetsets/WEB-INF/**,WEB-INF/lib/vaadin*.jar,</packagingExcludes>
+ -->
                         </configuration>
                     </plugin>
                     <plugin>

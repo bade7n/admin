@@ -12,7 +12,6 @@ import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.view.ExtraTabsView;
 import ru.yar.vi.rm.data.NavigationDO;
 import ru.yar.vi.rm.data.TerminalLinkDO;
 
@@ -34,7 +33,6 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 
 	public static final String NAV_KEY = "navigationView";
 
-	private ExtraTabsView extraTabsView;
 	private JPAContainer<TerminalLinkDO> linkContainer = JPAUtils.createCachingJPAContainer(TerminalLinkDO.class);
 	private Upload logo = null;
 	private Embedded image = new Embedded("Uploaded Image");
@@ -42,9 +40,8 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 
 	public MyImageSource imageSource;
 	
-    public NavigationView(ExtraTabsView extraTabsView) {
+    public NavigationView() {
     	super(NavigationDO.class);
-    	this.extraTabsView = extraTabsView;
     }
 
 	@Override
@@ -94,10 +91,6 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 		
 	}
 
-	@Override
-	public void postSaveEntity(NavigationDO obj) {
-		extraTabsView.getNavContainer().refreshItem(itemId);
-	}
 	
 	class ImageUploader implements Receiver, SucceededListener {
 	    public ByteArrayOutputStream file;

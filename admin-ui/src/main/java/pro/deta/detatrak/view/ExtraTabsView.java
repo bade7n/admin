@@ -107,8 +107,8 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
                         .setEditItemKey(configurationView.getNavKey())
                         .setBeanContainer(configContainer);
         panel.setCaption("Конфигурация");
-        configurationView.setTableBuilder(panel);
-        addForInitialization(configurationView);
+//        configurationView.setTableBuilder(panel);
+        addForInitialization(configurationView,configContainer);
         return panel;
     }
 
@@ -118,6 +118,11 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	TableBuilder panel = new TableBuilder()
     	.addColumn("name", "Название",0.3f)
     	.addColumn("link", "", new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6597981813395434865L;
+
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?pageId="+itemId));
@@ -128,7 +133,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	.setEditItemKey(view.getNavKey())
     	.setBeanContainer(pageContainer);
     	panel.setCaption("Страницы термнала");
-    	addForInitialization(view);
+    	addForInitialization(view,pageContainer);
     	return panel;
 	}
 
@@ -140,6 +145,11 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	final TerminalLinkView v1 = new TerminalLinkView();
 		view.setContent(new Content() {
 			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4796221196778621795L;
+
 			@Override
 			public Component getPopupComponent() {
 				return v1;
@@ -151,17 +161,23 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
 			}
 		});
     	
-    	TreeTableBuilder panel = new TreeTableBuilder<TerminalLinkDO>(view,v1);
+    	TreeTableBuilder<TerminalLinkDO> panel = new TreeTableBuilder<TerminalLinkDO>(view,v1);
     	panel.addColumn("name", "Название",0.7f);
     	panel.addColumn("id", "Идентификатор",0.3f);
 		panel.setEditItemKey(v1.getNavKey());
     	panel.setBeanContainer(navLinkContainer);
     	panel.setActionHandler(new Action.Handler() {
-			   public Action[] getActions(Object target, Object sender) {
+			   /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3562765695898454257L;
+
+			public Action[] getActions(Object target, Object sender) {
 			      return new Action[] { ACTION_DELETE };
 			   }
 
-			   public void handleAction(Action action, Object sender,final Object target) {
+			   @SuppressWarnings("serial")
+			public void handleAction(Action action, Object sender,final Object target) {
 				   ConfirmDialog.show(MyUI.getCurrent(), "Подтверждение", "Вы уверены?",
 							"Да", "Нет", new ConfirmDialog.Listener() {
 
@@ -178,16 +194,21 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
 					});
 			   }
 			});
-    	addForInitialization(v1);
+    	addForInitialization(v1,navLinkContainer);
     	panel.setCaption("Навигация - меню");
     	return panel;
 	}
     
     private TableBuilder createNavigationTable() {
-    	NavigationView view = new NavigationView(this);
+    	NavigationView view = new NavigationView();
     	TableBuilder panel = new TableBuilder()
     	.addColumn("title", "Название",0.3f)
 		.addColumn("link", "", new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -190760629159210981L;
+
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?navId="+itemId));
@@ -198,12 +219,12 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	.setEditItemKey(view.getNavKey())
     	.setBeanContainer(navContainer);
     	panel.setCaption("Навигация");
-    	addForInitialization(view);
+    	addForInitialization(view,navContainer);
     	return panel;
 	}
 
 	private TableBuilder createReportObjectTable() {
-		ReportObjectView view = new ReportObjectView(this);
+		ReportObjectView view = new ReportObjectView();
     	TableBuilder panel = new TableBuilder()
     	.addColumn("office.name", "Офис")
     	.addColumn("object.name", "Объект")
@@ -212,15 +233,21 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	.setEditItemKey(view.getNavKey())
     	.setBeanContainer(reportObjectContainer);
     	panel.setCaption("Объекты отчёта");
-    	addForInitialization(view);
+    	addForInitialization(view,reportObjectContainer);
     	return panel;
 	}
 
 	private TableBuilder createComplexReportTable() {
-		ComplexReportView view = new ComplexReportView(this);
+		ComplexReportView view = new ComplexReportView();
     	TableBuilder panel = new TableBuilder()
     	.addColumn("name", "Название",0.3f)
     	.addColumn("objects", "Объекты", 0.7f, new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4355046341072124674L;
+
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				List<ReportObjectDO> objects = (List<ReportObjectDO>) source.getContainerProperty(itemId, "objects").getValue();
@@ -250,6 +277,11 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
 			}
 		})
 		.addColumn("link", "Ссылка на отчёт", new Table.ColumnGenerator() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3592369916305235539L;
+
 			@Override
 			public Object generateCell(Table source, Object itemId, Object columnId) {
 				Link l = new Link("Ссылка на отчёт",new ExternalResource("/rm/self/report.do?reportId="+itemId));
@@ -260,12 +292,12 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	.setEditItemKey(view.getNavKey())
     	.setBeanContainer(complexReportContainer);
     	panel.setCaption("Отчёты");
-    	addForInitialization(view);
+    	addForInitialization(view,complexReportContainer);
     	return panel;
 	}
 
 	private TableBuilder createObjectTypeItemsTable() {
-		ObjectTypeItemView view = new ObjectTypeItemView(this);
+		ObjectTypeItemView view = new ObjectTypeItemView();
     	TableBuilder panel = new TableBuilder()
     	.addColumn("type.name", "Тип объекта")
     	.addColumn("type.type", "Код")
@@ -273,7 +305,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
     	.setEditItemKey(view.getNavKey())
     	.setBeanContainer(objectTypeItemContainer);
     	panel.setCaption("Типы объектов");
-    	addForInitialization(view);
+    	addForInitialization(view,objectTypeItemContainer);
     	return panel;
     }
 
@@ -289,7 +321,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
                 .setEditItemKey(view.getNavKey())
                 .setBeanContainer(objectTypeContainer);
         panel.setCaption("Типы объектов");
-        addForInitialization(view);
+        addForInitialization(view,objectTypeContainer);
         return panel;
     }
 
@@ -302,12 +334,12 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
                         .setEditItemKey(view.getNavKey())
                         .setBeanContainer(siteContainer);
         panel.setCaption("Площадки");
-        addForInitialization(view);
+        addForInitialization(view,siteContainer);
         return panel;
     }
 
     private TableBuilder createAdvertTable() {
-    	AdvertView view = new AdvertView(this);
+    	AdvertView view = new AdvertView();
     	TableBuilder panel =
                 new TableBuilder()
                         .addColumn("name", "Название")
@@ -315,7 +347,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
                         .setEditItemKey(view.getNavKey())
                         .setBeanContainer(advertContainer);
         panel.setCaption("Объявления");
-        addForInitialization(view);
+        addForInitialization(view,advertContainer);
         return panel;
     }
 	@Override
