@@ -18,8 +18,9 @@ import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.Receiver;
 import com.vaadin.ui.Upload.SucceededEvent;
 import com.vaadin.ui.Upload.SucceededListener;
+import com.vaadin.ui.VerticalLayout;
 
-public class FileUploader implements Receiver, SucceededListener {
+public class FileUploader extends VerticalLayout implements Receiver, SucceededListener {
 	private Upload upload = null;
 	private AbstractMedia media;
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -30,6 +31,8 @@ public class FileUploader implements Receiver, SucceededListener {
     	upload = new Upload("", this);
     	upload.addSucceededListener(this);
     	media.setVisible(false);
+    	addComponent(upload);
+    	addComponent(media);
     }
     
     public OutputStream receiveUpload(String filename, String mimeType) {
@@ -62,11 +65,7 @@ public class FileUploader implements Receiver, SucceededListener {
     		return new ByteArrayInputStream(imagebuffer.toByteArray());
     	}
     }
-    
-    public void addComponentTo(AbstractComponentContainer container) {
-    	container.addComponent(upload);
-    	container.addComponent(media);
-    }
+
 
 	public void setImageSource(ByteArrayOutputStream baos2, String name,
 			String contentType) {
@@ -113,5 +112,21 @@ public class FileUploader implements Receiver, SucceededListener {
 	public void clear() {
 		baos = new ByteArrayOutputStream();
 		imageSource = null;
+	}
+
+	public Upload getUpload() {
+		return upload;
+	}
+
+	public void setUpload(Upload upload) {
+		this.upload = upload;
+	}
+
+	public AbstractMedia getMedia() {
+		return media;
+	}
+
+	public void setMedia(AbstractMedia media) {
+		this.media = media;
 	}
 }
