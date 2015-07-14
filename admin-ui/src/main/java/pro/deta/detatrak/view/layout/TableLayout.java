@@ -27,7 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 public class TableLayout  implements Layout<FormParameter<Object>> {
-	private TableColumnLayout[] columns;
+	private TableColumnLayout[] columns = new TableColumnLayout[0];
 	private String editItemNavigationKey;
 	private Container container;
 	private String caption;
@@ -199,4 +199,15 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 		return button;
 	}
 
+	public void save(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (TableColumnLayout layout : columns) {
+			layout.save(p);
+		}
+	}
+	
+	public void cancel(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (TableColumnLayout layout : columns) {
+			layout.cancel(p);
+		}		
+	}
 }

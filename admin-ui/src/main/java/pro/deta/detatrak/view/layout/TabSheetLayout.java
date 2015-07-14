@@ -41,5 +41,16 @@ public class TabSheetLayout implements Layout<FormParameter<Object>> {
 		this.tabs = tabs;
 	}
 
+	public void save(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (Layout<FormParameter<Object>> layout : tabs) {
+			layout.save(p);
+		}
+	}
+	
+	public void cancel(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (Layout<FormParameter<Object>> layout : tabs) {
+			layout.cancel(p);
+		}		
+	}
 
 }

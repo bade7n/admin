@@ -29,5 +29,17 @@ public class DetaFormLayout implements Layout<FormParameter<Object>>{
 		}
 		return fl;
 	}
+	
+	public void save(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (Layout<FormParameter<Object>> layout : layouts) {
+			layout.save(p);
+		}
+	}
+	
+	public void cancel(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+		for (Layout<FormParameter<Object>> layout : layouts) {
+			layout.cancel(p);
+		}		
+	}
 
 }

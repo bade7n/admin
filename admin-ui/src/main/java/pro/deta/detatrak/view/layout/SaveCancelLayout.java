@@ -16,5 +16,9 @@ public class SaveCancelLayout implements Layout<FormParameter<Object>> {
 	public Component build(BuildLayoutParameter<FormParameter<Object>> param) {
 		return ComponentsBuilder.createSaveCancelButtons(action);
 	}
-
+	public void save(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+	}
+	
+	public void cancel(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+	}
 }

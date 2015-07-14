@@ -17,6 +17,7 @@ import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.ui.Audio;
 
 public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 
@@ -46,11 +47,11 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 				));
 
 		l.addTab(new DetaFormLayout("Электронная очередь",
-				new FieldLayout("Distinct queue", "distinctQueue", FieldLayout.FieldType.TEXTFIELD),
+				new FieldLayout("Distinct queue", "distinctQueue", FieldLayout.FieldType.CHECKBOX),
 				new SaveCancelLayout(this)
 				));
 
-		uploaderFieldLayout = new FieldLayout("Uploaded audio file", "sound", FieldLayout.FieldType.SOUND_FILE);
+		uploaderFieldLayout = new FieldLayout("Uploaded audio file", "sound", FieldLayout.FieldType.SOUND_FILE,new Audio());
 		l.addTab(new DetaFormLayout("Дополнительно",
 				uploaderFieldLayout ,
 				new FieldLayout("ОКАТО", "okato", FieldLayout.FieldType.TEXTFIELD),
@@ -62,28 +63,28 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 		return l;
 	}
 
-	@Override
-	public void saveEntity(OfficeDO office) {
-		try {
-			if(uploaderFieldLayout != null) {
-				FileUploader uploader = uploaderFieldLayout.getUploader();
-				if(uploader.isUploaded()) {
-					if(office.getSound() != null)
-						uploader.populateFilestorage(office.getSound());
-					else {
-						office.setSound(uploader.getFilestorage());
-					}
-					FilestorageContentDO content = JPAUtils.getEntityManager().merge(office.getSound().getContent());
-					office.getSound().setContent(content);
-					FilestorageDO fs = JPAUtils.getEntityManager().merge(office.getSound());
-					office.setSound(fs);
-				}
-				uploader.clear();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	@Override
+//	public void saveEntity(OfficeDO office) {
+//		try {
+//			if(uploaderFieldLayout != null) {
+//				FileUploader uploader = uploaderFieldLayout.getUploader();
+//				if(uploader.isUploaded()) {
+//					if(office.getSound() != null)
+//						uploader.populateFilestorage(office.getSound());
+//					else {
+//						office.setSound(uploader.getFilestorage());
+//					}
+//					FilestorageContentDO content = JPAUtils.getEntityManager().merge(office.getSound().getContent());
+//					office.getSound().setContent(content);
+//					FilestorageDO fs = JPAUtils.getEntityManager().merge(office.getSound());
+//					office.setSound(fs);
+//				}
+//				uploader.clear();
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 
 	@Override

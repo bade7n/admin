@@ -62,4 +62,9 @@ public class TableColumnLayout implements Layout<TableParameter> {
 		return name;
 	}
 
+	public void save(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+	}
+	
+	public void cancel(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutRuntimeException {
+	}
 }

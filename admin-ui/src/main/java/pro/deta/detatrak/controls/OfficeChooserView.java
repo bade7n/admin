@@ -34,7 +34,7 @@ public class OfficeChooserView extends RightPaneView  implements Captioned {
         table.setContainerDataSource(MyUI.getCurrentUI().getOfficeContainer());
         table.setConvertedValue(MyUI.getCurrentUI().getOffice().getId());
         table.setPageLength(0);
-
+        table.setVisibleColumns("id","name","schedule","okato","serviceActionList","serviceRegionList");
         table.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {

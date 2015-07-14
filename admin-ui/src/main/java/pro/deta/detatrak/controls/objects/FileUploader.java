@@ -12,7 +12,6 @@ import ru.yar.vi.rm.data.FilestorageContentDO;
 import ru.yar.vi.rm.data.FilestorageDO;
 
 import com.vaadin.server.StreamResource;
-import com.vaadin.ui.AbstractComponentContainer;
 import com.vaadin.ui.AbstractMedia;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.Receiver;
@@ -35,7 +34,12 @@ public class FileUploader extends VerticalLayout implements Receiver, SucceededL
     	addComponent(media);
     }
     
-    public OutputStream receiveUpload(String filename, String mimeType) {
+    public FileUploader(String caption, AbstractMedia media2) {
+    	this(media2);
+    	super.setCaption(caption);
+	}
+
+	public OutputStream receiveUpload(String filename, String mimeType) {
     	baos.reset();
         return baos;
     }
