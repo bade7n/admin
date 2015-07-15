@@ -43,7 +43,7 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 				binder.setItemDataSource(addedBean);
 				addComponent(buildDefinition(binder,bean));
 			} else {
-				item = container.getItem(itemId);
+				item = container.getItem(itemId);//container.getItem(10)
 				binder.setItemDataSource(item);
 				addComponent(buildDefinition(binder,item.getEntity()));
 			}

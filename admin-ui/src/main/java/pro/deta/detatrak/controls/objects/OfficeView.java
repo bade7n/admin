@@ -1,7 +1,5 @@
 package pro.deta.detatrak.controls.objects;
 
-import java.io.IOException;
-
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
@@ -11,8 +9,6 @@ import pro.deta.detatrak.view.layout.SaveCancelLayout;
 import pro.deta.detatrak.view.layout.TabSheetLayout;
 import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.ActionDO;
-import ru.yar.vi.rm.data.FilestorageContentDO;
-import ru.yar.vi.rm.data.FilestorageDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 
@@ -26,7 +22,6 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 	 */
 	private static final long serialVersionUID = -142895297402943269L;
 	public static final String NAV_KEY = "officeView";
-	FieldLayout uploaderFieldLayout;
 
 	public OfficeView() {
 		super(OfficeDO.class);
@@ -46,16 +41,16 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 				new SaveCancelLayout(this)
 				));
 
+		
+
 		l.addTab(new DetaFormLayout("Электронная очередь",
-				new FieldLayout("Distinct queue", "distinctQueue", FieldLayout.FieldType.CHECKBOX),
+				new FieldLayout("Звук вызова следующего посетителя", "sound", FieldLayout.FieldType.SOUND_FILE,new Audio()) ,
+				new FieldLayout("Общая очередь", "distinctQueue", FieldLayout.FieldType.CHECKBOX),
 				new SaveCancelLayout(this)
 				));
-
-		uploaderFieldLayout = new FieldLayout("Uploaded audio file", "sound", FieldLayout.FieldType.SOUND_FILE,new Audio());
 		l.addTab(new DetaFormLayout("Дополнительно",
-				uploaderFieldLayout ,
 				new FieldLayout("ОКАТО", "okato", FieldLayout.FieldType.TEXTFIELD),
-				new FieldLayout("Регионы обслуживания", "serviceRegionList", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
+				new FieldLayout("Регионы обслуживания офиса", "serviceRegionList", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
 				new FieldLayout("Услуги", "serviceActionList", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
 				new SaveCancelLayout(this)
 				));
@@ -63,49 +58,10 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 		return l;
 	}
 
-//	@Override
-//	public void saveEntity(OfficeDO office) {
-//		try {
-//			if(uploaderFieldLayout != null) {
-//				FileUploader uploader = uploaderFieldLayout.getUploader();
-//				if(uploader.isUploaded()) {
-//					if(office.getSound() != null)
-//						uploader.populateFilestorage(office.getSound());
-//					else {
-//						office.setSound(uploader.getFilestorage());
-//					}
-//					FilestorageContentDO content = JPAUtils.getEntityManager().merge(office.getSound().getContent());
-//					office.getSound().setContent(content);
-//					FilestorageDO fs = JPAUtils.getEntityManager().merge(office.getSound());
-//					office.setSound(fs);
-//				}
-//				uploader.clear();
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;
 	}
-
-	public void postSaveEntity(OfficeDO obj) {
-		if(uploaderFieldLayout != null) {
-			FileUploader uploader = uploaderFieldLayout.getUploader();
-			uploader.clear();
-		}
-	}
-
-	public void postCancel() {
-		if(uploaderFieldLayout != null) {
-			FileUploader uploader = uploaderFieldLayout.getUploader();
-			uploader.clear();
-		}
-	}
-
 
 }
 
