@@ -42,7 +42,7 @@ public class ObjectsTabsView extends NewRightPaneTabsView implements Captioned,I
 		objectsContainer.addNestedContainerProperty("office.name");
 		objectsContainer.addNestedContainerProperty("type.name");
 		
-    	TabSheetLayout tsl = new TabSheetLayout();//officesContainer.getItem(10)
+    	TabSheetLayout tsl = new TabSheetLayout();
     	OfficeView office = new OfficeView();
     	tsl.addTab(new TableLayout(officesContainer, bundle.getString("label.offices"),office.getNavKey(), 
     			new TableColumnLayout("name", bundle.getString("label.name")),

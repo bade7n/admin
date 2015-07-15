@@ -6,7 +6,7 @@ import java.util.List;
 
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.presenter.TabViewPresenter;
-import pro.deta.detatrak.util.RightPaneTabsView;
+import pro.deta.detatrak.util.NewRightPaneTabsView;
 import pro.deta.detatrak.view.Initializable;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
@@ -49,7 +49,7 @@ public abstract class EventDispatcher extends Panel implements View,Initializabl
 		subViews.add(e);
 	}
 	
-	public void addForInitialization(RightPaneTabsView e) {
+	public void addForInitialization(NewRightPaneTabsView e) {
 		subViews.add(e);
 	}
 
