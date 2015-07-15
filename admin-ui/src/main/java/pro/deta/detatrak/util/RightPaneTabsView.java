@@ -1,10 +1,6 @@
 package pro.deta.detatrak.util;
 
-import pro.deta.detatrak.common.TableBuilder;
-
-import com.vaadin.data.Container;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.TabSheet;
 
 public abstract class RightPaneTabsView extends RightPaneView {
@@ -35,20 +31,8 @@ public abstract class RightPaneTabsView extends RightPaneView {
 	protected void updateSelectedTab() {
 	}
 
-	public void addTab(TableBuilder tb) {
-        AbstractComponent panel = tb.createTable();
-        tabs.addTab(panel,tb.getCaption());
-    }
-	
     public abstract void initTabs(TabSheet tabs);
 
 	public abstract String getCaption();
     
-    protected TableBuilder createTableBuilder(String caption, String navKey, Container container) {
-    	TableBuilder panel = new TableBuilder()
-                .setBeanContainer(container)
-                .setEditItemKey(navKey);
-        panel.setCaption(caption);
-        return panel;
-    }
 }

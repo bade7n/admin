@@ -1,36 +1,25 @@
 package pro.deta.detatrak.view;
 
 import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.controls.objects.ObjectView;
 import pro.deta.detatrak.controls.objects.OfficeView;
 import pro.deta.detatrak.controls.objects.RegionView;
-import pro.deta.detatrak.controls.service.ActionView;
-import pro.deta.detatrak.controls.service.CriteriaView;
-import pro.deta.detatrak.controls.service.FieldView;
-import pro.deta.detatrak.controls.service.ValidatorView;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.NewRightPaneTabsView;
-import pro.deta.detatrak.util.RightPaneTabsView;
 import pro.deta.detatrak.util.TopLevelMenuView;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.TabSheetLayout;
 import pro.deta.detatrak.view.layout.TableColumnLayout;
 import pro.deta.detatrak.view.layout.TableLayout;
 import pro.deta.security.SecurityElement;
-import ru.yar.vi.rm.data.ActionDO;
-import ru.yar.vi.rm.data.CriteriaDO;
-import ru.yar.vi.rm.data.CustomFieldDO;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
-import ru.yar.vi.rm.data.ValidatorDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.TabSheet;
 
 @TopLevelMenuView(icon="icon-object")
 public class ObjectsTabsView extends NewRightPaneTabsView implements Captioned,Initializable,Restrictable {

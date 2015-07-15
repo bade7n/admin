@@ -1,7 +1,6 @@
 package pro.deta.detatrak.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewDisplay;

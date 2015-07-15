@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.data.HierarchyDO;
@@ -17,8 +16,6 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.DataBoundTransferable;
-import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
@@ -28,12 +25,9 @@ import com.vaadin.shared.ui.dd.VerticalDropLocation;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.AbstractSelect.VerticalLocationIs;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PopupView;
 import com.vaadin.ui.Table;
@@ -83,7 +77,7 @@ public class TreeTableLayout<E extends HierarchyDO<E>> extends TableLayout {
 						return sdf.format(dateValue);
 					}
 				} catch(Exception e) {
-					LoggerFactory.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
+					LoggerFactory.getLogger(TreeTableLayout.class).error("Error while formatting property " + colId +" on " + rowId, e);
 					return "RowId: " + rowId +" ColId: " + colId;
 				}
 				return super.formatPropertyValue(rowId, colId, property);

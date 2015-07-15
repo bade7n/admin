@@ -7,7 +7,6 @@ import java.util.Date;
 import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.confirmdialog.ConfirmDialog;
 import pro.deta.detatrak.confirmdialog.ConfirmDialog.Listener;
 
@@ -160,7 +159,7 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 						return sdf.format(dateValue);
 					}
 				} catch(Exception e) {
-					LoggerFactory.getLogger(TableBuilder.class).error("Error while formatting property " + colId +" on " + rowId, e);
+					LoggerFactory.getLogger(TableLayout.class).error("Error while formatting property " + colId +" on " + rowId, e);
 					return "RowId: " + rowId +" ColId: " + colId;
 				}
 				return super.formatPropertyValue(rowId, colId, property);
