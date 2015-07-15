@@ -40,8 +40,8 @@ public class TableColumnLayout implements Layout<TableParameter> {
 		this.generator = generator;
 		this.expandRatio = expandRatio;
 	}
-	
-	
+
+
 	@Override
 	public Component build(BuildLayoutParameter<TableParameter> param)
 			throws LayoutDefinitionException {

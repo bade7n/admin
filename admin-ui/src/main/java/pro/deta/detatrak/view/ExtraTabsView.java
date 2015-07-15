@@ -3,8 +3,6 @@ package pro.deta.detatrak.view;
 import java.util.List;
 
 import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.common.TableBuilder;
-import pro.deta.detatrak.common.TreeTableBuilder;
 import pro.deta.detatrak.confirmdialog.ConfirmDialog;
 import pro.deta.detatrak.controls.extra.AdvertView;
 import pro.deta.detatrak.controls.extra.ComplexReportView;
@@ -17,8 +15,14 @@ import pro.deta.detatrak.controls.extra.SiteView;
 import pro.deta.detatrak.controls.extra.TerminalLinkView;
 import pro.deta.detatrak.controls.extra.TerminalPageView;
 import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.detatrak.util.RightPaneTabsView;
+import pro.deta.detatrak.util.NewRightPaneTabsView;
 import pro.deta.detatrak.util.TopLevelMenuView;
+import pro.deta.detatrak.view.layout.FormParameter;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
+import pro.deta.detatrak.view.layout.TableColumnLayout;
+import pro.deta.detatrak.view.layout.TableLayout;
+import pro.deta.detatrak.view.layout.TreeTableLayout;
 import pro.deta.security.SecurityElement;
 import ru.yar.vi.rm.data.AdvertisementDO;
 import ru.yar.vi.rm.data.ComplexReportDO;
@@ -40,316 +44,259 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.PopupView;
 import com.vaadin.ui.PopupView.Content;
-import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 
 @TopLevelMenuView(icon="icon-extra")
-public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initializable,Restrictable{
+public class ExtraTabsView extends NewRightPaneTabsView  implements Captioned,Initializable,Restrictable{
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1286752618922726883L;
 	public static final String NAV_KEY = "/extra";
-    private JPAContainer<ObjectTypeDO> objectTypeContainer;
-    private JPAContainer<ObjectTypeItemDO> objectTypeItemContainer;
-    private JPAContainer<ConfigDO> configContainer;
-    private JPAContainer<SiteDO> siteContainer;
-    private JPAContainer<ReportObjectDO> reportObjectContainer;
-    private JPAContainer<ComplexReportDO> complexReportContainer;
-    private JPAContainer<AdvertisementDO> advertContainer;
-    private JPAContainer<NavigationDO> navContainer;
-    private JPAContainer<TerminalLinkDO> navLinkContainer;
-    private JPAContainer<TerminalPageDO> pageContainer;
+	private JPAContainer<ObjectTypeDO> objectTypeContainer;
+	private JPAContainer<ObjectTypeItemDO> objectTypeItemContainer;
+	private JPAContainer<ConfigDO> configContainer;
+	private JPAContainer<SiteDO> siteContainer;
+	private JPAContainer<ReportObjectDO> reportObjectContainer;
+	private JPAContainer<ComplexReportDO> complexReportContainer;
+	private JPAContainer<AdvertisementDO> advertContainer;
+	private JPAContainer<NavigationDO> navContainer;
+	private JPAContainer<TerminalLinkDO> navLinkContainer;
+	private JPAContainer<TerminalPageDO> pageContainer;
+
 
 	@Override
-	public void initTabs(TabSheet tabs) {	
-    	objectTypeContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
-    	objectTypeItemContainer = JPAUtils.createCachingJPAContainer(ObjectTypeItemDO.class);
-    	configContainer = JPAUtils.createCachingJPAContainer(ConfigDO.class);
-    	siteContainer = JPAUtils.createCachingJPAContainer(SiteDO.class);
-    	objectTypeItemContainer.addNestedContainerProperty("type.name");
-    	objectTypeItemContainer.addNestedContainerProperty("type.type");
-    	reportObjectContainer = JPAUtils.createCachingJPAContainer(ReportObjectDO.class);
-    	complexReportContainer = JPAUtils.createCachingJPAContainer(ComplexReportDO.class);
-    	reportObjectContainer.addNestedContainerProperty("office.name");
-    	reportObjectContainer.addNestedContainerProperty("object.name");
-    	reportObjectContainer.addNestedContainerProperty("adv.name");
-    	advertContainer = JPAUtils.createCachingJPAContainer(AdvertisementDO.class);
-    	navContainer = JPAUtils.createCachingJPAContainer(NavigationDO.class);
-    	navLinkContainer = JPAUtils.createCachingJPAContainer(TerminalLinkDO.class);
-    	navLinkContainer.setParentProperty("parent");
-    	pageContainer = JPAUtils.createCachingJPAContainer(TerminalPageDO.class);
-    	
-        addForInitialization(this);
-        
-        addTab(createObjectTypesTable());
-        addTab(createObjectTypeItemsTable());
-        addTab(createConfigurationsTable());
-        addTab(createSitesTable());
-        addTab(createComplexReportTable());
-        addTab(createReportObjectTable());
-        addTab(createAdvertTable());
-        addTab(createNavigationTable());
-        addTab(createNavigationLinkTable());
-        addTab(createTerminalPageTable());
-        
-    }
+	public Layout getLayoutDefinition() {
+		objectTypeContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
+		objectTypeItemContainer = JPAUtils.createCachingJPAContainer(ObjectTypeItemDO.class);
+		configContainer = JPAUtils.createCachingJPAContainer(ConfigDO.class);
+		siteContainer = JPAUtils.createCachingJPAContainer(SiteDO.class);
+		objectTypeItemContainer.addNestedContainerProperty("type.name");
+		objectTypeItemContainer.addNestedContainerProperty("type.type");
+		reportObjectContainer = JPAUtils.createCachingJPAContainer(ReportObjectDO.class);
+		complexReportContainer = JPAUtils.createCachingJPAContainer(ComplexReportDO.class);
+		reportObjectContainer.addNestedContainerProperty("office.name");
+		reportObjectContainer.addNestedContainerProperty("object.name");
+		reportObjectContainer.addNestedContainerProperty("adv.name");
+		advertContainer = JPAUtils.createCachingJPAContainer(AdvertisementDO.class);
+		navContainer = JPAUtils.createCachingJPAContainer(NavigationDO.class);
+		navLinkContainer = JPAUtils.createCachingJPAContainer(TerminalLinkDO.class);
+		navLinkContainer.setParentProperty("parent");
+		pageContainer = JPAUtils.createCachingJPAContainer(TerminalPageDO.class);
 
-	
-    private TableBuilder createConfigurationsTable() {
-    	ConfigurationView configurationView = new ConfigurationView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", "Имя параметра")
-                        .addColumn("value", "Значение")
-                        .setEditItemKey(configurationView.getNavKey())
-                        .setBeanContainer(configContainer);
-        panel.setCaption("Конфигурация");
-//        configurationView.setTableBuilder(panel);
-        addForInitialization(configurationView,configContainer);
-        return panel;
-    }
+		TabSheetLayout tsl = new TabSheetLayout();
 
-	
-	private TableBuilder createTerminalPageTable() {
-		TerminalPageView view = new TerminalPageView(this);
-    	TableBuilder panel = new TableBuilder()
-    	.addColumn("name", "Название",0.3f)
-    	.addColumn("link", "", new Table.ColumnGenerator() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6597981813395434865L;
 
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?pageId="+itemId));
-				l.setTargetName("_blank");
-				return l;
-			}
-		})
-    	.setEditItemKey(view.getNavKey())
-    	.setBeanContainer(pageContainer);
-    	panel.setCaption("Страницы термнала");
-    	addForInitialization(view,pageContainer);
-    	return panel;
+		ObjectTypeView objectType = new ObjectTypeView();
+		tsl.addTab(new TableLayout(objectTypeContainer,bundle.getString("label.objectType"), objectType.getNavKey(),
+				new TableColumnLayout("name",bundle.getString("label.name")),
+				new TableColumnLayout("type",bundle.getString("label.type"))
+				));
+
+
+		ObjectTypeItemView objectTypeItem = new ObjectTypeItemView();
+		tsl.addTab(new TableLayout(objectTypeItemContainer, bundle.getString("label.objectTypeItem"),objectTypeItem.getNavKey(), 
+				new TableColumnLayout("type.name",bundle.getString("label.type.name")),
+				new TableColumnLayout("type.type",bundle.getString("label.type.code")),
+				new TableColumnLayout("required",bundle.getString("label.required"))
+				));
+
+		ConfigurationView configuration = new ConfigurationView();
+		tsl.addTab(new TableLayout(configContainer, bundle.getString("label.configuration"),configuration.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name")),
+				new TableColumnLayout("value",bundle.getString("label.value"))
+				));
+
+		SiteView site = new SiteView();
+		tsl.addTab(new TableLayout(siteContainer, bundle.getString("label.site"),site.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name")),
+				new TableColumnLayout("description",bundle.getString("label.description"))
+				));
+
+		ComplexReportView complexReport = new ComplexReportView();
+		tsl.addTab(new TableLayout(complexReportContainer, bundle.getString("label.complexReport"),complexReport.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name"),0.3f),
+				new TableColumnLayout("objects",bundle.getString("label.objects"),new Table.ColumnGenerator() {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 4355046341072124674L;
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						List<ReportObjectDO> objects = (List<ReportObjectDO>) source.getContainerProperty(itemId, "objects").getValue();
+						String value = "";
+						for (ReportObjectDO c : objects) {
+							switch (c.getType()) {
+							case ADV_TYPE:
+								value += "ADV: " + c.getAdv().getName() +"\n";
+								break;
+							case OBJECT_TYPE:
+								value +=  c.getObject().getName() +"\n";
+								break;
+							case OFFICE_TYPE:
+								value += c.getOffice().getName() +"\n";
+								break;
+							default:
+								break;
+							}
+						}
+						TextArea ta = new TextArea();
+						ta.setRows(objects.size() == 0 ? 1 : objects.size());
+						ta.setWordwrap(false);
+						ta.setValue(value);
+						ta.setSizeFull();
+						ta.setReadOnly(true);
+						return ta;
+					}
+				},0.7f),
+				new TableColumnLayout("link",bundle.getString("label.reportLink"),new Table.ColumnGenerator() {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -3592369916305235539L;
+
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						Link l = new Link("Ссылка на отчёт",new ExternalResource("/rm/self/report.do?reportId="+itemId));
+						l.setTargetName("_blank");
+						return l;
+					}
+				})
+		));
+
+		ReportObjectView reportObject = new ReportObjectView();
+		tsl.addTab(new TableLayout(reportObjectContainer, bundle.getString("label.reportObject"),reportObject.getNavKey(), 
+				new TableColumnLayout("office.name",bundle.getString("label.office")),
+				new TableColumnLayout("object.name",bundle.getString("label.object")),
+				new TableColumnLayout("adv.name",bundle.getString("label.adv")),
+				new TableColumnLayout("type",bundle.getString("label.type"))
+				));
+		
+
+		AdvertView advert = new AdvertView();
+		tsl.addTab(new TableLayout(advertContainer, bundle.getString("label.adv"),advert.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name")),
+				new TableColumnLayout("description",bundle.getString("label.description"))
+				));
+
+				
+		NavigationView navigation = new NavigationView();
+		tsl.addTab(new TableLayout(navContainer, bundle.getString("label.navigation"),navigation.getNavKey(), 
+				new TableColumnLayout("title",bundle.getString("label.title"),0.3f),
+				new TableColumnLayout("link",bundle.getString("label.link"),new Table.ColumnGenerator() {
+					private static final long serialVersionUID = -190760629159210981L;
+
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?navId="+itemId));
+						l.setTargetName("_blank");
+						return l;
+					}
+				})
+		));
+		
+		
+		TerminalLinkView navigationLink = new TerminalLinkView();
+		tsl.addTab(createNavigationLinkTable(navigationLink));
+		
+		TerminalPageView terminalPage = new TerminalPageView();
+		tsl.addTab(new TableLayout(pageContainer, bundle.getString("label.terminalPage"),configuration.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name"),0.3f),
+				new TableColumnLayout("link",bundle.getString("label.link"),new Table.ColumnGenerator() {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6597981813395434865L;
+
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?pageId="+itemId));
+						l.setTargetName("_blank");
+						return l;
+					}
+				})
+		));
+
+		addForInitialization(this);
+
+		addForInitialization(objectType,objectTypeContainer);
+		addForInitialization(objectTypeItem,objectTypeItemContainer);
+		addForInitialization(configuration,configContainer);
+		addForInitialization(site,siteContainer);
+		addForInitialization(complexReport,complexReportContainer);
+		addForInitialization(reportObject,reportObjectContainer);
+		addForInitialization(advert,advertContainer);
+		addForInitialization(navigation,navContainer);
+		addForInitialization(navigationLink,navLinkContainer);
+		addForInitialization(terminalPage,pageContainer);
+		return tsl;
 	}
 
-	static final Action ACTION_DELETE = new Action("Delete");
+
+
 	
 
-    private TableBuilder createNavigationLinkTable() {
-    	PopupView view = new PopupView(null,null);
-    	final TerminalLinkView v1 = new TerminalLinkView();
-		view.setContent(new Content() {
-			
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4796221196778621795L;
 
-			@Override
+	static final Action ACTION_DELETE = new Action("Delete");
+
+	@SuppressWarnings("serial")
+	private Layout<FormParameter<Object>> createNavigationLinkTable(
+			TerminalLinkView navigationLink) {
+		
+		PopupView view = new PopupView(null,null);
+		view.setContent(new Content() {
 			public Component getPopupComponent() {
-				return v1;
+				return navigationLink;
 			}
-			
-			@Override
 			public String getMinimizedValueAsHTML() {
 				return "";
 			}
 		});
-    	
-    	TreeTableBuilder<TerminalLinkDO> panel = new TreeTableBuilder<TerminalLinkDO>(view,v1);
-    	panel.addColumn("name", "Название",0.7f);
-    	panel.addColumn("id", "Идентификатор",0.3f);
-		panel.setEditItemKey(v1.getNavKey());
-    	panel.setBeanContainer(navLinkContainer);
-    	panel.setActionHandler(new Action.Handler() {
-			   /**
-			 * 
-			 */
-			private static final long serialVersionUID = -3562765695898454257L;
 
+		
+		TreeTableLayout<TerminalLinkDO> layout = new TreeTableLayout<TerminalLinkDO>(navLinkContainer, bundle.getString("label.navigationLink"),navigationLink.getNavKey(), 
+				new TableColumnLayout("name",bundle.getString("label.name"),0.7f),
+				new TableColumnLayout("id",bundle.getString("label.id"),0.3f)
+		);
+		layout.setAdditionalComponents(view,navigationLink);
+		layout.setActionHandler(new Action.Handler() {
 			public Action[] getActions(Object target, Object sender) {
-			      return new Action[] { ACTION_DELETE };
-			   }
+				return new Action[] { ACTION_DELETE };
+			}
 
-			   @SuppressWarnings("serial")
+			@SuppressWarnings("serial")
 			public void handleAction(Action action, Object sender,final Object target) {
-				   ConfirmDialog.show(MyUI.getCurrent(), "Подтверждение", "Вы уверены?",
-							"Да", "Нет", new ConfirmDialog.Listener() {
+				ConfirmDialog.show(MyUI.getCurrent(), "Подтверждение", "Вы уверены?",
+						"Да", "Нет", new ConfirmDialog.Listener() {
 
-						public void onClose(ConfirmDialog dialog) {
-							if (dialog.isConfirmed()) {
-								EntityItem<TerminalLinkDO> trg = navLinkContainer.getItem(target);
-								trg.getEntity().getParent().getChilds().remove(trg.getEntity());
-								navLinkContainer.removeItem(target);
-								navLinkContainer.commit();
-								navLinkContainer.refresh();
-							} else {
-							}
+					public void onClose(ConfirmDialog dialog) {
+						if (dialog.isConfirmed()) {
+							EntityItem<TerminalLinkDO> trg = navLinkContainer.getItem(target);
+							trg.getEntity().getParent().getChilds().remove(trg.getEntity());
+							navLinkContainer.removeItem(target);
+							navLinkContainer.commit();
+							navLinkContainer.refresh();
+						} else {
 						}
-					});
-			   }
-			});
-    	addForInitialization(v1,navLinkContainer);
-    	panel.setCaption("Навигация - меню");
-    	return panel;
-	}
-    
-    private TableBuilder createNavigationTable() {
-    	NavigationView view = new NavigationView();
-    	TableBuilder panel = new TableBuilder()
-    	.addColumn("title", "Название",0.3f)
-		.addColumn("link", "", new Table.ColumnGenerator() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -190760629159210981L;
-
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				Link l = new Link("Ссылка на терминал",new ExternalResource("/rm/self/terminal.do?navId="+itemId));
-				l.setTargetName("_blank");
-				return l;
-			}
-		})
-    	.setEditItemKey(view.getNavKey())
-    	.setBeanContainer(navContainer);
-    	panel.setCaption("Навигация");
-    	addForInitialization(view,navContainer);
-    	return panel;
-	}
-
-	private TableBuilder createReportObjectTable() {
-		ReportObjectView view = new ReportObjectView();
-    	TableBuilder panel = new TableBuilder()
-    	.addColumn("office.name", "Офис")
-    	.addColumn("object.name", "Объект")
-    	.addColumn("adv.name", "Объявление")
-    	.addColumn("type", "Тип")
-    	.setEditItemKey(view.getNavKey())
-    	.setBeanContainer(reportObjectContainer);
-    	panel.setCaption("Объекты отчёта");
-    	addForInitialization(view,reportObjectContainer);
-    	return panel;
-	}
-
-	private TableBuilder createComplexReportTable() {
-		ComplexReportView view = new ComplexReportView();
-    	TableBuilder panel = new TableBuilder()
-    	.addColumn("name", "Название",0.3f)
-    	.addColumn("objects", "Объекты", 0.7f, new Table.ColumnGenerator() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4355046341072124674L;
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				List<ReportObjectDO> objects = (List<ReportObjectDO>) source.getContainerProperty(itemId, "objects").getValue();
-				String value = "";
-				for (ReportObjectDO c : objects) {
-					switch (c.getType()) {
-					case ADV_TYPE:
-						value += "ADV: " + c.getAdv().getName() +"\n";
-						break;
-					case OBJECT_TYPE:
-						value +=  c.getObject().getName() +"\n";
-						break;
-					case OFFICE_TYPE:
-						value += c.getOffice().getName() +"\n";
-						break;
-					default:
-						break;
 					}
-				}
-				TextArea ta = new TextArea();
-				ta.setRows(objects.size() == 0 ? 1 : objects.size());
-				ta.setWordwrap(false);
-				ta.setValue(value);
-				ta.setSizeFull();
-				ta.setReadOnly(true);
-				return ta;
+				});
 			}
-		})
-		.addColumn("link", "Ссылка на отчёт", new Table.ColumnGenerator() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -3592369916305235539L;
-
-			@Override
-			public Object generateCell(Table source, Object itemId, Object columnId) {
-				Link l = new Link("Ссылка на отчёт",new ExternalResource("/rm/self/report.do?reportId="+itemId));
-				l.setTargetName("_blank");
-				return l;
-			}
-		})
-    	.setEditItemKey(view.getNavKey())
-    	.setBeanContainer(complexReportContainer);
-    	panel.setCaption("Отчёты");
-    	addForInitialization(view,complexReportContainer);
-    	return panel;
+		});
+		return layout;
 	}
 
-	private TableBuilder createObjectTypeItemsTable() {
-		ObjectTypeItemView view = new ObjectTypeItemView();
-    	TableBuilder panel = new TableBuilder()
-    	.addColumn("type.name", "Тип объекта")
-    	.addColumn("type.type", "Код")
-    	.addColumn("required", "Обязательный")
-    	.setEditItemKey(view.getNavKey())
-    	.setBeanContainer(objectTypeItemContainer);
-    	panel.setCaption("Типы объектов");
-    	addForInitialization(view,objectTypeItemContainer);
-    	return panel;
-    }
+
+
 
 	@Override
-    public void changeView(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-    }
+	public void changeView(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+	}
 
-    private TableBuilder createObjectTypesTable() {
-    	ObjectTypeView view = new ObjectTypeView();
-    	TableBuilder panel = new TableBuilder()
-                .addColumn("name", "Имя типа объекта")
-                .addColumn("type", "Код типа объекта")
-                .setEditItemKey(view.getNavKey())
-                .setBeanContainer(objectTypeContainer);
-        panel.setCaption("Типы объектов");
-        addForInitialization(view,objectTypeContainer);
-        return panel;
-    }
-
-    private TableBuilder createSitesTable() {
-    	SiteView view = new SiteView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", "Название")
-                        .addColumn("description", "Описание")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(siteContainer);
-        panel.setCaption("Площадки");
-        addForInitialization(view,siteContainer);
-        return panel;
-    }
-
-    private TableBuilder createAdvertTable() {
-    	AdvertView view = new AdvertView();
-    	TableBuilder panel =
-                new TableBuilder()
-                        .addColumn("name", "Название")
-                        .addColumn("description", "Описание")
-                        .setEditItemKey(view.getNavKey())
-                        .setBeanContainer(advertContainer);
-        panel.setCaption("Объявления");
-        addForInitialization(view,advertContainer);
-        return panel;
-    }
+	
 	@Override
 	public String getCaption() {
 		return bundle.getString("label.extra");
@@ -385,7 +332,7 @@ public class ExtraTabsView extends RightPaneTabsView  implements Captioned,Initi
 	}
 
 
-    public JPAContainer<ReportObjectDO> getReportObjectContainer() {
+	public JPAContainer<ReportObjectDO> getReportObjectContainer() {
 		return reportObjectContainer;
 	}
 

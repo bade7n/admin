@@ -7,6 +7,7 @@ import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.data.TerminalLinkDO;
 import ru.yar.vi.rm.data.TerminalPageDO;
 
+import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -28,7 +29,7 @@ public class TerminalLinkView extends JPAEntityViewBase<TerminalLinkDO> implemen
 		pageContainer = JPAUtils.createCachingJPAContainer(TerminalPageDO.class);
 	}
 
-	public void setItem(EntityItem<TerminalLinkDO> item,JPAContainer<TerminalLinkDO> container,PopupView view) {
+	public void setItem(EntityItem<TerminalLinkDO> item,EntityContainer<TerminalLinkDO> container,PopupView view) {
 		this.container = container;
 		this.view = view;
 		

@@ -15,11 +15,8 @@ public class TerminalPageView extends JPAEntityViewBase<TerminalPageDO> {
 
 	private static final long serialVersionUID = -2909980719200560830L;
 
-	private ExtraTabsView extra;
-
-	public TerminalPageView(ExtraTabsView extraTabsView) {
+	public TerminalPageView() {
 		super(TerminalPageDO.class);
-		this.extra = extraTabsView;
 	}
     
 	protected void initForm(FieldGroup binder,TerminalPageDO type) {

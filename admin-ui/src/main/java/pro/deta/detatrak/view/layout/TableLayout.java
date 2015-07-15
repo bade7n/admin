@@ -59,7 +59,7 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 		Component root = createLayout(table);
 		return root;
 	}
-	private void addItemClickListener(ComponentContainer componentContainer, Table table) {
+	protected void addItemClickListener(ComponentContainer componentContainer, Table table) {
 		table.addItemClickListener(new ItemClickListener() {
 			private static final long serialVersionUID = 1436529222668499538L;
 
@@ -90,12 +90,18 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 		addServiceColumn(css,table);
 		addItemClickListener(css,table);
 		addActionHandlers(css,table);
+		initializeLayout(verticalLayout);
 
 		verticalLayout.addComponent(plusButton);
 		verticalLayout.addComponent(table);
 		verticalLayout.setExpandRatio(table, 1.0f);
 
 		return css;
+	}
+
+	public void initializeLayout(ComponentContainer verticalLayout) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	static final Action ACTION_DELETE = new Action("Delete");
@@ -129,7 +135,18 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 	}
 
 	protected Table createTable() {
-		Table table = new Table() {
+		Table table = getTableInstance();
+		table.setSizeFull();
+		table.addStyleName("plain");
+		table.addStyleName("borderless");
+		table.addStyleName("listing");
+		//		table.setImmediate(true);
+		table.setPageLength(100);
+		return table;
+	}
+	
+	protected Table getTableInstance() {
+		return new Table() {
 			private static final long serialVersionUID = 2689155068351476684L;
 			
 			private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -150,13 +167,6 @@ public class TableLayout  implements Layout<FormParameter<Object>> {
 
 			}
 		};
-		table.setSizeFull();
-		table.addStyleName("plain");
-		table.addStyleName("borderless");
-		table.addStyleName("listing");
-		//		table.setImmediate(true);
-		table.setPageLength(100);
-		return table;
 	}
 	
 	protected void addServiceColumn(ComponentContainer componentContainer,Table table) {

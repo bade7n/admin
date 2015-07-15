@@ -6,14 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.persistence.EntityManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.common.MyConverterFactory;
 import pro.deta.detatrak.controls.OfficeChooserView;
-import pro.deta.detatrak.dao.EMDAO;
 import pro.deta.detatrak.presenter.TabViewPresenter;
 import pro.deta.detatrak.util.DataUtil;
 import pro.deta.detatrak.util.JPAUtils;

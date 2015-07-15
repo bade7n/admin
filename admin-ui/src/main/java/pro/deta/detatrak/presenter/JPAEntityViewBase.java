@@ -38,7 +38,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		type = e;
 	}
 
-	public void setItem(EntityItem<E> item,JPAContainer<E> container,PopupView view) {
+	public void setItem(EntityItem<E> item,EntityContainer<E> container,PopupView view) {
 		
 	}
 

@@ -1,6 +1,5 @@
 package pro.deta.detatrak.view;
 
-import pro.deta.detatrak.common.TableBuilder;
 import pro.deta.detatrak.controls.service.ActionView;
 import pro.deta.detatrak.controls.service.CriteriaView;
 import pro.deta.detatrak.controls.service.FieldView;
@@ -20,7 +19,6 @@ import ru.yar.vi.rm.data.ValidatorDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.TabSheet;
 
 @TopLevelMenuView(icon="icon-service")
 public class ServiceTabsView extends NewRightPaneTabsView  implements Captioned,Initializable,Restrictable{
