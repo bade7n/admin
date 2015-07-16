@@ -1,8 +1,14 @@
 package pro.deta.detatrak.controls.extra;
 
-import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.presenter.JPAEntityViewBase;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
+import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.FieldLayout;
+import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.SaveCancelLayout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
+import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.CustomerDO;
 import ru.yar.vi.rm.data.OfficeDO;
@@ -10,53 +16,74 @@ import ru.yar.vi.rm.data.RegionDO;
 import ru.yar.vi.rm.data.SiteDO;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
-import com.vaadin.data.fieldgroup.FieldGroup;
 
-public class SiteView extends JPAEntityViewBase<SiteDO> {
+public class SiteView extends LayoutEntityViewBase<SiteDO> {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3012193455613754605L;
 	public static final String NAV_KEY = "siteView";
-	private EntityContainer<ActionDO> actionContainer = JPAUtils.createCachingJPAContainer(ActionDO.class);
-	private EntityContainer<CustomerDO> customerContainer = JPAUtils.createCachingJPAContainer(CustomerDO.class);
-	private EntityContainer<OfficeDO> officeContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
-	private EntityContainer<RegionDO> regionContainer = JPAUtils.createCachingJPAContainer(RegionDO.class);
-	
-    public SiteView() {
-    	super(SiteDO.class);
-    }
+
+	public SiteView() {
+		super(SiteDO.class);
+	}
 
 
 	@Override
-	protected void initForm(FieldGroup binder,SiteDO site) {
+	public Layout getFormDefinition() {
+		EntityContainer<ActionDO> actionContainer = JPAUtils.createCachingJPAContainer(ActionDO.class);
+		EntityContainer<CustomerDO> customerContainer = JPAUtils.createCachingJPAContainer(CustomerDO.class);
+		EntityContainer<OfficeDO> officeContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
+		EntityContainer<RegionDO> regionContainer = JPAUtils.createCachingJPAContainer(RegionDO.class);
+
+
+		TabSheetLayout l = new TabSheetLayout();
+		l.addTab(new DetaFormLayout("Основные настройки",
+				new FieldLayout("Название", "name", FieldType.TEXTFIELD),
+				new FieldLayout("Главный", "main", FieldType.CHECKBOX),
+
+				new SaveCancelLayout(this)
+				));
+
+		l.addTab(new DetaFormLayout("HTTP описание",
+				new FieldLayout("HTTP Title", "httpTitle", FieldType.TEXTFIELD),
+				new FieldLayout("HTTP Description", "httpDescription", FieldType.CKEDITOR),
+				new FieldLayout("HTTP Keywords", "httpKeywords", FieldType.TEXTAREA),
+				new FieldLayout("HTTP Template", "httpTemplate", FieldType.TEXTAREA),
+
+				new SaveCancelLayout(this)
+				));
+		
+		l.addTab(new DetaFormLayout("Информация",
+				new FieldLayout("Описание", "description", FieldType.CKEDITOR),
+				new FieldLayout("Информация", "info", FieldType.CKEDITOR),
+				new FieldLayout("Вводный текст", "intro", FieldType.CKEDITOR),
+				new FieldLayout("Текст по окончании процедуры записи", "finalText", FieldType.TEXTFIELD),
+
+				new SaveCancelLayout(this)
+				));
+
+		l.addTab(new DetaFormLayout("Стили",
+				new FieldLayout("Стиль основной", "styleCss", FieldType.TEXTAREA),
+				new FieldLayout("Стиль терминала", "selfCss", FieldType.TEXTAREA),
+				new FieldLayout("Стиль электронная очередь", "cfmCss", FieldType.TEXTAREA),
+				new SaveCancelLayout(this)
+				));
 
 		
-        form.addComponent(ComponentsBuilder.createTextField("Название", binder, "name"));
-        form.addComponent(ComponentsBuilder.createCheckBox("Главный", binder, "main"));
+		l.addTab(new DetaFormLayout("Дополнительно",
+				new FieldLayout("Услуги", "actions", FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
+				new FieldLayout("Типы клиентов", "customers", FieldType.TWINCOLSELECT,new ValuesContainer<>(customerContainer)),
+				new FieldLayout("Офисы", "offices", FieldType.TWINCOLSELECT,new ValuesContainer<>(officeContainer)),
+				new FieldLayout("Регионы", "regions", FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
 
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("Описание", binder, "description"));
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("Информация", binder, "info"));
-
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("Вводный текст", binder, "intro"));
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("Текст по окончании процедуры записи", binder, "finalText"));
-        form.addComponent(ComponentsBuilder.createTextArea("HTTP Title", binder, "httpTitle"));
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("HTTP Description", binder, "httpDescription"));
-        form.addComponent(ComponentsBuilder.createTextArea("HTTP Keywords", binder, "httpKeywords"));
-        form.addComponent(ComponentsBuilder.createTextArea("HTTP Template", binder, "httpTemplate"));
-
-        form.addComponent(ComponentsBuilder.createTextArea("Стиль терминала", binder, "selfCss"));
-        form.addComponent(ComponentsBuilder.createTextArea("Стиль основной", binder, "styleCss"));
-        form.addComponent(ComponentsBuilder.createTextArea("Стиль живая очередь", binder, "cfmCss"));
-
-        form.addComponent(ComponentsBuilder.createTwinColSelect("Услуги", actionContainer, binder, "actions"));
-        form.addComponent(ComponentsBuilder.createTwinColSelect("Типы клиентов", customerContainer, binder, "customers"));
-        form.addComponent(ComponentsBuilder.createTwinColSelect("Офисы", officeContainer, binder, "offices"));
-        form.addComponent(ComponentsBuilder.createTwinColSelect("Регионы", regionContainer, binder, "regions"));
-
-        form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
+				new SaveCancelLayout(this)
+				));
 		
+		
+		return l;
+
 	}
 	@Override
 	public String getNavKey() {

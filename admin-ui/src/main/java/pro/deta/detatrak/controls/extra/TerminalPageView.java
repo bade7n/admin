@@ -1,13 +1,15 @@
 package pro.deta.detatrak.controls.extra;
 
-import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.presenter.JPAEntityViewBase;
-import pro.deta.detatrak.view.ExtraTabsView;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
+import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.FieldLayout;
+import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.SaveCancelLayout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
 import ru.yar.vi.rm.data.TerminalPageDO;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
-
-public class TerminalPageView extends JPAEntityViewBase<TerminalPageDO> {
+public class TerminalPageView extends LayoutEntityViewBase<TerminalPageDO> {
 	/**
 	 * 
 	 */
@@ -19,13 +21,19 @@ public class TerminalPageView extends JPAEntityViewBase<TerminalPageDO> {
 		super(TerminalPageDO.class);
 	}
     
-	protected void initForm(FieldGroup binder,TerminalPageDO type) {
-		binder.setBuffered(true);
-    	form.addComponent(ComponentsBuilder.createTextField("Заголовок",binder, "name"));
-        form.addComponent(ComponentsBuilder.createCKEditorTextField("Содержание", binder, "content"));
-        form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
+	@Override
+	public Layout getFormDefinition() {
+		
+		TabSheetLayout l = new TabSheetLayout();
+		l.addTab(new DetaFormLayout("Основные настройки",
+				new FieldLayout("Заголовок", "name", FieldType.TEXTFIELD),
+				new FieldLayout("Содержание", "content", FieldType.CKEDITOR),
+
+				new SaveCancelLayout(this)
+				));
+		return l;
 	}
-    
+	
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;

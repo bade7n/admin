@@ -1,12 +1,15 @@
 package pro.deta.detatrak.controls.extra;
 
-import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.presenter.JPAEntityViewBase;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
+import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.FieldLayout;
+import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.SaveCancelLayout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
 import ru.yar.vi.rm.data.AdvertisementDO;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
-
-public class AdvertView extends JPAEntityViewBase<AdvertisementDO> {
+public class AdvertView extends LayoutEntityViewBase<AdvertisementDO> {
 
     /**
 	 * 
@@ -18,17 +21,21 @@ public class AdvertView extends JPAEntityViewBase<AdvertisementDO> {
     	super(AdvertisementDO.class);
     }
 
-    @Override
-	protected void initForm(FieldGroup binder,AdvertisementDO type) {
-    	form.addComponent(ComponentsBuilder.createTextField("Название",binder, "name"));
-    	form.addComponent(ComponentsBuilder.createTextField("Описание",binder, "description"));
-        form.addComponent(ComponentsBuilder.createTextArea("HTML",binder, "html"));
-        form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
-	}
-    
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;
 	}
+	
+	public Layout getFormDefinition() {
+		TabSheetLayout l = new TabSheetLayout();
+		l.addTab(new DetaFormLayout("Основные настройки",
+				new FieldLayout("Название", "name", FieldLayout.FieldType.TEXTFIELD),
+				new FieldLayout("Описание", "description", FieldLayout.FieldType.TEXTFIELD),
+				new FieldLayout("HTML", "html", FieldType.CKEDITOR),
+				new SaveCancelLayout(this)
+		));
+		return l;
+	}
+
 
 }

@@ -21,7 +21,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	private static final Logger logger = LoggerFactory.getLogger(FieldLayout.class);
 	
 	public enum FieldType {
-		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE
+		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA
 	}
 	private String caption;
 	private String field;
@@ -78,7 +78,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			c = ComponentsBuilder.createCKEditorTextFieldNoBind(getCaption());
 			break;
 		case TWINCOLSELECT:
-			c = ComponentsBuilder.createTwinColSelectNoBind(getCaption(), valuesContainer.getContainer(),valuesContainer.getValueField());
+			c = ComponentsBuilder.createTwinColSelectNoBind(getCaption(), valuesContainer.getEntityContainer(),valuesContainer.getValueField());
 			break;
 		case ACCESSCOMBOBOX:
 			c = ComponentsBuilder.createAccessComboBoxNoBind(caption);
@@ -88,6 +88,9 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			break;
 		case CHECKBOX:
 			c = ComponentsBuilder.createCheckBoxNoBind(caption);
+			break;
+		case TEXTAREA:
+			c = ComponentsBuilder.createTextAreaNoBind(caption);
 			break;
 		case SOUND_FILE:
 			uploader = new FileUploader(caption,media);

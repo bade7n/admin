@@ -1,33 +1,30 @@
 package pro.deta.detatrak.controls.extra;
 
-import java.util.MissingResourceException;
-
-import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.presenter.JPAEntityViewBase;
+import pro.deta.detatrak.presenter.LayoutEntityViewBase;
+import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.FieldLayout;
+import pro.deta.detatrak.view.layout.LabelResourceLayout;
+import pro.deta.detatrak.view.layout.Layout;
+import pro.deta.detatrak.view.layout.SaveCancelLayout;
+import pro.deta.detatrak.view.layout.TabSheetLayout;
 import ru.yar.vi.rm.data.ConfigDO;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.ui.Label;
-
-public class ConfigurationView extends JPAEntityViewBase<ConfigDO> {
+public class ConfigurationView extends LayoutEntityViewBase<ConfigDO> {
     public static final String NAV_KEY = "configurationView";
     
     public ConfigurationView() {
     	super(ConfigDO.class);
     }
 
-	@Override
-	protected void initForm(FieldGroup binder,ConfigDO config) {
-        form.addComponent(ComponentsBuilder.createTextField("Название", binder, "name"));
-        String description = "";
-        try {
-            description = config.getName() == null ? "" : MyUI.getCurrentUI().getBundle().getString(config.getName());
-        } catch (MissingResourceException e) {
-        }
-        form.addComponent(new Label(description));
-        form.addComponent(ComponentsBuilder.createTextField("Значение", binder, "value"));
-        form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
+	public Layout getFormDefinition() {
+		TabSheetLayout l = new TabSheetLayout();
+		l.addTab(new DetaFormLayout("Основные настройки",
+				new FieldLayout("Название", "name", FieldLayout.FieldType.TEXTFIELD),
+				new LabelResourceLayout("name"),
+				new FieldLayout("Значение", "value", FieldLayout.FieldType.TEXTFIELD),
+				new SaveCancelLayout(this)
+		));
+		return l;
 	}
 	
 	public String getNavKey() {

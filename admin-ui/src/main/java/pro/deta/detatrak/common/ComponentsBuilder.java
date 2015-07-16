@@ -28,6 +28,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextArea;
@@ -92,7 +93,7 @@ public class ComponentsBuilder {
         return comboBox;
     }
 
-    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, EntityContainer<T> container,String captionField) {
+    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, Container container,String captionField) {
         ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField);
 		comboBox.setImmediate(true);
         comboBox.setNullSelectionAllowed(true);
@@ -189,9 +190,14 @@ public class ComponentsBuilder {
 	
 	public static Component createTextArea(String caption, FieldGroup binder,
 			String field) {
+		Field ta = createTextAreaNoBind(caption);
+        binder.bind(ta, field);
+        return ta;
+	}
+	
+	public static Field createTextAreaNoBind(String caption) {
 		TextArea ta = new TextArea(caption);
 		ta.setImmediate(true);
-        binder.bind(ta, field);
         return ta;
 	}
 	
