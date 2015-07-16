@@ -52,6 +52,7 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 				new FieldLayout("ОКАТО", "okato", FieldLayout.FieldType.TEXTFIELD),
 				new FieldLayout("Регионы обслуживания офиса", "serviceRegionList", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
 				new FieldLayout("Услуги", "serviceActionList", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
+				new FieldLayout("Информация", "information", FieldLayout.FieldType.CKEDITOR),
 				new SaveCancelLayout(this)
 				));
 
