@@ -8,16 +8,16 @@ public class ValuesContainer<T> {
 	private String valueField = "name";
 	private Container container;
 
-	public ValuesContainer(Container container,String valueField) {
-		this(container);
+	public ValuesContainer(Container valueContainer,String valueField) {
+		this(valueContainer);
 		this.valueField = valueField;
 	}
 
-	public ValuesContainer(Container сontainer) {
-		if(container instanceof EntityContainer)
-			this.entityContainer = (EntityContainer<T>) container;
+	public ValuesContainer(Container valuesContainer) {
+		if(valuesContainer instanceof EntityContainer)
+			this.entityContainer = (EntityContainer<T>) valuesContainer;
 
-		this.container = сontainer;
+		this.container = valuesContainer;
 	}
 
 	public EntityContainer<T> getEntityContainer() {
