@@ -79,6 +79,8 @@ public class FileUploader extends VerticalLayout implements Receiver, SucceededL
 	}
 
 	public void setImageSource(FilestorageDO fs) {
+		if(fs == null)
+			return;
 		try {
 			baos.write(fs.getContent().getContent());
 		} catch (IOException e) {
