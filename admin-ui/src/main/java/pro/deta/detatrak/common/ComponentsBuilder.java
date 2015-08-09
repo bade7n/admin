@@ -86,18 +86,24 @@ public class ComponentsBuilder {
     }
 
     public static <T> ComboBox createComboBoxWithDataSource(String caption, EntityContainer<T> container,FieldGroup binder,String field,String captionField) {
-        ComboBox comboBox = createCustomComboBox(caption,container,binder,field,captionField);
+        ComboBox comboBox = createCustomComboBox(caption,container,binder,field,captionField,false);
 		comboBox.setImmediate(true);
         comboBox.setNullSelectionAllowed(true);
         comboBox.setNullSelectionItemId(0);
         return comboBox;
     }
-
-    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, Container container,String captionField) {
-        ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField);
+    
+    public static <T> ComboBox createComboBoxWithDataSourceNullAllowed(String caption, EntityContainer<T> container,FieldGroup binder,String field,String captionField) {
+        ComboBox comboBox = createCustomComboBox(caption,container,binder,field,captionField,true);
 		comboBox.setImmediate(true);
         comboBox.setNullSelectionAllowed(true);
         comboBox.setNullSelectionItemId(0);
+        return comboBox;
+    }
+    
+    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, Container container,String captionField) {
+        ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField,true);
+		comboBox.setImmediate(true);
         return comboBox;
     }
     
@@ -117,16 +123,21 @@ public class ComponentsBuilder {
         return comboBox;
     }
 
-    public static <T> ComboBox createCustomComboBox(String caption, Container container, FieldGroup binder, String field,String captionField) {
-        ComboBox combo = createCustomComboBoxNoBind(caption, container, captionField);
+    public static <T> ComboBox createCustomComboBox(String caption, Container container, FieldGroup binder, String field,String captionField,boolean nullAllowed) {
+        ComboBox combo = createCustomComboBoxNoBind(caption, container, captionField,nullAllowed);
         binder.bind(combo, field);
         return combo;
     }
-    public static <T> ComboBox createCustomComboBoxNoBind(String caption, Container container, String captionField) {
+    public static <T> ComboBox createCustomComboBoxNoBind(String caption, Container container, String captionField,boolean nullAllowed) {
         ComboBox comboBox = new ComboBox(caption);
         comboBox.setContainerDataSource(container);
-        comboBox.setTextInputAllowed(false);
-        comboBox.setNullSelectionAllowed(false);
+    	comboBox.setTextInputAllowed(false);
+        if(!nullAllowed) {
+        	comboBox.setNullSelectionAllowed(false);
+        } else {
+        	comboBox.setNullSelectionAllowed(true);
+        	comboBox.setNullSelectionItemId(null);
+        }
         comboBox.setWidth(width);
         comboBox.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         comboBox.setItemCaptionPropertyId(captionField);

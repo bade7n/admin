@@ -42,7 +42,7 @@ public class ScheduleView extends JPAEntityViewBase<ScheduleDO> {
 	@Override
 	protected void initForm(FieldGroup binder,ScheduleDO schedule) {
         form.addComponent(ComponentsBuilder.createComboBoxWithDataSource("Объект",MyUI.getCurrentUI().getObjectContainer(),binder,"object","name"));
-        form.addComponent(ComponentsBuilder.createComboBoxWithDataSource("Тип клиента", customerDataSource,binder,"customer","name"));
+        form.addComponent(ComponentsBuilder.createComboBoxWithDataSourceNullAllowed("Тип клиента", customerDataSource,binder,"customer","name"));
 
         form.addComponent(ComponentsBuilder.createAccessComboBox(binder,"security"));
 
