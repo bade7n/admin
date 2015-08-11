@@ -93,15 +93,13 @@ public class ComponentsBuilder {
         return comboBox;
     }
     
-    public static <T> ComboBox createComboBoxWithDataSourceNullAllowed(String caption, EntityContainer<T> container,FieldGroup binder,String field,String captionField) {
-        ComboBox comboBox = createCustomComboBox(caption,container,binder,field,captionField,true);
+    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, Container container,String captionField) {
+        ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField,false);
 		comboBox.setImmediate(true);
-        comboBox.setNullSelectionAllowed(true);
-        comboBox.setNullSelectionItemId(0);
         return comboBox;
     }
     
-    public static <T> ComboBox createComboBoxWithDataSourceNoBind(String caption, Container container,String captionField) {
+    public static <T> ComboBox createComboBoxNullAllowedWithDataSourceNoBind(String caption, Container container,String captionField) {
         ComboBox comboBox = createCustomComboBoxNoBind(caption,container,captionField,true);
 		comboBox.setImmediate(true);
         return comboBox;
@@ -137,7 +135,6 @@ public class ComponentsBuilder {
         } else {
         	comboBox.setNullSelectionAllowed(true);
         	comboBox.setNullSelectionItemId(null);
-        	comboBox.setTextInputAllowed(true);
         }
         comboBox.setWidth(width);
         comboBox.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
@@ -172,15 +169,19 @@ public class ComponentsBuilder {
 
 	public static Component createDateField(String caption, FieldGroup binder,
 			String field) {
+		DateField mdf = createDateFieldNoBind(caption);
+		binder.bind(mdf, field);
+		return mdf;
+	}
+	
+	public static DateField createDateFieldNoBind(String caption) {
 		DateField mdf = new DateField(caption);
 		Locale locale = new Locale("ru");
 		DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG,locale);
 		mdf.setLocale(locale);
-//		mdf.setImmediate(true);
 		if(dateFormat instanceof SimpleDateFormat ) {
 			mdf.setDateFormat(((SimpleDateFormat)dateFormat).toPattern());
 		}
-		binder.bind(mdf, field);
 		return mdf;
 	}
 

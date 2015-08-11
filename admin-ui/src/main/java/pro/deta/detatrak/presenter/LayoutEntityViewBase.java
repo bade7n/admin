@@ -35,7 +35,7 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 			itemId = getItemId(parameter);
 
 			binder = new FieldGroup();
-			binder.setBuffered(false);
+			binder.setBuffered(true);
 			if(itemId == null) {
 				// если создаём новый объект - не надо его делать через JPA, в режиме Bean
 				E bean = createBean();

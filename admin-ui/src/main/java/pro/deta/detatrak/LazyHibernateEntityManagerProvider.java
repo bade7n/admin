@@ -1,11 +1,18 @@
 package pro.deta.detatrak;
 
+import java.io.Serializable;
+
 import javax.persistence.EntityManager;
 
 import com.vaadin.addon.jpacontainer.EntityManagerProvider;
 
-public class LazyHibernateEntityManagerProvider implements EntityManagerProvider {
-	private ThreadLocal<EntityManager> entityManagerThreadLocal = new ThreadLocal<EntityManager>();
+public class LazyHibernateEntityManagerProvider implements EntityManagerProvider,Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -716191104935406008L;
+
+	transient private ThreadLocal<EntityManager> entityManagerThreadLocal = new ThreadLocal<EntityManager>();
 
 	private static LazyHibernateEntityManagerProvider provider = null;
 	private static Object _lock = new Object();
@@ -26,15 +33,25 @@ public class LazyHibernateEntityManagerProvider implements EntityManagerProvider
 	
 	@Override
 	public EntityManager getEntityManager() {
-		return entityManagerThreadLocal.get();
+		return getEntityManagerThreadLocal().get();
+	}
+
+	private ThreadLocal<EntityManager> getEntityManagerThreadLocal() {
+		if(entityManagerThreadLocal == null) {
+			synchronized (_lock) {
+				if(entityManagerThreadLocal== null)
+					entityManagerThreadLocal = new ThreadLocal<>();
+			}
+		}
+		return entityManagerThreadLocal;
 	}
 
 	public void setCurrentEntityManager(EntityManager em) {
-		entityManagerThreadLocal.set(em);
+		getEntityManagerThreadLocal().set(em);
 	}
 	
 	public void remove() {
-		entityManagerThreadLocal.remove();
+		getEntityManagerThreadLocal().remove();
 	}
 
 }

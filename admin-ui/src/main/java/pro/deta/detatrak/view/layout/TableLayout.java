@@ -1,5 +1,6 @@
 package pro.deta.detatrak.view.layout;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,7 +26,11 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
-public class TableLayout  implements Layout<FormParameter<Object>> {
+public class TableLayout  implements Layout<FormParameter<Object>>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3350175087461053426L;
 	private TableColumnLayout[] columns = new TableColumnLayout[0];
 	private String editItemNavigationKey;
 	private Container container;

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import pro.deta.detatrak.common.ComponentsBuilder;
 import pro.deta.detatrak.controls.objects.FileUploader;
+import pro.deta.detatrak.controls.schedule.converter.ScheduleBlock;
+import pro.deta.detatrak.controls.schedule.converter.ScheduleBuilder;
 import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.data.FilestorageContentDO;
 import ru.yar.vi.rm.data.FilestorageDO;
@@ -21,7 +23,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	private static final Logger logger = LoggerFactory.getLogger(FieldLayout.class);
 	
 	public enum FieldType {
-		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA
+		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA, DATEFIELD, COMBOBOX_WITHNULL, SCHEDULE
 	}
 	private String caption;
 	private String field;
@@ -30,6 +32,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	// hack for supporting file uploaders
 	private FileUploader uploader;
 	private AbstractMedia media;
+	private ScheduleBlock scheduleBlock;
 
 	public FieldLayout(String caption,String field,FieldType type) {
 		this.caption = caption;
@@ -86,16 +89,28 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		case COMBOBOX:
 			c = ComponentsBuilder.createComboBoxWithDataSourceNoBind(caption, valuesContainer.getContainer(), valuesContainer.getValueField());
 			break;
+		case COMBOBOX_WITHNULL:
+			c = ComponentsBuilder.createComboBoxNullAllowedWithDataSourceNoBind(caption, valuesContainer.getContainer(), valuesContainer.getValueField());
+			break;
 		case CHECKBOX:
 			c = ComponentsBuilder.createCheckBoxNoBind(caption);
 			break;
 		case TEXTAREA:
 			c = ComponentsBuilder.createTextAreaNoBind(caption);
 			break;
+		case DATEFIELD:
+			c = ComponentsBuilder.createDateFieldNoBind(caption);
+			break;
+		case SCHEDULE:
+			String value = (String) param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue();
+			scheduleBlock = ScheduleBuilder.getScheduleByString(value );
+			return scheduleBlock.getScheduleElementsLayout();
 		case SOUND_FILE:
 			uploader = new FileUploader(caption,media);
 			uploader.setImageSource((FilestorageDO) param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue());
 			return uploader;
+		default:
+			break;
 		}
 		if(c!= null) {
 			param.getData().getBinder().bind(c, field);
@@ -120,6 +135,8 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 					setProperty(param, fs);
 				}
 				uploader.clear();
+			} else if(type == FieldType.SCHEDULE) {
+				setProperty(param, ScheduleBuilder.getScheduleString(scheduleBlock));
 			}
 		} catch (IOException e) {
 			logger.error("Error while saving {0} with parameters {1} ", this, param, e);
