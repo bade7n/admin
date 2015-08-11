@@ -68,12 +68,15 @@ public class AdminTabsView extends NewRightPaneTabsView  implements Captioned,In
     	NotificationSMSConnectorView notificationSms = new NotificationSMSConnectorView();
     	tsl.addTab(new TableLayout(notificationSMSConnectorDataSource, bundle.getString("label.notificationconnector.sms"),notificationSms.getNavKey(), 
     			new TableColumnLayout("name",bundle.getString("label.name")),
-    			new TableColumnLayout("event",bundle.getString("label.notification.type"))
+    			new TableColumnLayout("sender",bundle.getString("label.notification.sender")),
+    			new TableColumnLayout("smscId",bundle.getString("label.notification.smsc"))
     	));
     	NotificationEmailConnectorView notificationEmail = new NotificationEmailConnectorView();
     	tsl.addTab(new TableLayout(notificationEmailConnectorDataSource, bundle.getString("label.notificationconnector.email"),notificationEmail.getNavKey(), 
     			new TableColumnLayout("name",bundle.getString("label.name")),
-    			new TableColumnLayout("event",bundle.getString("label.notification.type"))
+    			new TableColumnLayout("smtpHost",bundle.getString("label.notification.smtpHost")),
+    			new TableColumnLayout("fromEmail",bundle.getString("label.notification.from"))
+    			
     	));
     	
         addForInitialization(this);

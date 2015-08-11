@@ -129,8 +129,8 @@ public class ComponentsBuilder {
     public static <T> ComboBox createCustomComboBoxNoBind(String caption, Container container, String captionField,boolean nullAllowed) {
         ComboBox comboBox = new ComboBox(caption);
         comboBox.setContainerDataSource(container);
+    	comboBox.setTextInputAllowed(false);
         if(!nullAllowed) {
-        	comboBox.setTextInputAllowed(false);
         	comboBox.setNullSelectionAllowed(false);
         } else {
         	comboBox.setNullSelectionAllowed(true);
