@@ -1,247 +1,334 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>admin</artifactId>
-        <groupId>pro.deta.detatrak</groupId>
-        <version>1.0</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>admin</artifactId>
+		<groupId>pro.deta.detatrak</groupId>
+		<version>1.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>admin-production</artifactId>
-    <name>admin-production</name>
-    <packaging>war</packaging>
-    
-    <properties>
-        <vaadin.resource.directory>${project.build.directory}/${project.build.finalName}</vaadin.resource.directory>
-    </properties>
+	<artifactId>admin-production</artifactId>
+	<name>admin-production</name>
+	<packaging>war</packaging>
 
-    <dependencies>
-        <!--
-            Include the WAR-module as an overlay.
-          -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>admin-ui</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-            <scope>runtime</scope>
-        </dependency>
-                            <dependency>
-    <groupId>com.vaadin</groupId>
-    <artifactId>vaadin-client-compiler</artifactId>
-    <version>${vaadin.plugin.version}</version>
-</dependency>
-                            <dependency>
-    <groupId>com.vaadin</groupId>
-    <artifactId>vaadin-themes</artifactId>
-    <version>${vaadin.plugin.version}</version>
-</dependency>
-    </dependencies>
+	<properties>
+		<vaadin.resource.directory>${project.build.directory}/${project.build.finalName}</vaadin.resource.directory>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+	</properties>
 
-    <profiles>
-        <profile>
-            <id>production</id>
-            <build>
-                <plugins>
-                    <!-- Unpack the theme and widgetset to (re)compile them for production mode -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>2.9</version>
-                        <executions>
-                            <execution>
-                                <id>unpack</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>${project.groupId}</groupId>
-                                            <artifactId>admin-ui</artifactId>
-                                            <version>${project.version}</version>
-                                            <type>war</type>
-                                            <includes>VAADIN/themes/**,META-INF/**,WEB-INF/classes/**,WEB-INF/web.xml</includes>
-                                            <!-- If there already is a compiled theme, we want to recompile it -->
-                                            <outputDirectory>${vaadin.resource.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                    <overWriteIfNewer>true</overWriteIfNewer>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
+	<dependencies>
+		<!-- Include the WAR-module as an overlay. -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>admin-ui</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<version>${vaadin.plugin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-themes</artifactId>
+			<version>${vaadin.plugin.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>gbd</id>
+			<properties>
+				<tmpDir>/home/vi/.m2</tmpDir>
+				<archiveDir>/home/rm/old</archiveDir>
+				<workDir>/home/rm/webapps</workDir>
+				<contextName>vadmin</contextName>
+				<archiveDirFormat>${maven.build.timestamp}</archiveDirFormat>
+				<repositoryUrl>svc.76.gibdd.ru:3022</repositoryUrl>
+				<repositoryId>gbd-ssh-repo</repositoryId>
+			</properties>
+		</profile>
+		<profile>
+			<id>vol</id>
+			<properties>
+				<tmpDir>/home/vi/.m2</tmpDir>
+				<archiveDir>/home/rm/old</archiveDir>
+				<workDir>/home/rm/webapps</workDir>
+				<contextName>vadmin</contextName>
+				<archiveDirFormat>${maven.build.timestamp}</archiveDirFormat>
+				<repositoryUrl>svc.35.gibdd.ru:3022</repositoryUrl>
+				<repositoryId>vol-ssh-repo</repositoryId>
+			</properties>
+		</profile>
+		<profile>
+			<id>vol-test</id>
+			<properties>
+				<tmpDir>/home/vi/.m2</tmpDir>
+				<archiveDir>/home/rm/old</archiveDir>
+				<workDir>/home/vi/webapps</workDir>
+				<contextName>vadmin</contextName>
+				<archiveDirFormat>${maven.build.timestamp}</archiveDirFormat>
+				<repositoryUrl>svc.35.gibdd.ru:3022</repositoryUrl>
+				<repositoryId>vol-ssh-repo</repositoryId>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<distributionManagement>
+				<repository>
+					<id>${repositoryId}</id>
+					<url>scp://${repositoryUrl}${tmpDir}</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<defaultGoal>clean install</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>execute-update-command</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>sshexec</goal>
+								</goals>
+								<configuration>
+									<serverId>${repositoryId}</serverId>
+									<url>scp://${repositoryUrl}</url>
+									<displayCommandOutputs>true</displayCommandOutputs>
+									<commands>
+										<command>mkdir -p "${archiveDir}/${archiveDirFormat}"</command>
+										<command>touch "${workDir}/${contextName}.war"</command>
+										<command>cp	"${workDir}/${contextName}.war" \
+											"${archiveDir}/${archiveDirFormat}"</command>
+										<command>mv -f \
+											${tmpDir}/pro/deta/detatrak/${project.artifactId}/${project.version}/${project.build.finalName}.war	\
+											${workDir}/${contextName}.war</command>
+									</commands>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Unpack the theme and widgetset to (re)compile them for production 
+						mode -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>unpack</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>${project.groupId}</groupId>
+											<artifactId>admin-ui</artifactId>
+											<version>${project.version}</version>
+											<type>war</type>
+											<includes>VAADIN/themes/**,META-INF/**,WEB-INF/classes/**,WEB-INF/web.xml</includes>
+											<!-- If there already is a compiled theme, we want to recompile 
+												it -->
+											<outputDirectory>${vaadin.resource.directory}</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+									<overWriteIfNewer>true</overWriteIfNewer>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo>Displaying value of 'vaadin.resource.directory' property</echo>
+										<echo>[vaadin.resource.directory] ${vaadin.resource.directory}</echo>
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>net.alchim31.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin</artifactId>
+						<version>1.5.1</version>
+						<configuration>
+							<nosuffix>true</nosuffix>
+							<warSourceDirectory>${vaadin.resource.directory}</warSourceDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compress</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>com.vaadin</groupId>
+						<artifactId>vaadin-maven-plugin</artifactId>
+						<configuration>
+							<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+							<warSourceDirectory>${vaadin.resource.directory}</warSourceDirectory>
+							<draftCompile>false</draftCompile>
+							<compileReport>false</compileReport>
+							<style>OBF</style>
+							<strict>true</strict>
+							<theme>mytheme</theme>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compile</goal>
+									<goal>compile-theme</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>default-war</id>
+								<phase>package</phase>
+							</execution>
+						</executions>
+						<configuration>
+							<packagingIncludes>META-INF/**,VAADIN/themes/**,WEB-INF/classes/**,WEB-INF/web.xml,WEB-INF/lib/ckeditor-wrapper-for-vaadin-*.jar,WEB-INF/lib/jpacontainer-*.jar,WEB-INF/lib/recordmanager-data-${project.version}.jar,WEB-INF/lib/admin-widgetset-${project.version}.jar,WEB-INF/lib/vaadin-server-*.jar</packagingIncludes>
+							<!-- Exclude some unnecessary files generated by the GWT compiler. -->
+							<!-- <packagingExcludes>VAADIN/gwt-unitCache/**,VAADIN/widgetsets/WEB-INF/**,WEB-INF/lib/vaadin*.jar,</packagingExcludes> -->
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-install-plugin</artifactId>
+						<version>2.4</version>
+						<executions>
+							<execution>
+								<id>default-install</id>
+								<phase>install</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- The Jetty plugin allows us to easily test the production build 
+						by running jetty:run on the command line. -->
+					<plugin>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>${jetty.plugin.version}</version>
+						<configuration>
+							<baseResource>${vaadin.resource.directory}</baseResource>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.9</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<!-- Do not produce and install artifacts when not using the production 
+				profile -->
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.1</version>
+				<artifactId>maven-war-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<echo>Displaying value of 'vaadin.resource.directory' property</echo>
-								<echo>[vaadin.resource.directory] ${vaadin.resource.directory}</echo>
-							</tasks>
-						</configuration>
+						<id>default-war</id>
+						<phase>none</phase>
 					</execution>
 				</executions>
 			</plugin>
-                    <plugin>
-                        <groupId>net.alchim31.maven</groupId>
-                        <artifactId>yuicompressor-maven-plugin</artifactId>
-                        <version>1.5.1</version>
-                        <configuration>
-                            <nosuffix>true</nosuffix>
-                            <warSourceDirectory>${vaadin.resource.directory}</warSourceDirectory>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compress</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    
-                    <plugin>
-                        <groupId>com.vaadin</groupId>
-                        <artifactId>vaadin-maven-plugin</artifactId>
-                        <configuration>
-                            <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                            <warSourceDirectory>${vaadin.resource.directory}</warSourceDirectory>
-                            <draftCompile>false</draftCompile>
-                            <compileReport>false</compileReport>
-                            <style>OBF</style>
-                            <strict>true</strict>
-                            <theme>mytheme</theme>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                    <goal>compile-theme</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    
-                    
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-war</id>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
-                        <configuration>
-                     		<packagingIncludes>META-INF/**,VAADIN/themes/**,WEB-INF/classes/**,WEB-INF/web.xml,WEB-INF/lib/ckeditor-wrapper-for-vaadin-*.jar,WEB-INF/lib/jpacontainer-*.jar,WEB-INF/lib/recordmanager-data-${project.version}.jar,WEB-INF/lib/admin-widgetset-${project.version}.jar,WEB-INF/lib/vaadin-server-*.jar</packagingIncludes>
-                            <!-- Exclude some unnecessary files generated by the GWT compiler. -->
-<!--                             <packagingExcludes>VAADIN/gwt-unitCache/**,VAADIN/widgetsets/WEB-INF/**,WEB-INF/lib/vaadin*.jar,</packagingExcludes>
- -->
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <version>2.4</version>
-                        <executions>
-                            <execution>
-                                <id>default-install</id>
-                                <phase>install</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!--
-                        The Jetty plugin allows us to easily test the production build by running jetty:run on the command line.
-                      -->
-                    <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <version>${jetty.plugin.version}</version>
-                        <configuration>
-                            <baseResource>${vaadin.resource.directory}</baseResource>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <build>
-        <plugins>
-            <!-- Do not produce and install artifacts when not using the production profile -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-war</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <id>default-install</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-        	<plugins>
-        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        		<!-- TODO Remove when http://dev.vaadin.com/ticket/14924 is resolved -->
-        		<plugin>
-        			<groupId>org.eclipse.m2e</groupId>
-        			<artifactId>lifecycle-mapping</artifactId>
-        			<version>1.0.0</version>
-        			<configuration>
-        				<lifecycleMappingMetadata>
-        					<pluginExecutions>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>com.vaadin</groupId>
-        								<artifactId>vaadin-maven-plugin</artifactId>
-        								<versionRange>[7.1.11,)</versionRange>
-        								<goals>
-        									<goal>compile-theme</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore></ignore>
-        							</action>
-        						</pluginExecution>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>org.apache.maven.plugins</groupId>
-        								<artifactId>maven-dependency-plugin</artifactId>
-        								<versionRange>[2.9,)</versionRange>
-        								<goals>
-        									<goal>unpack</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore></ignore>
-        							</action>
-        						</pluginExecution>
-        					</pluginExecutions>
-        				</lifecycleMappingMetadata>
-        			</configuration>
-        		</plugin>
-        	</plugins>
-        </pluginManagement>
-    </build>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>default-install</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<!-- TODO Remove when http://dev.vaadin.com/ticket/14924 is resolved -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.vaadin</groupId>
+										<artifactId>vaadin-maven-plugin</artifactId>
+										<versionRange>[7.1.11,)</versionRange>
+										<goals>
+											<goal>compile-theme</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.9,)</versionRange>
+										<goals>
+											<goal>unpack</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>
