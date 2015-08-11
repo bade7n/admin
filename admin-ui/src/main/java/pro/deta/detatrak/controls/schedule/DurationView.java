@@ -47,13 +47,14 @@ public class DurationView extends LayoutEntityViewBase<DurationDO> {
 		l.addTab(new DetaFormLayout("Основные настройки",
 				new FieldLayout("Тип объекта", "type", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(objectTypeDataSource)),
 				new FieldLayout("Время", "min", FieldLayout.FieldType.TEXTFIELD),
-				new FieldLayout("Услуги", "action", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(actionDataSource)),
+				new FieldLayout("Услуга", "action", FieldLayout.FieldType.COMBOBOX_WITHNULL,new ValuesContainer<>(actionDataSource)),
+				new FieldLayout("Офис", "office", FieldLayout.FieldType.COMBOBOX_WITHNULL,new ValuesContainer<>(MyUI.getCurrentUI().getOfficeContainer())),
 				new SaveCancelLayout(this)
 		));
 
 		l.addTab(new DetaFormLayout("Дополнительно",
-				new FieldLayout("Объект", "object", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(MyUI.getCurrentUI().getObjectContainer())),
-				new FieldLayout("Тип клиента", "customer", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(customerDataSource)),
+				new FieldLayout("Объект", "object", FieldLayout.FieldType.COMBOBOX_WITHNULL,new ValuesContainer<>(MyUI.getCurrentUI().getObjectContainer())),
+				new FieldLayout("Тип клиента", "customer", FieldLayout.FieldType.COMBOBOX_WITHNULL,new ValuesContainer<>(customerDataSource)),
 				new FieldLayout("Дополнительные критерии", "criteria", FieldLayout.FieldType.COMBOBOX,new ValuesContainer<>(criteriaDataSource)),
 				new FieldLayout("Дата начала действия", "start", FieldLayout.FieldType.DATEFIELD),
 				new FieldLayout("Дата окончания действия", "end", FieldLayout.FieldType.DATEFIELD),

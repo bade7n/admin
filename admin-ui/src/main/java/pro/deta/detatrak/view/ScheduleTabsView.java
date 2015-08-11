@@ -3,7 +3,17 @@ package pro.deta.detatrak.view;
 
 import java.util.List;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.filter.Filters;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.TextArea;
+
 import pro.deta.detatrak.MyUI;
+import pro.deta.detatrak.controls.schedule.DurationOfficeQueryModifierDelegate;
 import pro.deta.detatrak.controls.schedule.DurationView;
 import pro.deta.detatrak.controls.schedule.ScheduleView;
 import pro.deta.detatrak.controls.schedule.WeekendOfficeQueryModifierDelegate;
@@ -22,13 +32,6 @@ import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.ScheduleDO;
 import ru.yar.vi.rm.data.WeekendDO;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Compare;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.TextArea;
-
 @TopLevelMenuView(icon="icon-schedule")
 public class ScheduleTabsView extends NewRightPaneTabsView implements Captioned,Initializable,Restrictable {
 
@@ -42,16 +45,15 @@ public class ScheduleTabsView extends NewRightPaneTabsView implements Captioned,
 	@Override
 	public void changeView(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 			scheduleContainer.removeAllContainerFilters();    		
-			durationContainer.removeAllContainerFilters();
+//			durationContainer.removeAllContainerFilters();
 
 			OfficeDO office = MyUI.getCurrentUI().getOffice();
 			if(office != null) {
 				Filter filter = new Compare.Equal("object.office", office);
 				scheduleContainer.addContainerFilter(filter);
 
-				Filter durationFilter = new Compare.Equal("object.office", office);
-				durationContainer.addContainerFilter(durationFilter);
-
+//				Filter durationFilter = Filters.or(new Compare.Equal("office", office),Filters.joinFilter("object", new Compare.Equal("office", office)), Filters.isNull("object"));
+//				durationContainer.addContainerFilter(durationFilter);
 			}
 	}
 	
@@ -64,8 +66,12 @@ public class ScheduleTabsView extends NewRightPaneTabsView implements Captioned,
 		durationContainer.addNestedContainerProperty("type.name");
 		durationContainer.addNestedContainerProperty("object.name");
 		durationContainer.addNestedContainerProperty("action.name");
+		durationContainer.addNestedContainerProperty("office.name");
 
 		weekendContainer.getEntityProvider().setQueryModifierDelegate(new WeekendOfficeQueryModifierDelegate() );
+		durationContainer.getEntityProvider().setQueryModifierDelegate(new DurationOfficeQueryModifierDelegate() );
+		
+		
 		
     	TabSheetLayout tsl = new TabSheetLayout();
     	ScheduleView schedule = new ScheduleView();
@@ -109,7 +115,8 @@ public class ScheduleTabsView extends NewRightPaneTabsView implements Captioned,
     			new TableColumnLayout("end",bundle.getString("label.end"),DATE_WIDTH),
     			new TableColumnLayout("action.name", bundle.getString("label.action"),0.5f),
     			new TableColumnLayout("type.name", bundle.getString("label.type"),0.2f),
-    			new TableColumnLayout("object.name", bundle.getString("label.object"),0.3f),
+    			new TableColumnLayout("object.name", bundle.getString("label.object"),0.2f),
+    			new TableColumnLayout("office.name", bundle.getString("label.office"),0.2f),
     			new TableColumnLayout("min", bundle.getString("label.min"))
     	));
 
