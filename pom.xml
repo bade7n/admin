@@ -6,7 +6,7 @@
 	<groupId>pro.deta.detatrak</groupId>
 	<artifactId>admin</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.5</version>
 	<name>admin-parent</name>
 
 	<properties>
