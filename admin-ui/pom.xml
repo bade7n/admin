@@ -20,6 +20,11 @@
 			<version>1.6.3</version>
 		</dependency>
 		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.vaadin.addon</groupId>
 			<artifactId>jpacontainer</artifactId>
 			<version>3.1.1</version>
@@ -38,7 +43,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
-			<scope>${scope}</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -62,19 +66,10 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.3-1101-jdbc41</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-
-
 
 		<!-- Versions for these are configured in the parent POM -->
 		<dependency>
@@ -135,30 +130,28 @@
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok-maven-plugin</artifactId>
 			</plugin>
-
+			<plugin>
+				<groupId>ru.concerteza.buildnumber</groupId>
+				<artifactId>maven-jgit-buildnumber-plugin</artifactId>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<contextFile>src/test/resources/context.xml</contextFile>
+					<systemProperties>
+						<detatrak.skip.captcha>true</detatrak.skip.captcha>
+					</systemProperties>
+					<contextFile>${project.build.directory}/test-classes/context.xml</contextFile>
 				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.postgresql</groupId>
 						<artifactId>postgresql</artifactId>
-						<version>9.3-1101-jdbc41</version>
+						<version>${postgresql.version}</version>
 					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-						<version>${slf4jVersion}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-simple</artifactId>
-						<version>${slf4jVersion}</version>
-					</dependency>
+
 				</dependencies>
 			</plugin>
 
@@ -175,46 +168,20 @@
 						WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**</packagingExcludes>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
-				
-			</plugin>
-			<!-- The Jetty plugin allows us to easily test the development build by 
-				running jetty:run on the command line. -->
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jetty.plugin.version}</version>
-				<configuration>
-					<scanIntervalSeconds>2</scanIntervalSeconds>
-				</configuration>
-			</plugin>
-			<!-- TODO remove? -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.16</version>
-				<executions>
-					<execution>
-						<id>default</id>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
-					</execution>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>verify</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
 
+<profiles>
+		<profile>
+			<id>gbd</id>
+			<properties>
+				<db.username>rm</db.username>
+				<db.password>rm</db.password>
+				<db.url>jdbc:postgresql://localhost:5432/gbd</db.url>
+				<detatrak.current_date>2014-11-11 09:00</detatrak.current_date>
+			</properties>
+		</profile>
 
+	</profiles>
 </project>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/vadmin">
-	<Resource name="jdbc/RecordManagerDS" auth="Container"
-		removeAbandoned="true" removeAbandonedTimeout="30" logAbandoned="true"
-		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" type="javax.sql.DataSource"
-		maxActive="100" maxIdle="30" maxWait="20000" username="${db.username}"
-		password="${db.password}" driverClassName="org.postgresql.Driver"
-		url="${db.url}" 
-		jdbcInterceptors="ResetAbandonedTimer"/>
+
+<Context path="/vadmin" swallowOutput="false" reloadable="true" addWebinfClassesResources="true">
+	<Resource name="jdbc/RecordManagerDS" auth="Container" removeAbandoned="true" removeAbandonedTimeout="30" logAbandoned="true"
+        factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+        type="javax.sql.DataSource" maxActive="100" maxIdle="100" maxWait="30000"
+        username="${db.username}" password="${db.password}" driverClassName="org.postgresql.Driver"
+        validationQuery="select 1"
+        url="${db.url}"  jdbcInterceptors="ResetAbandonedTimer"/>
 </Context>

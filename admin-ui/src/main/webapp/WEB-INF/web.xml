@@ -1,86 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	version="3.0" metadata-complete="true">
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
 
 	<context-param>
 		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
 		<param-value>resource</param-value>
 	</context-param>
-	<context-param>
-		<description>Vaadin production mode</description>
-		<param-name>productionMode</param-name>
-		<param-value>false</param-value>
-	</context-param>
 
 	<display-name>DETATRAK Admin</display-name>
 	<description>DETATRAK Admininstrative</description>
-
-	<absolute-ordering />
-
-	<servlet>
-		<servlet-name>Vadmin Application</servlet-name>
-		<servlet-class>pro.deta.detatrak.VadminVaadinServlet</servlet-class>
-		<init-param>
-			<description>Vaadin UI class to use</description>
-			<param-name>UI</param-name>
-			<param-value>pro.deta.detatrak.MyUI</param-value>
-		</init-param>
-		<init-param>
-			<description>Legacy mode to return the value of the property as a string from AbstractProperty.toString()</description>
-			<param-name>legacyPropertyToString</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<init-param>
-			<description>Application widgetset</description>
-			<param-name>widgetset</param-name>
-			<param-value>pro.deta.detatrak.MyAppWidgetSet</param-value>
-		</init-param>
-		<init-param>
-			<description>Application widgetset</description>
-			<param-name>productionMode</param-name>
-			<param-value>false</param-value>
-		</init-param>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>Vadmin Application</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>Vadmin Test Application</servlet-name>
-		<servlet-class>pro.deta.detatrak.VadminVaadinServlet</servlet-class>
-		<init-param>
-			<description>Vaadin UI class to use</description>
-			<param-name>UI</param-name>
-			<param-value>pro.deta.detatrak.MyTestUI</param-value>
-		</init-param>
-		<init-param>
-			<description>Legacy mode to return the value of the property as a string from AbstractProperty.toString()</description>
-			<param-name>legacyPropertyToString</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<init-param>
-			<description>Application widgetset</description>
-			<param-name>widgetset</param-name>
-			<param-value>pro.deta.detatrak.MyAppWidgetSet</param-value>
-		</init-param>
-		<init-param>
-			<description>Application widgetset</description>
-			<param-name>productionMode</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Vadmin Test Application</servlet-name>
-		<url-pattern>/test/*</url-pattern>
-	</servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
 
 	<session-config>
 		<session-timeout>45</session-timeout>

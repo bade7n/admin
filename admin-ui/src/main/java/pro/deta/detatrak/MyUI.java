@@ -55,7 +55,7 @@ public class MyUI extends UI {
 	private static List<Class<? extends View>> topLevelMenus = null;
 	
 	ResourceProperties bundle = null;
-
+	
 	HorizontalLayout root = new HorizontalLayout();
 	CssLayout content = new CssLayout();
 	CssLayout menu = new CssLayout();

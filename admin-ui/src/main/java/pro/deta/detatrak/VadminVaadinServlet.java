@@ -5,19 +5,27 @@ import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.server.VaadinServlet;
+
 import pro.deta.detatrak.dao.EMDAO;
 import pro.deta.detatrak.dao.listener.DCNDAO;
 import pro.deta.detatrak.dao.listener.DCNNotificatorCallback;
 import pro.deta.detatrak.dao.listener.DCNUpdateNotifier;
 
-import com.vaadin.server.VaadinServlet;
-
+@WebServlet(initParams={
+		@WebInitParam(name="UI",value="pro.deta.detatrak.MyUI"),
+		@WebInitParam(name="legacyPropertyToString",value="false"),
+		@WebInitParam(name="widgetset",value="pro.deta.detatrak.MyAppWidgetSet"),
+		@WebInitParam(name="productionMode",value="false"),
+},urlPatterns="/*",loadOnStartup=1)
 public class VadminVaadinServlet extends VaadinServlet {
 	private final Logger log = LoggerFactory.getLogger(VadminVaadinServlet.class); 
 	/**
@@ -32,7 +40,7 @@ public class VadminVaadinServlet extends VaadinServlet {
 	public void init(ServletConfig servletConfig) throws ServletException {
 		emd = EMDAO.getInstance();
 		try {
-			dcnd = new DCNDAO(new DCNNotificatorCallback(emd),emd);
+			dcnd = DCNDAO.getInstance(new DCNNotificatorCallback(emd),emd);
 			DCNUpdateNotifier.init(emd);
 		} catch(Throwable e) {
 			log.error("Error while startin Vadmin context ",e);
@@ -41,21 +49,34 @@ public class VadminVaadinServlet extends VaadinServlet {
 		super.init(servletConfig);
 	}
 
+	
 	@Override
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if(!isStaticResourceRequest(request))
+		if(!isStaticResourceRequest(request)) {
+			EntityManager em = null;
 			try {
-				EntityManager em = EMDAO.getInstance().createEntityManager();
+				em = EMDAO.getInstance().createEntityManager();
 				lhemp.setCurrentEntityManager(em);
 				super.service(request, response);
 			} finally {
+				if(em != null)
+					try {
+						em.close();
+					} catch (Exception e) {
+						log.error("Error while closing entityManager", e);
+					}
 				lhemp.remove();
 			}
-		else
+		} else
 			super.service(request, response);
 	}
 
+
+		
+		
+	
+	
 	@Override
 	public void destroy() {
 		super.destroy();

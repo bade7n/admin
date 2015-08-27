@@ -1,5 +1,6 @@
 package pro.deta.detatrak;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,9 +33,13 @@ import com.vaadin.addon.jpacontainer.LazyLoadingDelegate;
  * @author Jonatan Kronqvist / Vaadin Ltd
  * @since 2.0
  */
-public class HibernateLazyLoadingDelegate implements LazyLoadingDelegate {
+public class HibernateLazyLoadingDelegate implements LazyLoadingDelegate,Serializable{
 
-	private EntityProvider<?> entityProvider;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -913120580417412911L;
+	private transient EntityProvider<?> entityProvider;
 
 	public void setEntityProvider(EntityProvider<?> ep) {
 		entityProvider = ep;

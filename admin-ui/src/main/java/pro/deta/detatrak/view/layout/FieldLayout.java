@@ -1,11 +1,17 @@
 package pro.deta.detatrak.view.layout;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.ui.AbstractMedia;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
+
 import pro.deta.detatrak.common.ComponentsBuilder;
+import pro.deta.detatrak.common.EditableTable;
 import pro.deta.detatrak.controls.objects.FileUploader;
 import pro.deta.detatrak.controls.schedule.converter.ScheduleBlock;
 import pro.deta.detatrak.controls.schedule.converter.ScheduleBuilder;
@@ -13,17 +19,12 @@ import pro.deta.detatrak.util.JPAUtils;
 import ru.yar.vi.rm.data.FilestorageContentDO;
 import ru.yar.vi.rm.data.FilestorageDO;
 
-import com.vaadin.ui.AbstractMedia;
-import com.vaadin.ui.Audio;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Field;
-
 
 public class FieldLayout implements Layout<FormParameter<Object>> {
 	private static final Logger logger = LoggerFactory.getLogger(FieldLayout.class);
 	
 	public enum FieldType {
-		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA, DATEFIELD, COMBOBOX_WITHNULL, SCHEDULE
+		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA, DATEFIELD, COMBOBOX_WITHNULL, SCHEDULE, INTERNALTYPE_LIST
 	}
 	private String caption;
 	private String field;
@@ -33,6 +34,11 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	private FileUploader uploader;
 	private AbstractMedia media;
 	private ScheduleBlock scheduleBlock;
+	/*
+	 * Propertied for EditableTable
+	 */
+	private EditableTable table;
+	private EditableTableParameters editableTableParameters;
 
 	public FieldLayout(String caption,String field,FieldType type) {
 		this.caption = caption;
@@ -40,10 +46,13 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		this.type = type;
 	}
 
+	public FieldLayout(String caption,String field,FieldType type,EditableTableParameters tableParameters) {
+		this(caption,field,type);
+		this.editableTableParameters = tableParameters;
+	}
+	
 	public FieldLayout(String caption,String field,FieldType type,AbstractMedia media) {
-		this.caption = caption;
-		this.field = field;
-		this.type = type;
+		this(caption,field,type);
 		this.media = media;
 	}
 	
@@ -101,6 +110,16 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		case DATEFIELD:
 			c = ComponentsBuilder.createDateFieldNoBind(caption);
 			break;
+		case INTERNALTYPE_LIST:
+			Object rawValue = param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue();
+			if(rawValue instanceof List) {
+				List<?> value1 = (List<?>) rawValue;
+				table = ComponentsBuilder.createEditableTable(caption,value1,editableTableParameters);
+				
+				return table;
+			} else {
+				throw new LayoutDefinitionException("Property '"+field+"' for INTERNALTYPE_LIST expected to be java.util.List but '"+rawValue.getClass().getName()+"' found.");
+			}
 		case SCHEDULE:
 			String value = (String) param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue();
 			scheduleBlock = ScheduleBuilder.getScheduleByString(value );
@@ -135,6 +154,8 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 					setProperty(param, fs);
 				}
 				uploader.clear();
+			} else if(type == FieldType.INTERNALTYPE_LIST) {
+				setProperty(param, table.getOriginalList());
 			} else if(type == FieldType.SCHEDULE) {
 				setProperty(param, ScheduleBuilder.getScheduleString(scheduleBlock));
 			}

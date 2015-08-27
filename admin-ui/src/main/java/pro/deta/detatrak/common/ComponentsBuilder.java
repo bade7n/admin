@@ -2,25 +2,31 @@ package pro.deta.detatrak.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.vaadin.openesignforms.ckeditor.CKEditorConfig;
 import org.vaadin.openesignforms.ckeditor.CKEditorTextField;
 
+import pro.deta.detatrak.BaseTypeContainer;
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.MyTwinColSelectStringConverter;
 import pro.deta.detatrak.util.ResourceProperties;
+import pro.deta.detatrak.view.layout.EditableTableParameters;
+import pro.deta.detatrak.view.layout.TableColumnInfo;
 import ru.yar.vi.rm.data.Security;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Button;
@@ -31,9 +37,11 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.OptionGroup;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.TwinColSelect;
+import com.vaadin.ui.Table.TableDragMode;
 
 public class ComponentsBuilder {
 	public static String width = "400px";
@@ -293,5 +301,13 @@ public class ComponentsBuilder {
         listBuilder.setItemCaptionPropertyId("name");
         listBuilder.setValue(objIdList);
         return listBuilder;
+	}
+
+	public static EditableTable createEditableTable(String caption,List<?> values,EditableTableParameters p) {
+		EditableTable table = new EditableTable();
+		table.setOriginalList(values);
+		table.setCaption(caption);
+		table.initialize(p);
+		return table;
 	}
 }

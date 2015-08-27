@@ -25,16 +25,16 @@ import pro.deta.detatrak.dao.listener.DCNUpdateNotifier;
  */
 @Deprecated
 public class LazyHibernateServletFilter implements Filter {
-	private static DCNDAO dcnd = null;
-	private EMDAO emd;
-	private LazyHibernateEntityManagerProvider lhemp;
+//	private static DCNDAO dcnd = null;
+//	private EMDAO emd;
+//	private LazyHibernateEntityManagerProvider lhemp;
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		emd = EMDAO.getInstance();
-		dcnd = new DCNDAO(new DCNNotificatorCallback(emd),emd);
-		DCNUpdateNotifier.init(emd);
-		lhemp = LazyHibernateEntityManagerProvider.getInstance();
+//		emd = EMDAO.getInstance();
+//		dcnd = new DCNDAO(new DCNNotificatorCallback(emd),emd);
+//		DCNUpdateNotifier.init(emd);
+//		lhemp = LazyHibernateEntityManagerProvider.getInstance();
 	}
 
 	@Override
@@ -43,24 +43,24 @@ public class LazyHibernateServletFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) servletRequest;
 		try {
-			EntityManager em = EMDAO.getInstance().createEntityManager();
+//			EntityManager em = EMDAO.getInstance().createEntityManager();
 			// Create and set the entity manager
-			lhemp.setCurrentEntityManager(em);
+//			lhemp.setCurrentEntityManager(em);
 			
 			// Handle the request
 			filterChain.doFilter(servletRequest, servletResponse);
 		} finally {
 			// Reset the entity manager
-			lhemp.setCurrentEntityManager(null);
+//			lhemp.setCurrentEntityManager(null);
 		}
 	}
 
 	@Override
 	public void destroy() {
-		dcnd.close();
-		DCNUpdateNotifier.destroy();
-		emd.close();
-		dcnd = null;
-		emd = null;
+//		dcnd.close();
+//		DCNUpdateNotifier.destroy();
+//		emd.close();
+//		dcnd = null;
+//		emd = null;
 	}
 }

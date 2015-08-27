@@ -3,6 +3,7 @@ package pro.deta.detatrak.controls.extra;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
+import pro.deta.detatrak.view.layout.EditableTableParameters;
 import pro.deta.detatrak.view.layout.FieldLayout;
 import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
 import pro.deta.detatrak.view.layout.Layout;
@@ -42,7 +43,7 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		l.addTab(new DetaFormLayout("Основные настройки",
 				new FieldLayout("Название", "name", FieldType.TEXTFIELD),
 				new FieldLayout("Главный", "main", FieldType.CHECKBOX),
-
+				new FieldLayout("URL Mapping", "urlMapping", FieldType.INTERNALTYPE_LIST,new EditableTableParameters(String.class, null)),
 				new SaveCancelLayout(this)
 				));
 
