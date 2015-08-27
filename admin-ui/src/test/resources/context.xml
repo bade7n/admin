@@ -7,4 +7,5 @@
         username="${db.username}" password="${db.password}" driverClassName="org.postgresql.Driver"
         validationQuery="select 1"
         url="${db.url}"  jdbcInterceptors="ResetAbandonedTimer"/>
+    <Manager pathname="" />
 </Context>

@@ -185,6 +185,7 @@ public class EditableTable extends Table {
 			public Field createField(Container container, Object itemId, Object propertyId, Component uiContext) {
 				if (itemId == table.getData()) {
 					TextField f = (TextField) DefaultFieldFactory.get().createField(container, itemId, propertyId, uiContext);
+					Object backupValue = container.getItem(itemId).getItemProperty(propertyId).getValue();
 					f.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
 						public void handleAction(Object sender, Object target) {
 							table.setData(null);
@@ -193,9 +194,10 @@ public class EditableTable extends Table {
 					});
 					f.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ESCAPE, null) {
 						public void handleAction(Object sender, Object target) {
-							f.discard();
+							f.setValue((String)backupValue);
 							table.setData(null);
 							table.refreshRowCache();
+							table.focus();
 						}
 					});
 					f.focus();

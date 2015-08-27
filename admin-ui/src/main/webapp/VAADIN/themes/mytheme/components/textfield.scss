@@ -48,5 +48,8 @@
 	.v-webkit & .v-filterselect.small {
 		padding-bottom: .2em;
 	}
-
+	
+	.v-selected .v-textfield {
+		color: $text-color;
+	}
 }
