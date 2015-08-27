@@ -275,5 +275,13 @@
 	.v-table-cell-content {
     	vertical-align: middle;
 	}
+	
+	.editable-table {
+    	border: 1px solid;
+	}
+	
+	.v-selected .v-textfield {
+		color: $text-color;
+	}
 }
 

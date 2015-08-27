@@ -88,6 +88,7 @@ public class EditableTable extends Table {
 		table.setSizeFull();
 		table.setHeight(300, Unit.PIXELS);
 		table.addStyleName("editable-table");
+		table.setTabIndex(p.getTabIndex());
 		setTargetClass(p.getTargetClass());
 
 		BeanItemContainer bic = new BeanItemContainer(getTargetClass()); 
@@ -154,6 +155,27 @@ public class EditableTable extends Table {
 //				Notification.show(sourceItemId + " is related to " + targetItemId);
 			}
 		});
+		table.setSelectable(true);
+		table.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
+			
+			@Override
+			public void handleAction(Object sender, Object target) {
+				Object value = table.getValue();
+				if (table.getData() == null) {
+					table.setData(value);
+					table.refreshRowCache();
+				} else if (value == table.getData()) {
+					table.setData(null);
+					table.refreshRowCache();
+					table.focus();
+				} else if(value != table.getData()) {
+					table.setData(null);
+					table.setData(value);
+					table.refreshRowCache();
+				}
+				
+			}
+		});
 	}
 
 	private void addEditAbility() {
@@ -165,6 +187,13 @@ public class EditableTable extends Table {
 					TextField f = (TextField) DefaultFieldFactory.get().createField(container, itemId, propertyId, uiContext);
 					f.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
 						public void handleAction(Object sender, Object target) {
+							table.setData(null);
+							table.refreshRowCache();
+						}
+					});
+					f.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ESCAPE, null) {
+						public void handleAction(Object sender, Object target) {
+							f.discard();
 							table.setData(null);
 							table.refreshRowCache();
 						}
@@ -197,16 +226,16 @@ public class EditableTable extends Table {
 		table.setEditable(true);
 		table.addItemClickListener(event -> {
 			if(event.isDoubleClick()) {
+				Object itemId = event.getItemId();
 				if (table.getData() == null) {
-					table.setData(event.getItemId());
+					table.setData(itemId);
 					table.refreshRowCache();
-				} else if (event.getItemId() == table.getData()) {
+				} else if (itemId == table.getData()) {
 					table.setData(null);
 					table.refreshRowCache();
-				} else if(event.getItemId() != table.getData()) {
+				} else if(itemId != table.getData()) {
 					table.setData(null);
-//					table.refreshRowCache();
-					table.setData(event.getItemId());
+					table.setData(itemId);
 					table.refreshRowCache();
 					
 				}

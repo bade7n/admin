@@ -10,6 +10,7 @@ public class EditableTableParameters implements Serializable{
 	private static final long serialVersionUID = 2583613869866426503L;
 	private TableColumnInfo[] columnHeaders;
 	private Class<?> targetClass;
+	private int tabIndex;
 
 	public EditableTableParameters(Class<?> targetClass,TableColumnInfo[] columns) {
 		this.targetClass = targetClass;
@@ -27,6 +28,14 @@ public class EditableTableParameters implements Serializable{
 	}
 	public void setTargetClass(Class<?> targetClass) {
 		this.targetClass = targetClass;
+	}
+
+	public int getTabIndex() {
+		return tabIndex;
+	}
+
+	public void setTabIndex(int tabIndex) {
+		this.tabIndex = tabIndex;
 	}
 
 }

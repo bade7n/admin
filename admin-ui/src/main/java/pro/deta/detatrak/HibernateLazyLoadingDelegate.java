@@ -33,7 +33,7 @@ import com.vaadin.addon.jpacontainer.LazyLoadingDelegate;
  * @author Jonatan Kronqvist / Vaadin Ltd
  * @since 2.0
  */
-public class HibernateLazyLoadingDelegate implements LazyLoadingDelegate,Serializable{
+public class HibernateLazyLoadingDelegate implements LazyLoadingDelegate {
 
 	/**
 	 * 

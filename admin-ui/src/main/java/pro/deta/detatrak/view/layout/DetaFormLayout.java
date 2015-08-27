@@ -20,13 +20,16 @@ public class DetaFormLayout implements Layout<FormParameter<Object>>{
 	public Component build(BuildLayoutParameter<FormParameter<Object>> p) throws LayoutDefinitionException {
 		FormLayout fl = new FormLayout();
 		fl.setCaption(caption);
+		p.getData().setCurrentTabIndex(1);
 		for (Layout<FormParameter<Object>> l : layouts) {
 			try {
 				fl.addComponent(l.build(p));
 			} catch (Exception e) {
 				LoggerFactory.getLogger(DetaFormLayout.class).error("Error while rendering layout for field " + l +" form caption " + caption,e);
 			}
+			p.getData().incrementTabIndex();
 		}
+		p.getData().setCurrentTabIndex(0);
 		return fl;
 	}
 	

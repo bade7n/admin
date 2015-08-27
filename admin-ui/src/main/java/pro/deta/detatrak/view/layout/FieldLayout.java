@@ -82,9 +82,10 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		validate();
 		@SuppressWarnings("rawtypes")
 		Field c = null;
+		int tabIndex = param.getData().getCurrentTabIndex();
 		switch (type) {
 		case TEXTFIELD:
-			c = ComponentsBuilder.createTextFieldNoBind(getCaption());
+			c = ComponentsBuilder.createTextFieldNoBind(getCaption(),tabIndex);
 			break;
 		case CKEDITOR:
 			c = ComponentsBuilder.createCKEditorTextFieldNoBind(getCaption());
@@ -102,16 +103,17 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			c = ComponentsBuilder.createComboBoxNullAllowedWithDataSourceNoBind(caption, valuesContainer.getContainer(), valuesContainer.getValueField());
 			break;
 		case CHECKBOX:
-			c = ComponentsBuilder.createCheckBoxNoBind(caption);
+			c = ComponentsBuilder.createCheckBoxNoBind(caption,tabIndex);
 			break;
 		case TEXTAREA:
-			c = ComponentsBuilder.createTextAreaNoBind(caption);
+			c = ComponentsBuilder.createTextAreaNoBind(caption,tabIndex);
 			break;
 		case DATEFIELD:
 			c = ComponentsBuilder.createDateFieldNoBind(caption);
 			break;
 		case INTERNALTYPE_LIST:
 			Object rawValue = param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue();
+			editableTableParameters.setTabIndex(tabIndex);
 			if(rawValue instanceof List) {
 				List<?> value1 = (List<?>) rawValue;
 				table = ComponentsBuilder.createEditableTable(caption,value1,editableTableParameters);
@@ -191,5 +193,4 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	public FileUploader getUploader() {
 		return uploader;
 	}
-
 }

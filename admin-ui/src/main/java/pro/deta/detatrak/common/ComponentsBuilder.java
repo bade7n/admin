@@ -195,41 +195,44 @@ public class ComponentsBuilder {
 
 	public static TextField createTextField(String caption, FieldGroup binder,
 			String field) {
-		TextField tf = createTextFieldNoBind(caption);
+		TextField tf = createTextFieldNoBind(caption,0);
 		binder.bind(tf, field);
 		return tf;
 	}
 
-	public static TextField createTextFieldNoBind(String caption) {
+	public static TextField createTextFieldNoBind(String caption,int index) {
 		TextField tf = new TextField(caption);
 		tf.setNullSettingAllowed(true);
 		tf.setNullRepresentation("");
 		tf.setImmediate(true);
 		tf.setWidth(width);
+		tf.setTabIndex(index);
 		return tf;
 	}
 	
 	public static Component createTextArea(String caption, FieldGroup binder,
 			String field) {
-		Field ta = createTextAreaNoBind(caption);
+		Field ta = createTextAreaNoBind(caption,0);
         binder.bind(ta, field);
         return ta;
 	}
 	
-	public static Field createTextAreaNoBind(String caption) {
+	public static Field createTextAreaNoBind(String caption,int tabIndex) {
 		TextArea ta = new TextArea(caption);
 		ta.setImmediate(true);
+		ta.setTabIndex(tabIndex);
         return ta;
 	}
 	
 	public static Component createCheckBox(String caption, FieldGroup binder,String field) {
-		CheckBox cb = createCheckBoxNoBind(caption);
+		CheckBox cb = createCheckBoxNoBind(caption,0);
         binder.bind(cb, field);
 		return cb;
 	}
-	public static CheckBox createCheckBoxNoBind(String caption) {
+	public static CheckBox createCheckBoxNoBind(String caption,int tabIndex) {
         CheckBox cb = new CheckBox(caption);
 		cb.setImmediate(true);
+		cb.setTabIndex(tabIndex);
 		return cb;
 	}
 

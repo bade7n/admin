@@ -5,6 +5,7 @@ import com.vaadin.data.fieldgroup.FieldGroup;
 public class FormParameter<E> {
 	private E data;
 	private FieldGroup binder;
+	private int currentTabIndex;
 	
 	public FormParameter(E data,FieldGroup binder) {
 		this.data = data;
@@ -17,5 +18,17 @@ public class FormParameter<E> {
 
 	public E getBean() {
 		return data;
+	}
+
+	public int getCurrentTabIndex() {
+		return currentTabIndex;
+	}
+
+	public void setCurrentTabIndex(int currentTabIndex) {
+		this.currentTabIndex = currentTabIndex;
+	}
+
+	public void incrementTabIndex() {
+		currentTabIndex++;
 	}
 }
