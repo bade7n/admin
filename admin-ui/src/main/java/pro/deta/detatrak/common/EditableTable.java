@@ -3,7 +3,11 @@ package pro.deta.detatrak.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItemContainer;
@@ -25,6 +29,7 @@ import com.vaadin.ui.TableFieldFactory;
 import com.vaadin.ui.TextField;
 
 import pro.deta.detatrak.BaseTypeContainer;
+import pro.deta.detatrak.dao.data.T0;
 import pro.deta.detatrak.view.layout.EditableTableParameters;
 import pro.deta.detatrak.view.layout.TableColumnInfo;
 
@@ -33,6 +38,7 @@ public class EditableTable extends Table {
 	 * 
 	 */
 	private static final long serialVersionUID = 2851285307777397438L;
+	private static final Logger logger = LoggerFactory.getLogger(EditableTable.class);
 	protected static final Action REMOVE = new Action("Remove row");
 	protected static final Action ADD = new Action("Add row");
 
@@ -42,6 +48,7 @@ public class EditableTable extends Table {
 	private Container.Ordered orderedContainer;
 	private List<?> original = null;
 	private boolean baseTypeContainer;
+	private Function<T0, Object> createNewFunction;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List getOriginalList() {
@@ -211,7 +218,26 @@ public class EditableTable extends Table {
 			@Override
 			public void handleAction(Action action, Object sender, Object target) {
 				if(action == ADD) {
-					Object newItem = new BaseTypeContainer<String>("New item");
+					Object newItem = null;
+					if(baseTypeContainer) {
+						if(createNewFunction != null)
+							newItem	= new BaseTypeContainer(createNewFunction.apply(null));
+						else
+							try {
+								newItem	= new BaseTypeContainer(targetClass.newInstance());
+							} catch (Exception e) {
+								logger.error("Error while creating new bean",e);
+							}
+					} else {
+						if(createNewFunction != null)
+							newItem	= createNewFunction.apply(null);
+						else
+							try {
+								newItem	= targetClass.newInstance();
+							} catch (Exception e) {
+								logger.error("Error while creating new bean",e);
+							}
+					}
 					orderedContainer.addItemAfter(target, newItem);
 					table.setData(newItem);
 					table.refreshRowCache();

@@ -1,6 +1,9 @@
 package pro.deta.detatrak.view.layout;
 
 import java.io.Serializable;
+import java.util.function.Function;
+
+import pro.deta.detatrak.dao.data.T0;
 
 public class EditableTableParameters implements Serializable{
 	
@@ -11,10 +14,16 @@ public class EditableTableParameters implements Serializable{
 	private TableColumnInfo[] columnHeaders;
 	private Class<?> targetClass;
 	private int tabIndex;
+	private Function<T0, Object> createNew = null;
 
 	public EditableTableParameters(Class<?> targetClass,TableColumnInfo[] columns) {
 		this.targetClass = targetClass;
 		this.columnHeaders = columns;
+	}
+
+	public EditableTableParameters(Class<?> targetClass,TableColumnInfo[] columns,Function<T0, Object> createNew) {
+		this(targetClass,columns);
+		this.createNew = createNew;
 	}
 
 	public TableColumnInfo[] getColumnHeaders() {
@@ -36,6 +45,14 @@ public class EditableTableParameters implements Serializable{
 
 	public void setTabIndex(int tabIndex) {
 		this.tabIndex = tabIndex;
+	}
+
+	public Function<T0, Object> getCreateNew() {
+		return createNew;
+	}
+
+	public void setCreateNew(Function<T0, Object> createNew) {
+		this.createNew = createNew;
 	}
 
 }

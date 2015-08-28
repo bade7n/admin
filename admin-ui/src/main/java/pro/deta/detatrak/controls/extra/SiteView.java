@@ -1,5 +1,6 @@
 package pro.deta.detatrak.controls.extra;
 
+import pro.deta.detatrak.dao.data.T0;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
@@ -15,6 +16,8 @@ import ru.yar.vi.rm.data.CustomerDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 import ru.yar.vi.rm.data.SiteDO;
+
+import java.util.function.Function;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
 
@@ -43,7 +46,8 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		l.addTab(new DetaFormLayout("Основные настройки",
 				new FieldLayout("Название", "name", FieldType.TEXTFIELD),
 				new FieldLayout("Главный", "main", FieldType.CHECKBOX),
-				new FieldLayout("URL Mapping", "urlMapping", FieldType.INTERNALTYPE_LIST,new EditableTableParameters(String.class, null)),
+				new FieldLayout("URL Mapping", "urlMapping", FieldType.INTERNALTYPE_LIST,
+						new EditableTableParameters(String.class, null, t0-> {return "New item";})),
 				new SaveCancelLayout(this)
 				));
 
