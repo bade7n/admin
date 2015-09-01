@@ -8,12 +8,16 @@
 		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
 		<param-value>resource</param-value>
 	</context-param>
-<!-- 	<context-param>
+ 	<context-param>
 		<description>Vaadin production mode</description>
 		<param-name>productionMode</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
- -->
+	<context-param>
+		<param-name>log4jFileName</param-name>
+		<param-value>/WEB-INF/log4j-config.xml</param-value>
+	</context-param>
+
 	<display-name>DETATRAK Admin</display-name>
 	<description>DETATRAK Admininstrative</description>
 

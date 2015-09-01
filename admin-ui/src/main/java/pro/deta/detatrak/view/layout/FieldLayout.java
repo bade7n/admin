@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.data.Property;
 import com.vaadin.ui.AbstractMedia;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
@@ -24,7 +25,8 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	private static final Logger logger = LoggerFactory.getLogger(FieldLayout.class);
 	
 	public enum FieldType {
-		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA, DATEFIELD, COMBOBOX_WITHNULL, SCHEDULE, INTERNALTYPE_LIST
+		TEXTFIELD,CKEDITOR,TWINCOLSELECT,ACCESSCOMBOBOX,COMBOBOX,CHECKBOX, SOUND_FILE, TEXTAREA, DATEFIELD, 
+		COMBOBOX_WITHNULL, SCHEDULE, EDITABLE_LIST
 	}
 	private String caption;
 	private String field;
@@ -111,7 +113,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		case DATEFIELD:
 			c = ComponentsBuilder.createDateFieldNoBind(caption);
 			break;
-		case INTERNALTYPE_LIST:
+		case EDITABLE_LIST:
 			Object rawValue = param.getData().getBinder().getItemDataSource().getItemProperty(field).getValue();
 			editableTableParameters.setTabIndex(tabIndex);
 			if(rawValue instanceof List) {
@@ -156,7 +158,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 					setProperty(param, fs);
 				}
 				uploader.clear();
-			} else if(type == FieldType.INTERNALTYPE_LIST) {
+			} else if(type == FieldType.EDITABLE_LIST) {
 				setProperty(param, table.getOriginalList());
 			} else if(type == FieldType.SCHEDULE) {
 				setProperty(param, ScheduleBuilder.getScheduleString(scheduleBlock));
@@ -169,7 +171,8 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 
 	@SuppressWarnings("unchecked")
 	public void setProperty(BuildLayoutParameter<FormParameter<Object>> param,Object value) {
-		param.getData().getBinder().getItemDataSource().getItemProperty(field).setValue(value);
+		Property itprop = param.getData().getBinder().getItemDataSource().getItemProperty(field);
+		itprop.setValue(value);
 	}
 
 	public void cancel(BuildLayoutParameter<FormParameter<Object>> param) {

@@ -2,22 +2,22 @@ package pro.deta.detatrak;
 
 import java.io.Serializable;
 
-public class BaseTypeContainer<T> implements Serializable {
+public class BaseTypeContainer implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5367872762741920560L;
-	private T value = null;
+	private Object value = null;
 	
-	public BaseTypeContainer(T value) {
+	public BaseTypeContainer(Object value) {
 		this.value = value;
 	}
 	
-	public T getValue() {
+	public Object getValue() {
 		return value;
 	}
 	
-	public void  setValue(T val) {
+	public void  setValue(Object val) {
 		value = val;
 	}
 	

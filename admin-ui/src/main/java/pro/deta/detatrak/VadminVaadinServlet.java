@@ -1,6 +1,7 @@
 package pro.deta.detatrak;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletConfig;
@@ -38,6 +39,14 @@ public class VadminVaadinServlet extends VaadinServlet {
 
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
+		try {
+			String log4jFile = servletConfig.getServletContext().getInitParameter("log4jFileName");
+			URL logConfig = servletConfig.getServletContext().getResource(log4jFile);
+			System.out.println("Logger initializing with " + logConfig);
+			LogInitializer.initialize(logConfig);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		emd = EMDAO.getInstance();
 		try {
 			dcnd = DCNDAO.getInstance(new DCNNotificatorCallback(emd),emd);
@@ -72,11 +81,6 @@ public class VadminVaadinServlet extends VaadinServlet {
 			super.service(request, response);
 	}
 
-
-		
-		
-	
-	
 	@Override
 	public void destroy() {
 		super.destroy();

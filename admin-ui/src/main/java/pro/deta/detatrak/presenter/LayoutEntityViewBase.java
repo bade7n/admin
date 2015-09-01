@@ -95,7 +95,8 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 		}
 
 		try {
-			formDefinition.save(getLayoutParameters(e));
+			BuildLayoutParameter<FormParameter<E>> layoutParameters = getLayoutParameters(e);
+			formDefinition.save(layoutParameters);
 		} catch (LayoutRuntimeException e1) {
 			logger.error("Error while propagating save event to layout.", e1);
 		}

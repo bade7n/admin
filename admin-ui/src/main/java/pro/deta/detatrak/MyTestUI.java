@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
@@ -42,10 +41,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.VerticalLayout;
 
+import pro.deta.detatrak.common.EditableTable;
 import pro.deta.detatrak.controls.extra.SiteView;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.MyTwinColSelectStringConverter;
+import pro.deta.detatrak.view.layout.EditableTableParameters;
+import pro.deta.detatrak.view.layout.TableColumnInfo;
+import ru.yar.vi.rm.data.CustomerDO;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.SiteDO;
 import ru.yar.vi.rm.data.WeekendDO;
@@ -53,7 +56,7 @@ import ru.yar.vi.rm.data.WeekendDO;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
-@PreserveOnRefresh
+
 public class MyTestUI extends MyUI {
 	protected static final Action REMOVE = new Action("Remove row");
 	protected static final Action ADD = new Action("Add row");
@@ -72,18 +75,39 @@ public class MyTestUI extends MyUI {
 		//		user.setDescription("Администратор");
 		//		buildOfficeChooser();
 		root.removeAllComponents();
+//		generateEditableTableList(root);
 		setNavigator(new Navigator(this, root));
-//		generateTableList(root);
 		SiteView av = new SiteView();
 		av.setEntityContainer(JPAUtils.createCachingJPAContainer(SiteDO.class));
 		getNavigator().addView("siteView", av);
 		getNavigator().navigateTo("siteView/684");
 	}
 
+
+
+	private void generateEditableTableList(HorizontalLayout root) {
+		ArrayList<CustomerDO> customer = new ArrayList<>();
+		customer.add(new CustomerDO(1,"Физическое лицо"));
+		customer.add(new CustomerDO(2,"Юридическое лицо"));
+		customer.add(new CustomerDO(3,"Юридическое лицо"));
+		final EditableTable<CustomerDO> table = new EditableTable<>();
+		table.setOriginalList(customer);
+		table.setCaption("Пользователи");
+		table.initialize(new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[]{new TableColumnInfo("name", "Тип пользователя")},
+				t0 -> {
+					return new CustomerDO(0,"Новый тип пользователя");
+				},"id"));
+		root.addComponent(table);
+		Button btn = new Button("Clickme");
+		btn.addClickListener(event -> {Notification.show(""+table.getOriginalList());});
+		root.addComponent(btn);
+	}
+
+
 	private void generateTableList(HorizontalLayout root) {
 		List<String> list = Arrays.asList(new String[]{"as","bsd"});
-		ArrayList<BaseTypeContainer<String>> values = list.stream().map(value -> new BaseTypeContainer<String>(value)).collect(Collectors.toCollection(ArrayList::new)); 
-		BeanItemContainer<BaseTypeContainer<String>> bic = new BeanItemContainer<>(BaseTypeContainer.class);
+		ArrayList<BaseTypeContainer> values = list.stream().map(value -> new BaseTypeContainer(value)).collect(Collectors.toCollection(ArrayList::new)); 
+		BeanItemContainer<BaseTypeContainer> bic = new BeanItemContainer<>(BaseTypeContainer.class);
 		bic.addAll(values);
 		final Table table = new Table();
 		table.setDragMode(TableDragMode.ROW);
@@ -147,7 +171,7 @@ public class MyTestUI extends MyUI {
 			@Override
 			public void handleAction(Action action, Object sender, Object target) {
 				if(action == ADD) {
-					Object newItem = new BaseTypeContainer<String>("New item");
+					Object newItem = new BaseTypeContainer("New item");
 					bic.addItemAfter(target, newItem);
 					table.setData(newItem);
 					table.refreshRowCache();

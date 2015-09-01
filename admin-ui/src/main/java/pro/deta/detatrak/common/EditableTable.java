@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Container;
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.event.Action;
 import com.vaadin.event.DataBoundTransferable;
 import com.vaadin.event.ShortcutAction;
@@ -33,7 +33,7 @@ import pro.deta.detatrak.dao.data.T0;
 import pro.deta.detatrak.view.layout.EditableTableParameters;
 import pro.deta.detatrak.view.layout.TableColumnInfo;
 
-public class EditableTable extends Table {
+public class EditableTable<T> extends Table {
 	/**
 	 * 
 	 */
@@ -44,77 +44,63 @@ public class EditableTable extends Table {
 
 	
 	
-	private Class<?> targetClass;
-	private Container.Ordered orderedContainer;
-	private List<?> original = null;
-	private boolean baseTypeContainer;
-	private Function<T0, Object> createNewFunction;
+	private Class<T> targetClass;
+	private BeanContainer<Object, T> beanContainer;
+	private List original = null;
+	private Function<T0, T> createNewFunction;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings("unchecked" )
 	public List getOriginalList() {
-		ArrayList al = new ArrayList();
-		if(baseTypeContainer) {
-			List<BaseTypeContainer> btc = (List<BaseTypeContainer>) orderedContainer.getItemIds();
-			al = btc.stream().map(item -> item.getValue()).collect(Collectors.toCollection(ArrayList::new));
-		} else
-			al.addAll(orderedContainer.getItemIds());
+		ArrayList al = new ArrayList<>();
+		for (Object object : beanContainer.getItemIds()) {
+			T bean = beanContainer.getItem(object).getBean();
+			if(isBaseTypeContainer())
+				al.add(((BaseTypeContainer) bean).getValue());
+			else 
+				al.add(bean);
+		}
 		return al;
 	}
 
-	public void setOriginalList(List<?> values) {
+	public void setOriginalList(List values) {
 		this.original = values;
 	}
 
-	public Class<?> getTargetClass() {
+	public Class<T> getTargetClass() {
 		return targetClass;
 	}
 
-	public void setTargetClass(Class<?> targetClass) {
+	public void setTargetClass(Class<T> targetClass) {
 		this.targetClass = targetClass;
 	}
 
-	@Override
-	public void setContainerDataSource(Container orderedContainer) {
-		if(orderedContainer != null) {
-			if(orderedContainer instanceof Container.Indexed)
-				setContainerDataSource((Container.Indexed) orderedContainer);
-			else
-				throw new IllegalArgumentException("Should use Container.Ordered interface");
-		} else 
-			super.setContainerDataSource(orderedContainer);
-	}
-		
-	public void setContainerDataSource(Container.Ordered orderedContainer) {
-		super.setContainerDataSource(orderedContainer);
-		this.orderedContainer = orderedContainer;
+	public boolean isBaseTypeContainer() {
+		return targetClass == BaseTypeContainer.class;
 	}
 	
-	public void initialize(EditableTableParameters p) {
-		final EditableTable table = this;
+	public void initialize(EditableTableParameters<T> p) {
+		final EditableTable<T> table = this;
 		table.setDragMode(TableDragMode.ROW);
 		table.setSizeFull();
 		table.setHeight(300, Unit.PIXELS);
 		table.addStyleName("editable-table");
 		table.setTabIndex(p.getTabIndex());
 		setTargetClass(p.getTargetClass());
-
-		BeanItemContainer bic = new BeanItemContainer(getTargetClass()); 
-		if("java.lang".equalsIgnoreCase(getTargetClass().getPackage().getName()))
-			baseTypeContainer = true;
+		this.createNewFunction = p.getCreateNew();
 		
-		if(baseTypeContainer) {
-			// list of values is simple type, should be packed in BaseTypeContainer.
-			// we should ignore column information
+		beanContainer = new BeanContainer<>(getTargetClass());
+		if(isBaseTypeContainer()) {
+			// need BaseTypeContainer
 			p.setColumnHeaders(new TableColumnInfo[] {new TableColumnInfo("value", getCaption())});
-			ArrayList<BaseTypeContainer> al = original.stream().map(value -> new BaseTypeContainer(value)).collect(Collectors.toCollection(ArrayList::new)); 
-			bic = new BeanItemContainer(BaseTypeContainer.class);
-			bic.addAll(al);
-		} else {
-			bic.addAll(original);
+			p.setBeanIdProperty("value");
+			original = (List<T>) original.stream().map(value -> new BaseTypeContainer(value)).collect(Collectors.toCollection(ArrayList::new)); 
+			
 		}
-
-		this.setContainerDataSource(bic);
-		
+		beanContainer.setBeanIdProperty(p.getBeanIdProperty());
+		beanContainer.addAll(original);
+		this.setContainerDataSource(beanContainer);
+			
+			
 		if(p.getColumnHeaders() != null)
 			for (TableColumnInfo tableColumnInfo : p.getColumnHeaders()) {
 				table.setColumnHeader(tableColumnInfo.getName(), tableColumnInfo.getCaption());
@@ -130,11 +116,11 @@ public class EditableTable extends Table {
 	}
 
 	private void addDragAndDropAbility() {
-		EditableTable table = this;
+		final EditableTable<T> self = this;
 		setDropHandler(new DropHandler() {
 			@Override
 			public AcceptCriterion getAcceptCriterion() {
-				return new And(new SourceIs(table), AcceptItem.ALL);
+				return new And(new SourceIs(self), AcceptItem.ALL);
 			}
 
 			@Override
@@ -149,38 +135,48 @@ public class EditableTable extends Table {
 				if ( sourceItemId == targetItemId || targetItemId == null)
 					return;
 
+				T bean = beanContainer.getItem(sourceItemId).getBean();
+
 				// Let's remove the source of the drag so we can add it back where requested...
-				orderedContainer.removeItem(sourceItemId);
+				beanContainer.removeItem(sourceItemId);
 
 				if ( dropData.getDropLocation() == VerticalDropLocation.BOTTOM ) {
-					orderedContainer.addItemAfter(targetItemId,sourceItemId);
+					beanContainer.addItemAfter(targetItemId, sourceItemId, bean);
 				} else {
-					Object prevItemId = orderedContainer.prevItemId(targetItemId);
-					orderedContainer.addItemAfter(prevItemId, sourceItemId);
+					Object prevItemId = beanContainer.prevItemId(targetItemId);
+					beanContainer.addItemAfter(prevItemId, sourceItemId, bean);
 				}
 				// tell that the persons are related
 //				Notification.show(sourceItemId + " is related to " + targetItemId);
 			}
 		});
-		table.setSelectable(true);
-		table.addShortcutListener(new ShortcutListener("Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
+		self.setSelectable(true);
+		self.addShortcutListener(new ShortcutListener("Another Shortcut Name", ShortcutAction.KeyCode.ENTER, null) {
 			
 			@Override
 			public void handleAction(Object sender, Object target) {
-				Object value = table.getValue();
-				if (table.getData() == null) {
-					table.setData(value);
-					table.refreshRowCache();
-				} else if (value == table.getData()) {
-					table.setData(null);
-					table.refreshRowCache();
-					table.focus();
-				} else if(value != table.getData()) {
-					table.setData(null);
-					table.setData(value);
-					table.refreshRowCache();
+				EditableTable<T> table1 = null;
+				if(target instanceof EditableTable) {
+					table1 = (EditableTable<T>)target;
+				} else if(target instanceof TextField) {
+					TextField tf = (TextField) target;
+					table1 = (EditableTable) tf.getParent();
 				}
-				
+				if(table1 != null) {
+					Object value = table1.getValue();
+
+					if (table1.getData() == null) {
+						table1.setData(value);
+						table1.refreshRowCache();
+					} else if (value == table1.getData()) {
+						table1.setData(null);
+						table1.refreshRowCache();
+						table1.focus();
+					} else if(value != table1.getData()) {
+						table1.setData(value);
+						table1.refreshRowCache();
+					}
+				}
 			}
 		});
 	}
@@ -189,7 +185,7 @@ public class EditableTable extends Table {
 		EditableTable table = this;
 		table.setTableFieldFactory(new TableFieldFactory() {
 			@Override
-			public Field createField(Container container, Object itemId, Object propertyId, Component uiContext) {
+			public Field createField(final Container container, final Object itemId, final Object propertyId, final Component uiContext) {
 				if (itemId == table.getData()) {
 					TextField f = (TextField) DefaultFieldFactory.get().createField(container, itemId, propertyId, uiContext);
 					Object backupValue = container.getItem(itemId).getItemProperty(propertyId).getValue();
@@ -218,31 +214,21 @@ public class EditableTable extends Table {
 			@Override
 			public void handleAction(Action action, Object sender, Object target) {
 				if(action == ADD) {
-					Object newItem = null;
-					if(baseTypeContainer) {
-						if(createNewFunction != null)
-							newItem	= new BaseTypeContainer(createNewFunction.apply(null));
-						else
-							try {
-								newItem	= new BaseTypeContainer(targetClass.newInstance());
-							} catch (Exception e) {
-								logger.error("Error while creating new bean",e);
-							}
-					} else {
-						if(createNewFunction != null)
+					T newItem = null;
+					if(isBaseTypeContainer() || createNewFunction != null) {
 							newItem	= createNewFunction.apply(null);
-						else
+					} else {
 							try {
 								newItem	= targetClass.newInstance();
 							} catch (Exception e) {
 								logger.error("Error while creating new bean",e);
 							}
 					}
-					orderedContainer.addItemAfter(target, newItem);
+					beanContainer.addBeanAfter(target, newItem);
 					table.setData(newItem);
 					table.refreshRowCache();
 				} else if (action == REMOVE) {
-					orderedContainer.removeItem(target);
+					beanContainer.removeItem(target);
 				}
 			}
 			

@@ -1,6 +1,7 @@
 package pro.deta.detatrak.controls.extra;
 
-import pro.deta.detatrak.dao.data.T0;
+import pro.deta.detatrak.BaseTypeContainer;
+//import pro.deta.detatrak.dao.data.T0;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
@@ -10,6 +11,7 @@ import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.SaveCancelLayout;
 import pro.deta.detatrak.view.layout.TabSheetLayout;
+import pro.deta.detatrak.view.layout.TableColumnInfo;
 import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.CustomerDO;
@@ -46,8 +48,14 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		l.addTab(new DetaFormLayout("Основные настройки",
 				new FieldLayout("Название", "name", FieldType.TEXTFIELD),
 				new FieldLayout("Главный", "main", FieldType.CHECKBOX),
-				new FieldLayout("URL Mapping", "urlMapping", FieldType.INTERNALTYPE_LIST,
-						new EditableTableParameters(String.class, null, t0-> {return "New item";})),
+				new FieldLayout("URL Mapping", "urlMapping", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<BaseTypeContainer>(BaseTypeContainer.class, t0-> {return new BaseTypeContainer("New item");})),
+				
+				new FieldLayout("Типы клиентов", "customers", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Тип пользователя")}, 
+								t0-> {return new CustomerDO("Новый тип пользователя");},"id")),
+
+				
 				new SaveCancelLayout(this)
 				));
 
@@ -79,13 +87,11 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		
 		l.addTab(new DetaFormLayout("Дополнительно",
 				new FieldLayout("Услуги", "actions", FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
-				new FieldLayout("Типы клиентов", "customers", FieldType.TWINCOLSELECT,new ValuesContainer<>(customerContainer)),
 				new FieldLayout("Офисы", "offices", FieldType.TWINCOLSELECT,new ValuesContainer<>(officeContainer)),
 				new FieldLayout("Регионы", "regions", FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
 
 				new SaveCancelLayout(this)
 				));
-		
 		
 		return l;
 

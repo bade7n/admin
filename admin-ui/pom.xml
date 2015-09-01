@@ -144,6 +144,7 @@
 						<detatrak.skip.captcha>true</detatrak.skip.captcha>
 					</systemProperties>
 					<contextFile>${project.build.directory}/test-classes/context.xml</contextFile>
+					<contextReloadable>false</contextReloadable>
 				</configuration>
 				<dependencies>
 					<dependency>

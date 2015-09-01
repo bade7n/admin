@@ -36,8 +36,8 @@ public class JPAUtils {
 		try {
 			if(!getEntityManager().getTransaction().isActive())
 				getEntityManager().getTransaction().begin();
-			o = getEntityManager().merge(o);
-			getEntityManager().persist(o);
+			Object merged = getEntityManager().merge(o);
+			getEntityManager().persist(merged);
 			getEntityManager().getTransaction().commit();
 		} finally {
 			if(getEntityManager().getTransaction().isActive())
