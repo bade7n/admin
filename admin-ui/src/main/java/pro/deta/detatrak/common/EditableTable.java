@@ -2,6 +2,7 @@ package pro.deta.detatrak.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.Action;
 import com.vaadin.event.DataBoundTransferable;
 import com.vaadin.event.ShortcutAction;
@@ -48,6 +50,7 @@ public class EditableTable<T> extends Table {
 	private BeanContainer<Object, T> beanContainer;
 	private List original = null;
 	private Function<T0, T> createNewFunction;
+	private Iterator<Integer>  newItemIdIterator = null; 
 
 	@SuppressWarnings("unchecked" )
 	public List getOriginalList() {
@@ -78,7 +81,7 @@ public class EditableTable<T> extends Table {
 		return targetClass == BaseTypeContainer.class;
 	}
 	
-	public void initialize(EditableTableParameters<T> p) {
+	public void initialize(final EditableTableParameters<T> p) {
 		final EditableTable<T> table = this;
 		table.setDragMode(TableDragMode.ROW);
 		table.setSizeFull();
@@ -94,9 +97,21 @@ public class EditableTable<T> extends Table {
 			p.setColumnHeaders(new TableColumnInfo[] {new TableColumnInfo("value", getCaption())});
 			p.setBeanIdProperty("value");
 			original = (List<T>) original.stream().map(value -> new BaseTypeContainer(value)).collect(Collectors.toCollection(ArrayList::new)); 
-			
 		}
-		beanContainer.setBeanIdProperty(p.getBeanIdProperty());
+		if(p.getBeanIdProperty() != null)
+			beanContainer.setBeanIdProperty(p.getBeanIdProperty());
+		final EditableTable self = this;
+		
+		newItemIdIterator = p.getNewItemIdGenerator().iterator();
+
+		if(p.getBeanIdResolver() != null) {
+			beanContainer.setBeanIdResolver((T bean) -> {
+				Object itemId = p.getBeanIdResolver().apply(bean);
+				if(itemId == null)
+					itemId = self.newItemIdIterator.next();
+				return itemId;
+			});
+		}
 		beanContainer.addAll(original);
 		this.setContainerDataSource(beanContainer);
 			
@@ -214,18 +229,19 @@ public class EditableTable<T> extends Table {
 			@Override
 			public void handleAction(Action action, Object sender, Object target) {
 				if(action == ADD) {
-					T newItem = null;
+					T newBean = null;
 					if(isBaseTypeContainer() || createNewFunction != null) {
-							newItem	= createNewFunction.apply(null);
+							newBean	= createNewFunction.apply(null);
 					} else {
 							try {
-								newItem	= targetClass.newInstance();
+								newBean	= targetClass.newInstance();
 							} catch (Exception e) {
 								logger.error("Error while creating new bean",e);
 							}
 					}
-					beanContainer.addBeanAfter(target, newItem);
-					table.setData(newItem);
+					Object itemId = beanContainer.getBeanIdResolver().getIdForBean(newBean);
+					BeanItem<T> beanItem = beanContainer.addItemAfter(target, itemId, newBean);
+					table.setData(itemId);
 					table.refreshRowCache();
 				} else if (action == REMOVE) {
 					beanContainer.removeItem(target);

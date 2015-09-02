@@ -1,6 +1,7 @@
 package pro.deta.detatrak.view.layout;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -159,7 +160,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 				}
 				uploader.clear();
 			} else if(type == FieldType.EDITABLE_LIST) {
-				setProperty(param, table.getOriginalList());
+				setArrayProperty(param, table.getOriginalList());
 			} else if(type == FieldType.SCHEDULE) {
 				setProperty(param, ScheduleBuilder.getScheduleString(scheduleBlock));
 			}
@@ -174,7 +175,19 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 		Property itprop = param.getData().getBinder().getItemDataSource().getItemProperty(field);
 		itprop.setValue(value);
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public void setArrayProperty(BuildLayoutParameter<FormParameter<Object>> param,List newValue) {
+		Property itprop = param.getData().getBinder().getItemDataSource().getItemProperty(field);
+		itprop.setValue(newValue);
+		// list comparison necessary due to orphan removal set to true;
+		// but if not - it is good way
+		/*
+		if(itprop.getValue() instanceof List) {
+			List value = (List) itprop.getValue();
+			
+		}*/
+	}
 	public void cancel(BuildLayoutParameter<FormParameter<Object>> param) {
 		if(type == FieldType.SOUND_FILE) {
 			uploader.clear();

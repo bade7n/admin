@@ -53,7 +53,7 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 				
 				new FieldLayout("Типы клиентов", "customers", FieldType.EDITABLE_LIST,
 						new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Тип пользователя")}, 
-								t0-> {return new CustomerDO("Новый тип пользователя");},"id")),
+								t0-> {return new CustomerDO("Новый тип пользователя");},t0-> {return t0.getId();})),
 
 				
 				new SaveCancelLayout(this)

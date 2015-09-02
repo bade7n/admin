@@ -2,6 +2,10 @@ package pro.deta.detatrak.view.layout;
 
 import java.io.Serializable;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import com.vaadin.data.util.AbstractBeanContainer.BeanIdResolver;
+import com.vaadin.ui.Table;
 
 import pro.deta.detatrak.dao.data.T0;
 import ru.yar.vi.rm.data.CustomFieldDO;
@@ -28,6 +32,9 @@ public class EditableTableParameters<T> implements Serializable{
 	private int tabIndex;
 	private Function<T0, T> createNew = null;
 	private String beanIdProperty;
+	private Function<T, Object> beanIdResolver;
+	
+	private int i = -1;
 
 	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns) {
 		this.targetClass = targetClass;
@@ -43,6 +50,12 @@ public class EditableTableParameters<T> implements Serializable{
 		this(targetClass,columns);
 		this.createNew = createNew;
 		this.beanIdProperty = beanIdProperty;
+	}
+
+	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns,Function<T0, T> createNew,Function<T, Object> getItemId) {
+		this(targetClass,columns);
+		this.createNew = createNew;
+		this.beanIdResolver = getItemId;
 	}
 
 	public TableColumnInfo[] getColumnHeaders() {
@@ -80,6 +93,14 @@ public class EditableTableParameters<T> implements Serializable{
 
 	public void setBeanIdProperty(String beanIdProperty) {
 		this.beanIdProperty = beanIdProperty;
+	}
+
+	public Function<T, Object> getBeanIdResolver() {
+		return beanIdResolver;
+	}
+
+	public Stream<Integer> getNewItemIdGenerator() {
+		return Stream.generate(() -> {return i--;});
 	}
 
 }

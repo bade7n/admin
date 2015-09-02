@@ -19,7 +19,6 @@ import com.vaadin.server.VaadinServlet;
 import pro.deta.detatrak.dao.EMDAO;
 import pro.deta.detatrak.dao.listener.DCNDAO;
 import pro.deta.detatrak.dao.listener.DCNNotificatorCallback;
-import pro.deta.detatrak.dao.listener.DCNUpdateNotifier;
 
 @WebServlet(initParams={
 		@WebInitParam(name="UI",value="pro.deta.detatrak.MyUI"),
@@ -50,7 +49,6 @@ public class VadminVaadinServlet extends VaadinServlet {
 		emd = EMDAO.getInstance();
 		try {
 			dcnd = DCNDAO.getInstance(new DCNNotificatorCallback(emd),emd);
-			DCNUpdateNotifier.init(emd);
 		} catch(Throwable e) {
 			log.error("Error while startin Vadmin context ",e);
 		}
@@ -86,7 +84,6 @@ public class VadminVaadinServlet extends VaadinServlet {
 		super.destroy();
 		if(dcnd != null)
 			dcnd.close();
-		DCNUpdateNotifier.destroy();
 		emd.close();
 		dcnd = null;
 		emd = null;
