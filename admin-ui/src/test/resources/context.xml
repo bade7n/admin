@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Context path="/vadmin" swallowOutput="false" reloadable="false" addWebinfClassesResources="true">
-	<Resource name="jdbc/RecordManagerDS" auth="Container" removeAbandoned="true" removeAbandonedTimeout="30" logAbandoned="true"
+	<Resource name="jdbc/RecordManagerDS" auth="Container" removeAbandoned="true" removeAbandonedTimeout="30000" logAbandoned="true"
         factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
         type="javax.sql.DataSource" maxActive="100" maxIdle="100" maxWait="30000"
         username="${db.username}" password="${db.password}" driverClassName="org.postgresql.Driver"

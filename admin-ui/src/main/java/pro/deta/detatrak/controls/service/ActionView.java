@@ -43,6 +43,7 @@ public class ActionView extends LayoutEntityViewBase<ActionDO> {
 					new FieldLayout("Дополнительные поля", "field", FieldLayout.FieldType.TWINCOLSELECT,new ValuesContainer<>(fieldContainer)),
 					new FieldLayout("Количество дней для записи", "queueLength", FieldLayout.FieldType.TEXTFIELD),
 					new FieldLayout("Мин. время восстановления отменённой записи (в мин.)", "minimumRestore", FieldLayout.FieldType.TEXTFIELD),
+					new FieldLayout("Группировать в одну записи текущего часа", "mergeCurrentHour", FieldLayout.FieldType.CHECKBOX),
 					new SaveCancelLayout(this)
 				));
 		
