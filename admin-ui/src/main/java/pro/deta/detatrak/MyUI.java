@@ -9,6 +9,21 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.annotations.Theme;
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.View;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.DragAndDropWrapper;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.UI;
+
 import pro.deta.detatrak.common.MyConverterFactory;
 import pro.deta.detatrak.controls.OfficeChooserView;
 import pro.deta.detatrak.presenter.TabViewPresenter;
@@ -31,22 +46,8 @@ import pro.deta.detatrak.view.ServiceTabsView;
 import pro.deta.security.SecurityElement;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.OfficeDO;
+import ru.yar.vi.rm.data.SiteDO;
 import ru.yar.vi.rm.data.UserDO;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.annotations.Theme;
-import com.vaadin.data.util.filter.Compare;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.View;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.DragAndDropWrapper;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.UI;
 
 @Theme("mytheme")
 @SuppressWarnings("serial")
@@ -64,9 +65,11 @@ public class MyUI extends UI {
 	private JPAContainer<OfficeDO> officeContainer = null;
 	private JPAContainer<ObjectDO> objectContainer = null;
 	private JPAContainer<UserDO> userContainer = null;
+	private JPAContainer<SiteDO> siteContainer = null;
 
 
 	protected UserDO user = null;
+	private SiteDO site = null;	
 	private OfficeDO office = null;	
 	private MyViewDisplay viewDisplay = null;
 	private String remoteHost;
@@ -77,9 +80,10 @@ public class MyUI extends UI {
 		//bundle = Utf8ResourceBundle.getBundle("resource");Thread.currentThread().getContextClassLoader().getResource("resource")
 		bundle = new ResourceProperties(ResourceBundle.getBundle("resource"));
 		remoteHost = request.getRemoteHost();
-		userContainer = JPAUtils.createCachingJPAContainer(UserDO.class);
+		userContainer = JPAUtils.createJPAContainer(UserDO.class);
 		objectContainer = JPAUtils.createCachingJPAContainer(ObjectDO.class);
-		officeContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
+		officeContainer = JPAUtils.createJPAContainer(OfficeDO.class);
+		siteContainer = JPAUtils.createJPAContainer(SiteDO.class);
 		initResources();
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
 		root.setSizeFull();
@@ -123,14 +127,8 @@ public class MyUI extends UI {
 		return bundle;
 	}
 	
-	public void setDefaultOffice() {
-		setOffice(officeContainer.getItem(officeContainer.firstItemId()).getEntity());
-	}
-		
-
 	public void buildOfficeChooser() {
 		root.removeAllComponents();
-		setDefaultOffice();
 		buildMenu();        		
 	}
 
@@ -249,4 +247,21 @@ public class MyUI extends UI {
 	public JPAContainer<UserDO> getUserContainer() {
 		return userContainer;
 	}
+
+	public JPAContainer<SiteDO> getSiteContainer() {
+		return siteContainer;
+	}
+
+	public void setSiteContainer(JPAContainer<SiteDO> siteContainer) {
+		this.siteContainer = siteContainer;
+	}
+
+	public SiteDO getSite() {
+		return site;
+	}
+
+	public void setSite(SiteDO site) {
+		this.site = site;
+	}
+
 }

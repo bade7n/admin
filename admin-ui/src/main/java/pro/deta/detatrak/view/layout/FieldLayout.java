@@ -1,7 +1,6 @@
 package pro.deta.detatrak.view.layout;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 
 import pro.deta.detatrak.common.ComponentsBuilder;
-import pro.deta.detatrak.common.EditableTable;
+import pro.deta.detatrak.common.EditableTablePanel;
 import pro.deta.detatrak.controls.objects.FileUploader;
 import pro.deta.detatrak.controls.schedule.converter.ScheduleBlock;
 import pro.deta.detatrak.controls.schedule.converter.ScheduleBuilder;
@@ -40,7 +39,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 	/*
 	 * Propertied for EditableTable
 	 */
-	private EditableTable table;
+	private EditableTablePanel table;
 	private EditableTableParameters editableTableParameters;
 
 	public FieldLayout(String caption,String field,FieldType type) {
@@ -120,7 +119,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			if(rawValue instanceof List) {
 				List<?> value1 = (List<?>) rawValue;
 				table = ComponentsBuilder.createEditableTable(caption,value1,editableTableParameters);
-				
+				table.setFormParameter(param.getData());
 				return table;
 			} else {
 				throw new LayoutDefinitionException("Property '"+field+"' for INTERNALTYPE_LIST expected to be java.util.List but '"+rawValue.getClass().getName()+"' found.");

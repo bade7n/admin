@@ -3,8 +3,11 @@ package pro.deta.detatrak.util;
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.event.EventDispatcher;
 import ru.yar.vi.rm.data.OfficeDO;
+import ru.yar.vi.rm.data.SiteDO;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.filter.Compare;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
@@ -26,6 +29,7 @@ public abstract class RightPaneView extends EventDispatcher {
 	protected ResourceProperties bundle;
 	protected VerticalLayout root = new VerticalLayout();
 	ListSelect officeSelect = new ListSelect();
+	ListSelect siteSelect = new ListSelect();
 
     public RightPaneView() {
     	setContent(root);
@@ -75,6 +79,28 @@ public abstract class RightPaneView extends EventDispatcher {
     	
     	officeSelect.addStyleName("small");
     	cl.addComponent(officeSelect,"officeChooser");
+    	
+    	
+		siteSelect.setRows(1);
+    	siteSelect.setNullSelectionAllowed(false);
+    	siteSelect.setContainerDataSource(MyUI.getCurrentUI().getSiteContainer());
+    	siteSelect.setConvertedValue(MyUI.getCurrentUI().getSite().getId());
+    	siteSelect.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+    	siteSelect.setItemCaptionPropertyId("name");
+    	siteSelect.addStyleName("small");
+    	siteSelect.addValueChangeListener(event ->{
+			Object value = siteSelect.getConvertedValue();
+			SiteDO site = MyUI.getCurrentUI().getSiteContainer().getItem(value).getEntity();
+			MyUI.getCurrentUI().setSite(site);
+			JPAContainer<OfficeDO> officeContainer = MyUI.getCurrentUI().getOfficeContainer();
+			officeContainer.removeAllContainerFilters();
+			officeContainer.addContainerFilter(new Compare.Equal("site", site));
+			Navigator navigator = MyUI.getCurrentUI().getNavigator();
+            navigator.navigateTo(navigator.getState());
+    		
+    	});
+    	cl.addComponent(siteSelect,"siteChooser");
+    	
     	return cl;
 	}
 

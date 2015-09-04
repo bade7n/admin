@@ -26,11 +26,11 @@
 	</appender>
 
 	<category name="ru">
-		<priority value="warn" />
+		<priority value="debug" />
 		<appender-ref ref="f1" />
 	</category>
 	<category name="pro">
-		<priority value="warn" />
+		<priority value="debug" />
 		<appender-ref ref="f1" />
 	</category>
 	<category name="org.apache.struts">

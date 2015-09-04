@@ -15,12 +15,14 @@ import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.security.SecurityElement;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RoleDO;
+import ru.yar.vi.rm.data.SiteDO;
 import ru.yar.vi.rm.data.UserDO;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.And;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.ShortcutAction;
@@ -170,9 +172,25 @@ public class LoginView extends VerticalLayout {
 				} else {
 					signin.removeShortcutListener(enter);
 					MyUI.getCurrentUI().setUser(userEntity.getEntity());
+					
+					JPAContainer<SiteDO> siteContainer = MyUI.getCurrentUI().getSiteContainer();
+					Filter[] filterSite = new Filter[userEntity.getEntity().getSite().size()];
+					if(filterSite.length == 0 ) {
+						addError("error.noSitePermissionFound");
+						return;
+					}
+					int j =0;
+					for (SiteDO o : userEntity.getEntity().getSite()) {
+						filterSite[j++] = new Compare.Equal("id", o.getId());
+					}
+					siteContainer.addContainerFilter(new Or(filterSite));
+					SiteDO currentSite = siteContainer.getItem(siteContainer.firstItemId()).getEntity();
+					MyUI.getCurrentUI().setSite(currentSite );
+					JPAContainer<OfficeDO> officeContainer = MyUI.getCurrentUI().getOfficeContainer();
+					officeContainer.addContainerFilter(new And(new Compare.Equal("site",currentSite)));
+					
 					if(!DataUtil.matchElement(restr, SecurityElement.OFFICE_UNRESTRICTED)) {
 						// if user has office restrictions
-						JPAContainer<OfficeDO> officeContainer = MyUI.getCurrentUI().getOfficeContainer();
 						Filter[] filters = new Filter[userEntity.getEntity().getOffice().size()];
 						int i =0;
 						for (OfficeDO o : userEntity.getEntity().getOffice()) {
@@ -180,7 +198,7 @@ public class LoginView extends VerticalLayout {
 						}
 						officeContainer.addContainerFilter(new Or(filters));
 					}
-					
+					MyUI.getCurrentUI().setOffice(officeContainer.getItem(officeContainer.firstItemId()).getEntity());
 					MyUI.getCurrentUI().buildOfficeChooser();
 				}
 			}

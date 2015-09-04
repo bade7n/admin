@@ -41,7 +41,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.VerticalLayout;
 
-import pro.deta.detatrak.common.EditableTable;
+import pro.deta.detatrak.common.EditableTablePanel;
 import pro.deta.detatrak.controls.extra.SiteView;
 import pro.deta.detatrak.listbuilder.ListBuilder;
 import pro.deta.detatrak.util.JPAUtils;
@@ -90,7 +90,7 @@ public class MyTestUI extends MyUI {
 		customer.add(new CustomerDO(1,"Физическое лицо"));
 		customer.add(new CustomerDO(2,"Юридическое лицо"));
 		customer.add(new CustomerDO(3,"Юридическое лицо"));
-		final EditableTable<CustomerDO> table = new EditableTable<>();
+		final EditableTablePanel<CustomerDO> table = new EditableTablePanel<>();
 		table.setOriginalList(customer);
 		table.setCaption("Пользователи");
 		table.initialize(new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[]{new TableColumnInfo("name", "Тип пользователя")},

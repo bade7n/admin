@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.vaadin.data.util.AbstractBeanContainer.BeanIdResolver;
-import com.vaadin.ui.Table;
+import com.vaadin.data.util.converter.Converter;
 
-import pro.deta.detatrak.dao.data.T0;
 import ru.yar.vi.rm.data.CustomFieldDO;
 
 /**
@@ -30,7 +28,7 @@ public class EditableTableParameters<T> implements Serializable{
 	private TableColumnInfo[] columnHeaders;
 	private Class<T> targetClass;
 	private int tabIndex;
-	private Function<T0, T> createNew = null;
+	private Function<FormParameter<Object>, T> createNew = null;
 	private String beanIdProperty;
 	private Function<T, Object> beanIdResolver;
 	
@@ -41,18 +39,18 @@ public class EditableTableParameters<T> implements Serializable{
 		this.columnHeaders = columns;
 	}
 
-	public EditableTableParameters(Class<T> targetClass,Function<T0, T> createNew) {
+	public EditableTableParameters(Class<T> targetClass,Function<FormParameter<Object>, T> createNew) {
 		this.targetClass = targetClass;
 		this.createNew = createNew;
 	}
 
-	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns,Function<T0, T> createNew,String beanIdProperty) {
+	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns,Function<FormParameter<Object>, T> createNew,String beanIdProperty) {
 		this(targetClass,columns);
 		this.createNew = createNew;
 		this.beanIdProperty = beanIdProperty;
 	}
 
-	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns,Function<T0, T> createNew,Function<T, Object> getItemId) {
+	public EditableTableParameters(Class<T> targetClass,TableColumnInfo[] columns,Function<FormParameter<Object>, T> createNew,Function<T, Object> getItemId) {
 		this(targetClass,columns);
 		this.createNew = createNew;
 		this.beanIdResolver = getItemId;
@@ -79,11 +77,11 @@ public class EditableTableParameters<T> implements Serializable{
 		this.tabIndex = tabIndex;
 	}
 
-	public Function<T0, T> getCreateNew() {
+	public Function<FormParameter<Object>, T> getCreateNew() {
 		return createNew;
 	}
 
-	public void setCreateNew(Function<T0, T> createNew) {
+	public void setCreateNew(Function<FormParameter<Object>, T> createNew) {
 		this.createNew = createNew;
 	}
 

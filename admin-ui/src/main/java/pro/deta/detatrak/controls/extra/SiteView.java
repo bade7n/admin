@@ -1,13 +1,29 @@
 package pro.deta.detatrak.controls.extra;
 
+
+
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
+
+import com.vaadin.addon.jpacontainer.EntityContainer;
+import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
+import com.vaadin.ui.ComboBox;
+
 import pro.deta.detatrak.BaseTypeContainer;
-//import pro.deta.detatrak.dao.data.T0;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
 import pro.deta.detatrak.view.layout.EditableTableParameters;
 import pro.deta.detatrak.view.layout.FieldLayout;
 import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
+import pro.deta.detatrak.view.layout.FormParameter;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.SaveCancelLayout;
 import pro.deta.detatrak.view.layout.TabSheetLayout;
@@ -18,10 +34,6 @@ import ru.yar.vi.rm.data.CustomerDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 import ru.yar.vi.rm.data.SiteDO;
-
-import java.util.function.Function;
-
-import com.vaadin.addon.jpacontainer.EntityContainer;
 
 public class SiteView extends LayoutEntityViewBase<SiteDO> {
 
@@ -39,12 +51,10 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 	@Override
 	public Layout getFormDefinition() {
 		EntityContainer<ActionDO> actionContainer = JPAUtils.createCachingJPAContainer(ActionDO.class);
-		EntityContainer<CustomerDO> customerContainer = JPAUtils.createCachingJPAContainer(CustomerDO.class);
-		EntityContainer<OfficeDO> officeContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
-		EntityContainer<RegionDO> regionContainer = JPAUtils.createCachingJPAContainer(RegionDO.class);
 
 
 		TabSheetLayout l = new TabSheetLayout();
+		
 		l.addTab(new DetaFormLayout("Основные настройки",
 				new FieldLayout("Название", "name", FieldType.TEXTFIELD),
 				new FieldLayout("Главный", "main", FieldType.CHECKBOX),
@@ -54,6 +64,31 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 				new FieldLayout("Типы клиентов", "customers", FieldType.EDITABLE_LIST,
 						new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Тип пользователя")}, 
 								t0-> {return new CustomerDO("Новый тип пользователя");},t0-> {return t0.getId();})),
+				new FieldLayout("Регионы", "regions", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<RegionDO>(RegionDO.class, 
+								new TableColumnInfo[] {
+										new TableColumnInfo("name","Регион"),
+										new TableColumnInfo("defaultOffice","Офис по умолчанию",form ->{
+											final List<OfficeDO> offices = ((SiteDO)form.getBean()).getOffices();
+											ComboBox combo = new ComboBox();
+											BeanItemContainer<OfficeDO> cont = new BeanItemContainer<>(OfficeDO.class);
+											cont.addAll(offices);
+											combo.setContainerDataSource(cont);
+											combo.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+											combo.setItemCaptionPropertyId("name");
+									        return combo;
+										}) 
+									}, 
+								t0-> {
+									RegionDO o = new RegionDO();
+									o.setName("Район обслуживания");
+									o.setSite((SiteDO)t0.getBean());
+										return o;
+									},
+								t0-> {
+									return t0.getId();
+									}
+								)),
 
 				
 				new SaveCancelLayout(this)
@@ -87,12 +122,19 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		
 		l.addTab(new DetaFormLayout("Дополнительно",
 				new FieldLayout("Услуги", "actions", FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
-				new FieldLayout("Офисы", "offices", FieldType.TWINCOLSELECT,new ValuesContainer<>(officeContainer)),
-				new FieldLayout("Регионы", "regions", FieldType.TWINCOLSELECT,new ValuesContainer<>(regionContainer)),
-
+//				new FieldLayout("Офисы", "offices", FieldType.TWINCOLSELECT,new ValuesContainer<>(MyUI.getCurrentUI().getOfficeContainer())),
+				new FieldLayout("Офисы", "offices", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<OfficeDO>(OfficeDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Название офиса обслуживания")}, 
+								t0-> {
+									OfficeDO o = new OfficeDO();
+									o.setName("Новый офис");
+									o.setSite((SiteDO)t0.getBean());
+										return o;
+									},t0-> {return t0.getId();})),
 				new SaveCancelLayout(this)
 				));
 		
+
 		return l;
 
 	}

@@ -1,6 +1,9 @@
 package pro.deta.detatrak.view.layout;
 
 import java.io.Serializable;
+import java.util.function.Function;
+
+import com.vaadin.ui.Field;
 
 public class TableColumnInfo implements Serializable {
 	/**
@@ -11,10 +14,17 @@ public class TableColumnInfo implements Serializable {
 	private String name;
 	private Integer width;
 	private Float expandRatio;
+	private Function<FormParameter<Object>, Field<?>> fieldInitializer;
 
 	public TableColumnInfo(String name,String caption) {
 		this.setCaption(caption);
 		this.setName(name);
+	}
+
+	public TableColumnInfo(String name,String caption,Function<FormParameter<Object>, Field<?>> fieldInitializer) {
+		this.setCaption(caption);
+		this.setName(name);
+		this.setFieldInitializer(fieldInitializer);
 	}
 	
 	public TableColumnInfo(String name,String caption,Integer width) {
@@ -60,5 +70,12 @@ public class TableColumnInfo implements Serializable {
 	public void setExpandRatio(Float expandRatio) {
 		this.expandRatio = expandRatio;
 	}
-	
+
+	public Function<FormParameter<Object>, Field<?>> getFieldInitializer() {
+		return fieldInitializer;
+	}
+
+	public void setFieldInitializer(Function<FormParameter<Object>, Field<?>> fieldInitializer) {
+		this.fieldInitializer = fieldInitializer;
+	}
 }
