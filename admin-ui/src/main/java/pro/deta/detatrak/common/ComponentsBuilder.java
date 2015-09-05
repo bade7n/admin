@@ -41,17 +41,17 @@ public class ComponentsBuilder {
 	public static String width = "400px";
     private static final int ROWS_COMPONENT_HEIGHT = 5;
 
-    public static <T> TwinColSelect createTwinColSelect(String caption,EntityContainer<T> objectContainer,FieldGroup binder,String field) {
+    public static <T> TwinColSelect createTwinColSelect(String caption,Container objectContainer,FieldGroup binder,String field) {
         return createTwinColSelect(caption, objectContainer, binder, field, "name");
     }
     
-    public static <T> TwinColSelect createTwinColSelect(String caption,EntityContainer<T> objectContainer,FieldGroup binder,String field,String valueCaptionField) {
+    public static <T> TwinColSelect createTwinColSelect(String caption,Container objectContainer,FieldGroup binder,String field,String valueCaptionField) {
     	TwinColSelect tcs = createTwinColSelectNoBind(caption, objectContainer, valueCaptionField);
         binder.bind(tcs, field);
         return tcs;
     }
     
-    public static <T> TwinColSelect createTwinColSelectNoBind(String caption,EntityContainer<T> objectContainer,String valueCaptionField) {
+    public static <T> TwinColSelect createTwinColSelectNoBind(String caption,Container objectContainer,String valueCaptionField) {
     	TwinColSelect objectsSelect = new TwinColSelect(caption);
 		objectsSelect.setImmediate(true);
         objectsSelect.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
@@ -83,11 +83,11 @@ public class ComponentsBuilder {
 		return ckEditorTextField1;
     }
     
-    public static <T> ComboBox createComboBox(String caption, EntityContainer<T> container,FieldGroup binder,String field) {
+    public static <T> ComboBox createComboBox(String caption, Container container,FieldGroup binder,String field) {
     	return createComboBoxWithDataSource(caption, container, binder, field, "name");
     }
 
-    public static <T> ComboBox createComboBoxWithDataSource(String caption, EntityContainer<T> container,FieldGroup binder,String field,String captionField) {
+    public static <T> ComboBox createComboBoxWithDataSource(String caption, Container container,FieldGroup binder,String field,String captionField) {
         ComboBox comboBox = createCustomComboBox(caption,container,binder,field,captionField,false);
 		comboBox.setImmediate(true);
         comboBox.setNullSelectionAllowed(true);

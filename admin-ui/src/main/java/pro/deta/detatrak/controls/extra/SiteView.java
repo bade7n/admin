@@ -64,33 +64,6 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 				new FieldLayout("Типы клиентов", "customers", FieldType.EDITABLE_LIST,
 						new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Тип пользователя")}, 
 								t0-> {return new CustomerDO("Новый тип пользователя");},t0-> {return t0.getId();})),
-				new FieldLayout("Регионы", "regions", FieldType.EDITABLE_LIST,
-						new EditableTableParameters<RegionDO>(RegionDO.class, 
-								new TableColumnInfo[] {
-										new TableColumnInfo("name","Регион"),
-										new TableColumnInfo("defaultOffice","Офис по умолчанию",form ->{
-											final List<OfficeDO> offices = ((SiteDO)form.getBean()).getOffices();
-											ComboBox combo = new ComboBox();
-											BeanItemContainer<OfficeDO> cont = new BeanItemContainer<>(OfficeDO.class);
-											cont.addAll(offices);
-											combo.setContainerDataSource(cont);
-											combo.setItemCaptionMode(ItemCaptionMode.PROPERTY);
-											combo.setItemCaptionPropertyId("name");
-									        return combo;
-										}) 
-									}, 
-								t0-> {
-									RegionDO o = new RegionDO();
-									o.setName("Район обслуживания");
-									o.setSite((SiteDO)t0.getBean());
-										return o;
-									},
-								t0-> {
-									return t0.getId();
-									}
-								)),
-
-				
 				new SaveCancelLayout(this)
 				));
 
@@ -122,7 +95,6 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 		
 		l.addTab(new DetaFormLayout("Дополнительно",
 				new FieldLayout("Услуги", "actions", FieldType.TWINCOLSELECT,new ValuesContainer<>(actionContainer)),
-//				new FieldLayout("Офисы", "offices", FieldType.TWINCOLSELECT,new ValuesContainer<>(MyUI.getCurrentUI().getOfficeContainer())),
 				new FieldLayout("Офисы", "offices", FieldType.EDITABLE_LIST,
 						new EditableTableParameters<OfficeDO>(OfficeDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Название офиса обслуживания")}, 
 								t0-> {
@@ -131,6 +103,31 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 									o.setSite((SiteDO)t0.getBean());
 										return o;
 									},t0-> {return t0.getId();})),
+				new FieldLayout("Регионы", "regions", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<RegionDO>(RegionDO.class, 
+								new TableColumnInfo[] {
+										new TableColumnInfo("name","Район"),
+										new TableColumnInfo("defaultOffice","Офис по умолчанию",form ->{
+											final List<OfficeDO> offices = ((SiteDO)form.getBean()).getOffices();
+											ComboBox combo = new ComboBox();
+											BeanItemContainer<OfficeDO> cont = new BeanItemContainer<>(OfficeDO.class);
+											cont.addAll(offices);
+											combo.setContainerDataSource(cont);
+											combo.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+											combo.setItemCaptionPropertyId("name");
+									        return combo;
+										}) 
+									}, 
+								t0-> {
+									RegionDO o = new RegionDO();
+									o.setName("Район");
+									o.setSite((SiteDO)t0.getBean());
+										return o;
+									},
+								t0-> {
+									return t0.getId();
+									}
+								)),
 				new SaveCancelLayout(this)
 				));
 		

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vaadin.data.Container;
+import com.vaadin.navigator.View;
+import com.vaadin.ui.Panel;
+
 import pro.deta.detatrak.presenter.JPAEntityViewBase;
 import pro.deta.detatrak.presenter.TabViewPresenter;
 import pro.deta.detatrak.util.NewRightPaneTabsView;
 import pro.deta.detatrak.view.Initializable;
-
-import com.vaadin.addon.jpacontainer.EntityContainer;
-import com.vaadin.navigator.View;
-import com.vaadin.ui.Panel;
 
 public abstract class EventDispatcher extends Panel implements View,Initializable {
 	/**
@@ -54,8 +54,9 @@ public abstract class EventDispatcher extends Panel implements View,Initializabl
 	}
 
 	protected <T> void addForInitialization(JPAEntityViewBase<T> view,
-			EntityContainer<T> container) {
-		view.setEntityContainer(container);
+			Container container) {
+		view.setContainer(container);
 		subViews.add(view);
 	}
+
 }

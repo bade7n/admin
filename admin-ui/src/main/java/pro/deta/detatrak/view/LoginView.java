@@ -8,21 +8,11 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.StringUtils;
 
-import pro.deta.detatrak.LazyHibernateEntityManagerProvider;
-import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.util.DataUtil;
-import pro.deta.detatrak.util.JPAUtils;
-import pro.deta.security.SecurityElement;
-import ru.yar.vi.rm.data.OfficeDO;
-import ru.yar.vi.rm.data.RoleDO;
-import ru.yar.vi.rm.data.SiteDO;
-import ru.yar.vi.rm.data.UserDO;
-
 import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.And;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.ShortcutAction;
@@ -35,6 +25,15 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import pro.deta.detatrak.MyUI;
+import pro.deta.detatrak.util.DataUtil;
+import pro.deta.detatrak.util.JPAUtils;
+import pro.deta.security.SecurityElement;
+import ru.yar.vi.rm.data.OfficeDO;
+import ru.yar.vi.rm.data.RoleDO;
+import ru.yar.vi.rm.data.SiteDO;
+import ru.yar.vi.rm.data.UserDO;
 
 public class LoginView extends VerticalLayout {
 	/**
@@ -186,8 +185,7 @@ public class LoginView extends VerticalLayout {
 					siteContainer.addContainerFilter(new Or(filterSite));
 					SiteDO currentSite = siteContainer.getItem(siteContainer.firstItemId()).getEntity();
 					MyUI.getCurrentUI().setSite(currentSite );
-					JPAContainer<OfficeDO> officeContainer = MyUI.getCurrentUI().getOfficeContainer();
-					officeContainer.addContainerFilter(new And(new Compare.Equal("site",currentSite)));
+					BeanContainer<Integer,OfficeDO> officeContainer = MyUI.getCurrentUI().createOfficeContainer();
 					
 					if(!DataUtil.matchElement(restr, SecurityElement.OFFICE_UNRESTRICTED)) {
 						// if user has office restrictions
@@ -198,7 +196,8 @@ public class LoginView extends VerticalLayout {
 						}
 						officeContainer.addContainerFilter(new Or(filters));
 					}
-					MyUI.getCurrentUI().setOffice(officeContainer.getItem(officeContainer.firstItemId()).getEntity());
+					MyUI.getCurrentUI().setOfficeContainer(officeContainer);
+					MyUI.getCurrentUI().setOffice(officeContainer.getItem(officeContainer.firstItemId()).getBean());
 					MyUI.getCurrentUI().buildOfficeChooser();
 				}
 			}

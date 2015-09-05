@@ -2,10 +2,13 @@ package pro.deta.detatrak.util;
 
 import javax.persistence.EntityManager;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.addon.jpacontainer.provider.CachingMutableLocalEntityProvider;
 import com.vaadin.addon.jpacontainer.provider.MutableLocalEntityProvider;
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 
 import pro.deta.detatrak.HibernateLazyLoadingDelegate;
 import pro.deta.detatrak.LazyHibernateEntityManagerProvider;
@@ -22,6 +25,13 @@ public class JPAUtils {
         return cont;
 	}
 	
+	public static <E> E getBeanByItem(Item item) {
+		if(item instanceof EntityItem)
+			return ((EntityItem<E>) item).getEntity();
+		else if (item instanceof BeanItem)
+			return ((BeanItem<E>) item).getBean();
+		return null;
+	}
 	
 	static public<T extends Object> JPAContainer<T> createJPAContainer(Class<T> class1) {
 		JPAContainer<T> cont = JPAContainerFactory.make(class1, (EntityManager) null);

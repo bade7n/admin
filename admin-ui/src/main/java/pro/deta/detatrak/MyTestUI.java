@@ -78,7 +78,7 @@ public class MyTestUI extends MyUI {
 //		generateEditableTableList(root);
 		setNavigator(new Navigator(this, root));
 		SiteView av = new SiteView();
-		av.setEntityContainer(JPAUtils.createCachingJPAContainer(SiteDO.class));
+		av.setContainer(JPAUtils.createCachingJPAContainer(SiteDO.class));
 		getNavigator().addView("siteView", av);
 		getNavigator().navigateTo("siteView/684");
 	}

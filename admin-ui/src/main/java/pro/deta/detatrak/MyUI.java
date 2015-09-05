@@ -11,7 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.annotations.Theme;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Container.Filterable;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.filter.Compare;
+import com.vaadin.data.util.filter.Or;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
@@ -62,7 +66,6 @@ public class MyUI extends UI {
 	CssLayout menu = new CssLayout();
 
 	/* Office Chooser container */
-	private JPAContainer<OfficeDO> officeContainer = null;
 	private JPAContainer<ObjectDO> objectContainer = null;
 	private JPAContainer<UserDO> userContainer = null;
 	private JPAContainer<SiteDO> siteContainer = null;
@@ -82,7 +85,6 @@ public class MyUI extends UI {
 		remoteHost = request.getRemoteHost();
 		userContainer = JPAUtils.createJPAContainer(UserDO.class);
 		objectContainer = JPAUtils.createCachingJPAContainer(ObjectDO.class);
-		officeContainer = JPAUtils.createJPAContainer(OfficeDO.class);
 		siteContainer = JPAUtils.createJPAContainer(SiteDO.class);
 		initResources();
 		VaadinSession.getCurrent().setConverterFactory(new MyConverterFactory());
@@ -111,10 +113,25 @@ public class MyUI extends UI {
 		}};
 	}
 
-	public JPAContainer<OfficeDO> getOfficeContainer() {
-		return officeContainer;
+//	public JPAContainer<OfficeDO> getOfficeContainer() {
+//		return officeContainer;
+//	}
+	
+	private BeanContainer<Integer, OfficeDO> officeContainer;
+	
+	public BeanContainer<Integer, OfficeDO> createOfficeContainer() {
+    	List<OfficeDO> offices = MyUI.getCurrentUI().getSite().getOffices();
+    	return createContainer(offices, OfficeDO.class, "id");
+	}
+	
+	 public static <T> BeanContainer<Integer, T> createContainer(List<T> list,Class<T> cl, String idColumn) {
+    	BeanContainer<Integer, T> ontainer = new BeanContainer<>(cl);
+    	ontainer.setBeanIdProperty(idColumn);
+    	ontainer.addAll(list);
+    	return ontainer;
 	}
 
+	
 	public UserDO getUser() {
 		return user;
 	}
@@ -150,48 +167,7 @@ public class MyUI extends UI {
 		menu.removeAllComponents();
 
 		for (Class<?> class1 : topLevelMenus) {
-			TopLevelMenuView topLevelAnnotation = class1.getAnnotation(TopLevelMenuView.class);
-			if(topLevelAnnotation != null) {
-				String icon = topLevelAnnotation.icon();
-//				final String nav = topLevelAnnotation.view();
-				if (View.class.isAssignableFrom(class1) && Captioned.class.isAssignableFrom(class1)) {
-					try {
-						View v = (View) class1.newInstance();
-						Captioned capt = (Captioned) v;
-						final String nav = capt.getNavKey();
-						if(Restrictable.class.isInstance(v)) {
-							Restrictable init = (Restrictable) v;
-							List<SecurityElement> secList = DataUtil.getRestrictions(user);
-							if(!DataUtil.matchElement(secList, init.getRestriction()))
-								continue;
-						}
-							
-						
-						if(Initializable.class.isInstance(v)) {
-							Initializable init = (Initializable) v;
-							TabViewPresenter presenter = new TabViewPresenter(getNavigator(), nav);
-							init.init(presenter);
-						}
-
-						Button b = new NativeButton(capt.getCaption());
-						b.addStyleName(icon);
-						b.addClickListener(new Button.ClickListener() {
-							@Override
-							public void buttonClick(Button.ClickEvent event) {
-								clearMenuSelection();
-								event.getButton().addStyleName("selected");
-								if (!getNavigator().getState().equals(nav))
-									getNavigator().navigateTo(nav);
-							}
-						});
-						menu.addComponent(b);
-					} catch (InstantiationException | IllegalAccessException e) {
-						logger.error("Error occured while constructing class " + class1,e);
-					}
-				} else {
-					logger.error("Error occured while constructing class " + class1 +" annotation " + TopLevelMenuView.class + "is not available.");
-				}
-			}
+			initializeTopLevelMenu(class1);
 		}
 		
 
@@ -200,6 +176,51 @@ public class MyUI extends UI {
 		menu.getComponent(0).addStyleName("selected");
 		getNavigator().addView(OfficeChooserView.NAV_KEY, new OfficeChooserView());
 		getNavigator().navigateTo(OfficeChooserView.NAV_KEY);
+	}
+
+	public void initializeTopLevelMenu(Class<?> class1) {
+		TopLevelMenuView topLevelAnnotation = class1.getAnnotation(TopLevelMenuView.class);
+		if(topLevelAnnotation != null) {
+			String icon = topLevelAnnotation.icon();
+//				final String nav = topLevelAnnotation.view();
+			if (View.class.isAssignableFrom(class1) && Captioned.class.isAssignableFrom(class1)) {
+				try {
+					View v = (View) class1.newInstance();
+					Captioned capt = (Captioned) v;
+					final String nav = capt.getNavKey();
+					if(Restrictable.class.isInstance(v)) {
+						Restrictable init = (Restrictable) v;
+						List<SecurityElement> secList = DataUtil.getRestrictions(user);
+						if(!DataUtil.matchElement(secList, init.getRestriction()))
+							return;
+					}
+						
+					
+					if(Initializable.class.isInstance(v)) {
+						Initializable init = (Initializable) v;
+						TabViewPresenter presenter = new TabViewPresenter(getNavigator(), nav);
+						init.init(presenter);
+					}
+
+					Button b = new NativeButton(capt.getCaption());
+					b.addStyleName(icon);
+					b.addClickListener(new Button.ClickListener() {
+						@Override
+						public void buttonClick(Button.ClickEvent event) {
+							clearMenuSelection();
+							event.getButton().addStyleName("selected");
+							if (!getNavigator().getState().equals(nav))
+								getNavigator().navigateTo(nav);
+						}
+					});
+					menu.addComponent(b);
+				} catch (InstantiationException | IllegalAccessException e) {
+					logger.error("Error occured while constructing class " + class1,e);
+				}
+			} else {
+				logger.error("Error occured while constructing class " + class1 +" annotation " + TopLevelMenuView.class + "is not available.");
+			}
+		}
 	}
 
 	private void clearMenuSelection() {
@@ -214,11 +235,27 @@ public class MyUI extends UI {
 		}
 	}
 
-	public void setOffice(OfficeDO office) {
-		this.office = office;
+	public void updateContainerForSite() {
+		setOfficeContainer(createOfficeContainer());
+		OfficeDO office = officeContainer.getItem(officeContainer.firstItemId()).getBean();
+		setOffice(office);
+		updateContainerForObjects();
+	}
+	
+	public void updateContainerForObjects() {
     	objectContainer.removeAllContainerFilters();
+    	Filter[] filters = new Filter[site.getOffices().size()];
+    	int i =0;
+    	for (OfficeDO of : site.getOffices()) {
+    		filters[i++] = new Compare.Equal("office", of);
+		}
+		objectContainer.addContainerFilter(new Or(filters));
     	if(office != null)
     		objectContainer.addContainerFilter(new Compare.Equal("office", office));
+	}
+	
+	public void setOffice(OfficeDO office) {
+		this.office = office;
 	}
 
 	public OfficeDO getOffice() {
@@ -262,6 +299,14 @@ public class MyUI extends UI {
 
 	public void setSite(SiteDO site) {
 		this.site = site;
+	}
+
+	public BeanContainer<Integer, OfficeDO> getOfficeContainer() {
+		return officeContainer;
+	}
+
+	public void setOfficeContainer(BeanContainer<Integer, OfficeDO> officeContainer) {
+		this.officeContainer = officeContainer;
 	}
 
 }

@@ -1,5 +1,10 @@
 package pro.deta.detatrak.controls.objects;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.util.BeanContainer;
+import com.vaadin.ui.Audio;
+
+import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.DetaFormLayout;
@@ -12,11 +17,7 @@ import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.ui.Audio;
-
 public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
-
 	/**
 	 * 
 	 */
@@ -28,8 +29,8 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 	}
 
 	public Layout getFormDefinition() {
-		JPAContainer<RegionDO> regionContainer = JPAUtils.createCachingJPAContainer(RegionDO.class);
-		JPAContainer<ActionDO> actionContainer = JPAUtils.createCachingJPAContainer(ActionDO.class);
+		BeanContainer<Integer,RegionDO> regionContainer =  MyUI.createContainer(MyUI.getCurrentUI().getSite().getRegions(),RegionDO.class,"id");
+		BeanContainer<Integer,ActionDO> actionContainer =  MyUI.createContainer(MyUI.getCurrentUI().getSite().getActions(),ActionDO.class,"id");
 
 		TabSheetLayout l = new TabSheetLayout();
 		l.addTab(new DetaFormLayout("Основные настройки",
@@ -64,6 +65,13 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 		return NAV_KEY;
 	}
 
+
+	@Override
+	public OfficeDO createBean() {
+		OfficeDO office = new OfficeDO();
+		office.setSite(MyUI.getCurrentUI().getSite());
+		return office;
+	}
 }
 
 

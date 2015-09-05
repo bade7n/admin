@@ -1,13 +1,6 @@
 package pro.deta.detatrak.util;
 
-import pro.deta.detatrak.MyUI;
-import pro.deta.detatrak.event.EventDispatcher;
-import ru.yar.vi.rm.data.OfficeDO;
-import ru.yar.vi.rm.data.SiteDO;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.data.util.filter.Compare;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
@@ -19,6 +12,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
+
+import pro.deta.detatrak.MyUI;
+import pro.deta.detatrak.event.EventDispatcher;
+import pro.deta.detatrak.view.ObjectsTabsView;
+import ru.yar.vi.rm.data.OfficeDO;
+import ru.yar.vi.rm.data.SiteDO;
 
 public abstract class RightPaneView extends EventDispatcher {
     /**
@@ -59,11 +58,12 @@ public abstract class RightPaneView extends EventDispatcher {
 			public void buttonClick(ClickEvent event) {
 				Object value = officeSelect.getConvertedValue();
 				if(value != null) {
-					OfficeDO office = MyUI.getCurrentUI().getOfficeContainer().getItem(value).getEntity();
+					OfficeDO office = MyUI.getCurrentUI().getOfficeContainer().getItem(value).getBean();
 					MyUI.getCurrentUI().setOffice(office);
 				} else {
 					MyUI.getCurrentUI().setOffice(null);
 				}
+				MyUI.getCurrentUI().updateContainerForObjects();
 				Navigator navigator = MyUI.getCurrentUI().getNavigator();
                 navigator.navigateTo(navigator.getState());
 			}
@@ -92,12 +92,11 @@ public abstract class RightPaneView extends EventDispatcher {
 			Object value = siteSelect.getConvertedValue();
 			SiteDO site = MyUI.getCurrentUI().getSiteContainer().getItem(value).getEntity();
 			MyUI.getCurrentUI().setSite(site);
-			JPAContainer<OfficeDO> officeContainer = MyUI.getCurrentUI().getOfficeContainer();
-			officeContainer.removeAllContainerFilters();
-			officeContainer.addContainerFilter(new Compare.Equal("site", site));
+			MyUI.getCurrentUI().updateContainerForSite();
+			officeSelect.setContainerDataSource(MyUI.getCurrentUI().getOfficeContainer());
+			MyUI.getCurrentUI().initializeTopLevelMenu(ObjectsTabsView.class);
 			Navigator navigator = MyUI.getCurrentUI().getNavigator();
             navigator.navigateTo(navigator.getState());
-    		
     	});
     	cl.addComponent(siteSelect,"siteChooser");
     	

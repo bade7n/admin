@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import ru.yar.vi.rm.data.ObjectIdentifiable;
-
-import com.vaadin.addon.jpacontainer.EntityContainer;
+import com.vaadin.data.Container;
 import com.vaadin.data.util.converter.Converter;
+
+import ru.yar.vi.rm.data.ObjectIdentifiable;
 
 
 public class MyTwinColSelectStringConverter<T> implements Converter<Object,List> {
 	
-	private EntityContainer<T> container;
+	private Container container;
 
-	public MyTwinColSelectStringConverter(EntityContainer<T> container) {
+	public MyTwinColSelectStringConverter(Container container) {
 		this.container = container;
 		
 	}
@@ -30,7 +30,7 @@ public class MyTwinColSelectStringConverter<T> implements Converter<Object,List>
 		ArrayList<T> list = new ArrayList<T>();
 		while(it.hasNext()) {
 			Object k = it.next();
-			T item = container.getItem(k).getEntity();
+			T item = JPAUtils.getBeanByItem(container.getItem(k));
 			list.add(item);
 		}
 		return list;

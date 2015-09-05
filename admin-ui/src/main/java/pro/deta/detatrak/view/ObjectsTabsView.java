@@ -1,9 +1,18 @@
 package pro.deta.detatrak.view;
 
+import java.util.List;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Container.Filterable;
+import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.filter.Compare;
+import com.vaadin.navigator.ViewChangeListener;
+
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.controls.objects.ObjectView;
 import pro.deta.detatrak.controls.objects.OfficeView;
-import pro.deta.detatrak.controls.objects.RegionView;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.util.NewRightPaneTabsView;
 import pro.deta.detatrak.util.TopLevelMenuView;
@@ -14,12 +23,6 @@ import pro.deta.detatrak.view.layout.TableLayout;
 import pro.deta.security.SecurityElement;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.OfficeDO;
-import ru.yar.vi.rm.data.RegionDO;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Compare;
-import com.vaadin.navigator.ViewChangeListener;
 
 @TopLevelMenuView(icon="icon-object")
 public class ObjectsTabsView extends NewRightPaneTabsView implements Captioned,Initializable,Restrictable {
@@ -30,15 +33,14 @@ public class ObjectsTabsView extends NewRightPaneTabsView implements Captioned,I
 	public static final String NAV_KEY = "/objects";
 
 	private JPAContainer<ObjectDO> objectsContainer;
-	private JPAContainer<OfficeDO> officesContainer;
-	private JPAContainer<RegionDO> regionsContainer;
+	private BeanContainer<Integer, OfficeDO> officesContainer;
 
 	
     @Override
 	public Layout getLayoutDefinition() {
-		officesContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
-    	objectsContainer = JPAUtils.createCachingJPAContainer(ObjectDO.class);
-		regionsContainer = JPAUtils.createCachingJPAContainer(RegionDO.class);
+    	officesContainer = MyUI.getCurrentUI().getOfficeContainer();
+    	
+    	objectsContainer = MyUI.getCurrentUI().getObjectContainer();
 		objectsContainer.addNestedContainerProperty("office.name");
 		objectsContainer.addNestedContainerProperty("type.name");
 		
@@ -55,32 +57,17 @@ public class ObjectsTabsView extends NewRightPaneTabsView implements Captioned,I
     			new TableColumnLayout("type.name", bundle.getString("label.type")),
     			new TableColumnLayout("office.name", bundle.getString("label.office"))
     	));
-    	RegionView region = new RegionView();
-    	tsl.addTab(new TableLayout(regionsContainer, bundle.getString("label.regions"),region.getNavKey(), 
-    			new TableColumnLayout("name",  bundle.getString("label.name"))
-    	));
 
         addForInitialization(this);
         addForInitialization(office,officesContainer);
         addForInitialization(object,objectsContainer);
-        addForInitialization(region,regionsContainer);
         return tsl;
     }
 
 	@Override
 	public void changeView(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-		objectsContainer.removeAllContainerFilters();    		
-		officesContainer.removeAllContainerFilters();
-		regionsContainer.removeAllContainerFilters();
-
-		OfficeDO office = MyUI.getCurrentUI().getOffice();
-		if(office != null) {
-			Filter filter = new Compare.Equal("office", office);
-			objectsContainer.addContainerFilter(filter);
-
-			Filter officeFilter = new Compare.Equal("id", office.getId());
-			officesContainer.addContainerFilter(officeFilter);
-		}
+		officesContainer = MyUI.getCurrentUI().getOfficeContainer();
+		objectsContainer = MyUI.getCurrentUI().getObjectContainer();
 	}
 
 	

@@ -1,10 +1,8 @@
 package pro.deta.detatrak.view.layout;
 
-import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.data.Container;
 
 public class ValuesContainer<T> {
-	private EntityContainer<T> entityContainer;
 	private String valueField = "name";
 	private Container container;
 
@@ -14,16 +12,9 @@ public class ValuesContainer<T> {
 	}
 
 	public ValuesContainer(Container valuesContainer) {
-		if(valuesContainer instanceof EntityContainer)
-			this.entityContainer = (EntityContainer<T>) valuesContainer;
-
 		this.container = valuesContainer;
 	}
 
-	public EntityContainer<T> getEntityContainer() {
-		return entityContainer;
-	}
-	
 	public Container getContainer() {
 		return container;
 	}

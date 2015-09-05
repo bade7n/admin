@@ -1,7 +1,7 @@
 package pro.deta.detatrak.util;
 
-import com.vaadin.addon.jpacontainer.EntityContainer;
+import com.vaadin.data.Container;
 
 public interface EntityContainerHandler<T> {
-	public void setEntityContainer(EntityContainer<T> container);
+	public void setContainer(Container container);
 }

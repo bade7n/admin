@@ -4,18 +4,19 @@ package pro.deta.detatrak.presenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pro.deta.detatrak.event.EventBase;
-import pro.deta.detatrak.util.EntityContainerHandler;
-import pro.deta.detatrak.util.JPAUtils;
-import ru.yar.vi.rm.model.NumberWrapper;
-
 import com.vaadin.addon.jpacontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container;
+import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.PopupView;
+
+import pro.deta.detatrak.event.EventBase;
+import pro.deta.detatrak.util.EntityContainerHandler;
+import pro.deta.detatrak.util.JPAUtils;
+import ru.yar.vi.rm.model.NumberWrapper;
 
 
 public abstract class JPAEntityViewBase<E> extends EditViewBase implements EntityContainerHandler<E> {
@@ -24,17 +25,15 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 	 */
 	private static final long serialVersionUID = 8600864478538693787L;
 	public static final Logger logger = LoggerFactory.getLogger(JPAEntityViewBase.class);
-	protected EntityItem<E> item = null;
-	protected EntityContainer<E> container = null;
+	protected Item item = null;
+	protected Container container = null;
 	protected Object itemId = null;
-	protected BeanItem<E> addedBean = null;
+//	protected BeanItem<E> addedBean = null;
 	protected Class<E> type = null;
 	protected FieldGroup binder;
-//	private TableBuilder tableBuilder;
-//	private ItemSetChangeEvent event;
+	E bean = null;
 
 	public JPAEntityViewBase(Class<E> e) {
-//		this.container = JPAUtils.createCachingJPAContainer(e);
 		type = e;
 	}
 
@@ -42,25 +41,6 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		
 	}
 
-	public void setEntityContainer(EntityContainer<E> container) {
-		this.container = container;
-	}
-	
-	/**
-	 * commented out due to not using.
-	 * @param tb
-	@SuppressWarnings("serial")
-	public void setTableBuilder(TableBuilder tb) {
-		this.tableBuilder = tb;
-		event = new ItemSetChangeEvent() {
-			@Override
-			public Container getContainer() {
-				return tableBuilder.getContainer();
-			}
-		};
-	}
-	
-	 */
 	@Override
 	protected void buildUI(String parameter) {
 		item = null;
@@ -71,18 +51,17 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		binder.setBuffered(false);
 		if(itemId == null) {
 			// если создаём новый объект - не надо его делать через JPA, в режиме Bean
-			E bean = createBean();
-			addedBean = new BeanItem<E>(bean);
-			binder.setItemDataSource(addedBean);
+			bean = createBean();
+			binder.setItemDataSource(new BeanItem<E>(bean));
 			initForm(binder,bean);
 		} else {
 			item = container.getItem(itemId);
 			binder.setItemDataSource(item);
-			initForm(binder,item.getEntity());
+			bean = JPAUtils.getBeanByItem(item);
+			initForm(binder,bean);
 		}
 		
 	}
-
 	
 	
 	public E createBean() {
@@ -114,32 +93,17 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		} catch (CommitException e1) {
 			logger.error("Error while binder.commit",e1);
 		}
-		if(item == null) {
-			E e = addedBean.getBean();
-			saveEntity(e);
-			save(e);
-//			postSaveEntity(e);
-		} else {
-			E e = item.getEntity();
-			saveEntity(e);
-			save(e);
-//			postSaveEntity(e);
-		}
+		saveEntity(bean);
+		save(bean);
 	}
 	
 	private final void save(Object o) {
 		JPAUtils.save(o);
 		dispatchEvent(new EventBase("save"));
-//		if(tableBuilder != null && tableBuilder.getTable()!= null) {
-//			tableBuilder.getTable().containerItemSetChange(event);
-//		}
 	}
 
 	public void saveEntity(E obj) {
-		
 	}
-	
-
 	
 	public void cancel() {
 		binder.discard();
@@ -149,5 +113,9 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 
 	public void postCancel() {
 		
+	}
+
+	public void setContainer(Container container) {
+		this.container = container;
 	}
 }

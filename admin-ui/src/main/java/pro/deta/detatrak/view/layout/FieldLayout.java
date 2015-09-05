@@ -93,7 +93,7 @@ public class FieldLayout implements Layout<FormParameter<Object>> {
 			c = ComponentsBuilder.createCKEditorTextFieldNoBind(getCaption());
 			break;
 		case TWINCOLSELECT:
-			c = ComponentsBuilder.createTwinColSelectNoBind(getCaption(), valuesContainer.getEntityContainer(),valuesContainer.getValueField());
+			c = ComponentsBuilder.createTwinColSelectNoBind(getCaption(), valuesContainer.getContainer(),valuesContainer.getValueField());
 			break;
 		case ACCESSCOMBOBOX:
 			c = ComponentsBuilder.createAccessComboBoxNoBind(caption);

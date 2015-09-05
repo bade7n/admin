@@ -3,6 +3,11 @@ package pro.deta.detatrak.presenter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.ui.Component;
+
 import pro.deta.detatrak.event.EventBase;
 import pro.deta.detatrak.util.JPAUtils;
 import pro.deta.detatrak.view.layout.BuildLayoutParameter;
@@ -10,11 +15,6 @@ import pro.deta.detatrak.view.layout.FormParameter;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.LayoutDefinitionException;
 import pro.deta.detatrak.view.layout.LayoutRuntimeException;
-
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Component;
 
 public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 	public static final Logger logger = LoggerFactory.getLogger(LayoutEntityViewBase.class);
@@ -38,14 +38,14 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 			binder.setBuffered(true);
 			if(itemId == null) {
 				// если создаём новый объект - не надо его делать через JPA, в режиме Bean
-				E bean = createBean();
-				addedBean = new BeanItem<E>(bean);
-				binder.setItemDataSource(addedBean);
+				bean = createBean();
+				binder.setItemDataSource(new BeanItem<E>(bean));
 				addComponent(buildDefinition(binder,bean));
 			} else {
 				item = container.getItem(itemId);//container.getItem(10)
 				binder.setItemDataSource(item);
-				addComponent(buildDefinition(binder,item.getEntity()));
+				bean = JPAUtils.getBeanByItem(item);
+				addComponent(buildDefinition(binder,bean));
 			}
 		} catch (LayoutDefinitionException e) {
 			logger.error("Error while building form definition for bean " + item +" by " + itemId + e.getMessage());
@@ -87,21 +87,14 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 			logger.error("Error while binder.commit",e1);
 		}
 
-		E e = null;
-		if(item == null) {
-			e = addedBean.getBean();
-		} else {
-			e = item.getEntity();
-		}
-
 		try {
-			BuildLayoutParameter<FormParameter<E>> layoutParameters = getLayoutParameters(e);
+			BuildLayoutParameter<FormParameter<E>> layoutParameters = getLayoutParameters(bean);
 			formDefinition.save(layoutParameters);
 		} catch (LayoutRuntimeException e1) {
 			logger.error("Error while propagating save event to layout.", e1);
 		}
-		saveEntity(e);
-		save(e);
+		saveEntity(bean);
+		save(bean);
 	}
 
 	private final void save(Object o) {
@@ -120,14 +113,8 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 
 	public void cancel() {
 		binder.discard();
-		E e = null;
-		if(item == null) {
-			e = addedBean.getBean();
-		} else {
-			e = item.getEntity();
-		}
 		try {
-			formDefinition.cancel(getLayoutParameters(e));
+			formDefinition.cancel(getLayoutParameters(bean));
 		} catch (LayoutRuntimeException e1) {
 			logger.error("Error while propagating save event to layout.", e1);
 		}
