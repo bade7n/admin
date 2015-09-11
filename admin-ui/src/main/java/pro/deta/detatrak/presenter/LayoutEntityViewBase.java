@@ -39,14 +39,12 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 			if(itemId == null) {
 				// если создаём новый объект - не надо его делать через JPA, в режиме Bean
 				bean = createBean();
-				binder.setItemDataSource(new BeanItem<E>(bean));
-				addComponent(buildDefinition(binder,bean));
 			} else {
-				item = container.getItem(itemId);//container.getItem(10)
-				binder.setItemDataSource(item);
+				item = container.getItem(itemId);
 				bean = JPAUtils.getBeanByItem(item);
-				addComponent(buildDefinition(binder,bean));
 			}
+			binder.setItemDataSource(new BeanItem<E>(bean));
+			addComponent(buildDefinition(binder,bean));
 		} catch (LayoutDefinitionException e) {
 			logger.error("Error while building form definition for bean " + item +" by " + itemId + e.getMessage());
 		}
@@ -93,20 +91,25 @@ public abstract class LayoutEntityViewBase<E> extends JPAEntityViewBase<E>{
 		} catch (LayoutRuntimeException e1) {
 			logger.error("Error while propagating save event to layout.", e1);
 		}
-		saveEntity(bean);
-		save(bean);
-	}
-
-	private final void save(Object o) {
-		JPAUtils.save(o);
+		preSaveEntity(bean);
+		bean = save(bean);
+		postSaveEntity(bean);
 		dispatchEvent(new EventBase("save"));
-		//		if(tableBuilder != null && tableBuilder.getTable()!= null) {
-		//			tableBuilder.getTable().containerItemSetChange(event);
-		//		}
 	}
 
-	public void saveEntity(E obj) {
+	protected E postSaveEntity(E bean) {
+		return bean; 
+	}
 
+
+	protected E save(E o) {
+		E e = JPAUtils.save(o);
+		return e;
+	}
+
+	@Override
+	protected E preSaveEntity(E obj) {
+		return obj;
 	}
 
 

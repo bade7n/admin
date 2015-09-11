@@ -13,9 +13,11 @@ import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.ObjectDO;
 import ru.yar.vi.rm.data.ObjectTypeDO;
 import ru.yar.vi.rm.data.OfficeDO;
+import ru.yar.vi.rm.data.RegionDO;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.BeanContainer;
 
 public class ObjectView extends LayoutEntityViewBase<ObjectDO> {
 
@@ -30,8 +32,8 @@ public class ObjectView extends LayoutEntityViewBase<ObjectDO> {
     }
 
     public Layout getFormDefinition() {
-    	JPAContainer<ObjectTypeDO> objectTypeContainer = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);
-    	JPAContainer<OfficeDO> officeContainer = JPAUtils.createCachingJPAContainer(OfficeDO.class);
+    	BeanContainer<Integer,ObjectTypeDO> objectTypeContainer =  MyUI.createContainer(MyUI.getCurrentUI().getSite().getTypes(),ObjectTypeDO.class,"id");
+    	BeanContainer<Integer,OfficeDO> officeContainer =  MyUI.createContainer(MyUI.getCurrentUI().getSite().getOffices(),OfficeDO.class,"id");
 
 		TabSheetLayout l = new TabSheetLayout();
 		l.addTab(new DetaFormLayout("Основные настройки",
@@ -50,13 +52,25 @@ public class ObjectView extends LayoutEntityViewBase<ObjectDO> {
 	}
 
     @Override
-    public void saveEntity(ObjectDO obj) {
+    public ObjectDO preSaveEntity(ObjectDO obj) {
     	obj.setOffice(MyUI.getCurrentUI().getOffice());
+    	return obj;
     }
 
+    public ObjectDO postSaveEntity(ObjectDO obj) {
+    	MyUI.getCurrentUI().getObjectContainer().refresh();
+    	return obj;
+    }
+    
 	@Override
 	public String getNavKey() {
 		return NAV_KEY;
+	}
+	
+	public ObjectDO createBean() {
+		ObjectDO o = new ObjectDO();
+		o.setOffice(MyUI.getCurrentUI().getOffice());
+		return o;
 	}
 
 }

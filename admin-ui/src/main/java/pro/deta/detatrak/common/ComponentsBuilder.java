@@ -141,7 +141,8 @@ public class ComponentsBuilder {
         comboBox.setWidth(width);
         comboBox.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         comboBox.setItemCaptionPropertyId(captionField);
-        comboBox.setConverter(new SingleSelectConverter(comboBox));
+        comboBox.setConverter(new BaseDOToIntegerConverter(container));
+//        comboBox.setConverter(new SingleSelectConverter(comboBox));
         return comboBox;
     }
     

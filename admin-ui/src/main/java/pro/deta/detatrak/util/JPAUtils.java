@@ -12,6 +12,7 @@ import com.vaadin.data.util.BeanItem;
 
 import pro.deta.detatrak.HibernateLazyLoadingDelegate;
 import pro.deta.detatrak.LazyHibernateEntityManagerProvider;
+import ru.yar.vi.rm.data.OfficeDO;
 
 public class JPAUtils {
 	static public<T extends Object> JPAContainer<T> createCachingJPAContainer(Class<T> class1) {
@@ -26,11 +27,15 @@ public class JPAUtils {
 	}
 	
 	public static <E> E getBeanByItem(Item item) {
+		E bean = null;
 		if(item instanceof EntityItem)
-			return ((EntityItem<E>) item).getEntity();
-		else if (item instanceof BeanItem)
-			return ((BeanItem<E>) item).getBean();
-		return null;
+			bean = ((EntityItem<E>) item).getEntity();
+		else if (item instanceof BeanItem) {
+			bean = ((BeanItem<E>) item).getBean();
+		}
+		if(bean != null)
+			bean = getEntityManager().merge(bean);
+		return bean;
 	}
 	
 	static public<T extends Object> JPAContainer<T> createJPAContainer(Class<T> class1) {
@@ -47,17 +52,19 @@ public class JPAUtils {
 		return LazyHibernateEntityManagerProvider.getInstance().getEntityManager();
 	}
 	
-	public static void save(Object o) {
+	public static<T> T save(T o) {
+		T merged = null;
 		try {
 			if(!getEntityManager().getTransaction().isActive())
 				getEntityManager().getTransaction().begin();
-			Object merged = getEntityManager().merge(o);
+			merged = getEntityManager().merge(o);
 			getEntityManager().persist(merged);
 			getEntityManager().getTransaction().commit();
 		} finally {
 			if(getEntityManager().getTransaction().isActive())
 				getEntityManager().getTransaction().rollback();
 		}
+		return merged;
 	}
 
 	public static void remove(Object target) {

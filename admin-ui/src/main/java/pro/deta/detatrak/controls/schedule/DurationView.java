@@ -1,6 +1,7 @@
 package pro.deta.detatrak.controls.schedule;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container;
 
 import pro.deta.detatrak.MyUI;
 import pro.deta.detatrak.presenter.LayoutEntityViewBase;
@@ -38,7 +39,7 @@ public class DurationView extends LayoutEntityViewBase<DurationDO> {
 
 	@Override
 	public Layout getFormDefinition() {
-		JPAContainer<CustomerDO> customerDataSource = JPAUtils.createCachingJPAContainer(CustomerDO.class);
+		Container customerDataSource =MyUI.createContainer(MyUI.getCurrentUI().getSite().getCustomers(),CustomerDO.class,"id");
 		JPAContainer<CriteriaDO> criteriaDataSource = JPAUtils.createCachingJPAContainer(CriteriaDO.class);
 		JPAContainer<ActionDO> actionDataSource = JPAUtils.createCachingJPAContainer(ActionDO.class);
 		JPAContainer<ObjectTypeDO> objectTypeDataSource = JPAUtils.createCachingJPAContainer(ObjectTypeDO.class);

@@ -3,16 +3,9 @@ package pro.deta.detatrak.controls.extra;
 
 
 import java.util.List;
-import java.util.Locale;
-import java.util.function.Function;
 
 import com.vaadin.addon.jpacontainer.EntityContainer;
-import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.ComboBox;
 
@@ -23,7 +16,6 @@ import pro.deta.detatrak.view.layout.DetaFormLayout;
 import pro.deta.detatrak.view.layout.EditableTableParameters;
 import pro.deta.detatrak.view.layout.FieldLayout;
 import pro.deta.detatrak.view.layout.FieldLayout.FieldType;
-import pro.deta.detatrak.view.layout.FormParameter;
 import pro.deta.detatrak.view.layout.Layout;
 import pro.deta.detatrak.view.layout.SaveCancelLayout;
 import pro.deta.detatrak.view.layout.TabSheetLayout;
@@ -31,6 +23,7 @@ import pro.deta.detatrak.view.layout.TableColumnInfo;
 import pro.deta.detatrak.view.layout.ValuesContainer;
 import ru.yar.vi.rm.data.ActionDO;
 import ru.yar.vi.rm.data.CustomerDO;
+import ru.yar.vi.rm.data.ObjectTypeDO;
 import ru.yar.vi.rm.data.OfficeDO;
 import ru.yar.vi.rm.data.RegionDO;
 import ru.yar.vi.rm.data.SiteDO;
@@ -64,6 +57,9 @@ public class SiteView extends LayoutEntityViewBase<SiteDO> {
 				new FieldLayout("Типы клиентов", "customers", FieldType.EDITABLE_LIST,
 						new EditableTableParameters<CustomerDO>(CustomerDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Тип пользователя")}, 
 								t0-> {return new CustomerDO("Новый тип пользователя");},t0-> {return t0.getId();})),
+				new FieldLayout("Типы объектов", "types", FieldType.EDITABLE_LIST,
+						new EditableTableParameters<ObjectTypeDO>(ObjectTypeDO.class, new TableColumnInfo[] {new TableColumnInfo("name","Название"),new TableColumnInfo("type","Код")}, 
+								t0-> {return new ObjectTypeDO("Новый тип");},t0-> {return t0.getId();})),
 				new SaveCancelLayout(this)
 				));
 

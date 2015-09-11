@@ -1,6 +1,5 @@
 package pro.deta.detatrak.controls.objects;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Audio;
 
@@ -42,8 +41,6 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 				new SaveCancelLayout(this)
 				));
 
-		
-
 		l.addTab(new DetaFormLayout("Электронная очередь",
 				new FieldLayout("Звук вызова следующего посетителя", "sound", FieldLayout.FieldType.SOUND_FILE,new Audio()) ,
 				new FieldLayout("Общая очередь", "distinctQueue", FieldLayout.FieldType.CHECKBOX),
@@ -65,13 +62,15 @@ public class OfficeView extends LayoutEntityViewBase<OfficeDO> {
 		return NAV_KEY;
 	}
 
-
 	@Override
-	public OfficeDO createBean() {
-		OfficeDO office = new OfficeDO();
-		office.setSite(MyUI.getCurrentUI().getSite());
-		return office;
+	public OfficeDO save(OfficeDO obj) {
+		super.preSaveEntity(obj);
+		obj.setSite(MyUI.getCurrentUI().getSite());
+		obj.getSite().getOffices().add(obj);
+		MyUI.getCurrentUI().updateSite(JPAUtils.save(obj.getSite()));
+		return obj;
 	}
+
 }
 
 

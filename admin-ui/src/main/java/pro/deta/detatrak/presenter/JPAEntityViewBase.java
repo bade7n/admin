@@ -28,7 +28,6 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 	protected Item item = null;
 	protected Container container = null;
 	protected Object itemId = null;
-//	protected BeanItem<E> addedBean = null;
 	protected Class<E> type = null;
 	protected FieldGroup binder;
 	E bean = null;
@@ -93,7 +92,7 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		} catch (CommitException e1) {
 			logger.error("Error while binder.commit",e1);
 		}
-		saveEntity(bean);
+		preSaveEntity(bean);
 		save(bean);
 	}
 	
@@ -102,7 +101,8 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 		dispatchEvent(new EventBase("save"));
 	}
 
-	public void saveEntity(E obj) {
+	protected E preSaveEntity(E obj) {
+		return obj;
 	}
 	
 	public void cancel() {
@@ -117,5 +117,9 @@ public abstract class JPAEntityViewBase<E> extends EditViewBase implements Entit
 
 	public void setContainer(Container container) {
 		this.container = container;
+	}
+
+	public Container getContainer() {
+		return container;
 	}
 }

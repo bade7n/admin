@@ -198,6 +198,7 @@ public class LoginView extends VerticalLayout {
 					}
 					MyUI.getCurrentUI().setOfficeContainer(officeContainer);
 					MyUI.getCurrentUI().setOffice(officeContainer.getItem(officeContainer.firstItemId()).getBean());
+					MyUI.getCurrentUI().updateObjectContainer();
 					MyUI.getCurrentUI().buildOfficeChooser();
 				}
 			}

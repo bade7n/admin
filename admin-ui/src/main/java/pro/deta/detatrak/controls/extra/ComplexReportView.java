@@ -80,7 +80,7 @@ public class ComplexReportView extends JPAEntityViewBase<ComplexReportDO> {
 	}
 	
 	@Override
-	public void saveEntity(ComplexReportDO obj) {
+	public void preSaveEntity(ComplexReportDO obj) {
 		listBuilder.commit();
 		if(obj.getObjects()!= null)
 			obj.getObjects().clear();

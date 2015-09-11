@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.filter.Filters;
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
@@ -84,9 +86,10 @@ public class ScheduleTabsView extends NewRightPaneTabsView implements Captioned,
 
     				@Override
     				public Object generateCell(Table source, Object itemId, Object columnId) {
-    					String value = (String) source.getContainerProperty(itemId, "schedule").getValue();
-    					if(value == null)
-    						value = "";
+    					Property it = source.getContainerProperty(itemId, "schedule");
+    					String value = "";
+    					if(it != null && it.getValue() != null)
+    						 value = (String) it.getValue();
     					int rows = value.split(";").length;
 
     					int length = value.length();

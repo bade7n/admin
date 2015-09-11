@@ -44,7 +44,7 @@ public class UserView extends JPAEntityViewBase<UserDO> {
         form.addComponent(ComponentsBuilder.createSaveCancelButtons(this));
 	}
 	@Override
-	public void saveEntity(UserDO obj) {
+	public void preSaveEntity(UserDO obj) {
 		if(password.getValue() != null && !"".equalsIgnoreCase(password.getValue())) {
 			String passw = DataUtil.md5(password.getValue());
 			obj.setPass(passw);

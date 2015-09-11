@@ -45,9 +45,9 @@ public class ReportObjectView extends LayoutEntityViewBase<ReportObjectDO> {
 		return l;
 	}
 	@Override
-	public void saveEntity(ReportObjectDO obj) {
+	public void preSaveEntity(ReportObjectDO obj) {
 		// TODO Добавить валидацию что выбран только один объект - либо офис либо объект либо объявление.
-		super.saveEntity(obj);
+		super.preSaveEntity(obj);
 	}
 
 	@Override

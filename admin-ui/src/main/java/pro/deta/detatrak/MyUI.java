@@ -194,8 +194,6 @@ public class MyUI extends UI {
 						if(!DataUtil.matchElement(secList, init.getRestriction()))
 							return;
 					}
-						
-					
 					if(Initializable.class.isInstance(v)) {
 						Initializable init = (Initializable) v;
 						TabViewPresenter presenter = new TabViewPresenter(getNavigator(), nav);
@@ -236,13 +234,23 @@ public class MyUI extends UI {
 	}
 
 	public void updateContainerForSite() {
-		setOfficeContainer(createOfficeContainer());
+		updateOfficeContainer();
 		OfficeDO office = officeContainer.getItem(officeContainer.firstItemId()).getBean();
 		setOffice(office);
-		updateContainerForObjects();
+		updateObjectContainer();
 	}
 	
-	public void updateContainerForObjects() {
+	public void updateSite(SiteDO newSite) {
+		setSite(newSite);
+		updateContainerForSite();
+	}
+	
+	public void updateOfficeContainer() {
+		getOfficeContainer().removeAllItems();
+		officeContainer.addAll(getSite().getOffices());
+	}
+	
+	public void updateObjectContainer() {
     	objectContainer.removeAllContainerFilters();
     	Filter[] filters = new Filter[site.getOffices().size()];
     	int i =0;

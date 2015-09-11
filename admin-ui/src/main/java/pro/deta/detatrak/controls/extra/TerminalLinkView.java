@@ -54,9 +54,9 @@ public class TerminalLinkView extends JPAEntityViewBase<TerminalLinkDO> implemen
 	}
 
 	@Override
-	public void saveEntity(TerminalLinkDO obj) {
+	public void preSaveEntity(TerminalLinkDO obj) {
 		// TODO Добавить валидацию что выбран только один объект - либо офис либо объект либо объявление.
-		super.saveEntity(obj);
+		super.preSaveEntity(obj);
 		view.setPopupVisible(false);
 	}
 

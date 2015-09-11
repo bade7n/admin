@@ -89,11 +89,11 @@ public class ExtraTabsView extends NewRightPaneTabsView  implements Captioned,In
 		TabSheetLayout tsl = new TabSheetLayout();
 
 
-		ObjectTypeView objectType = new ObjectTypeView();
-		tsl.addTab(new TableLayout(objectTypeContainer,bundle.getString("label.objectType"), objectType.getNavKey(),
-				new TableColumnLayout("name",bundle.getString("label.name")),
-				new TableColumnLayout("type",bundle.getString("label.type"))
-				));
+//		ObjectTypeView objectType = new ObjectTypeView();
+//		tsl.addTab(new TableLayout(objectTypeContainer,bundle.getString("label.objectType"), objectType.getNavKey(),
+//				new TableColumnLayout("name",bundle.getString("label.name")),
+//				new TableColumnLayout("type",bundle.getString("label.type"))
+//				));
 
 
 		ObjectTypeItemView objectTypeItem = new ObjectTypeItemView();
@@ -223,7 +223,7 @@ public class ExtraTabsView extends NewRightPaneTabsView  implements Captioned,In
 
 		addForInitialization(this);
 
-		addForInitialization(objectType,objectTypeContainer);
+//		addForInitialization(objectType,objectTypeContainer);
 		addForInitialization(objectTypeItem,objectTypeItemContainer);
 		addForInitialization(configuration,configContainer);
 		addForInitialization(site,siteContainer);

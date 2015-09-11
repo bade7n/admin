@@ -63,7 +63,7 @@ public abstract class RightPaneView extends EventDispatcher {
 				} else {
 					MyUI.getCurrentUI().setOffice(null);
 				}
-				MyUI.getCurrentUI().updateContainerForObjects();
+				MyUI.getCurrentUI().updateObjectContainer();
 				Navigator navigator = MyUI.getCurrentUI().getNavigator();
                 navigator.navigateTo(navigator.getState());
 			}
@@ -91,10 +91,8 @@ public abstract class RightPaneView extends EventDispatcher {
     	siteSelect.addValueChangeListener(event ->{
 			Object value = siteSelect.getConvertedValue();
 			SiteDO site = MyUI.getCurrentUI().getSiteContainer().getItem(value).getEntity();
-			MyUI.getCurrentUI().setSite(site);
-			MyUI.getCurrentUI().updateContainerForSite();
-			officeSelect.setContainerDataSource(MyUI.getCurrentUI().getOfficeContainer());
-			MyUI.getCurrentUI().initializeTopLevelMenu(ObjectsTabsView.class);
+			MyUI.getCurrentUI().updateSite(site);
+//			MyUI.getCurrentUI().initializeTopLevelMenu(ObjectsTabsView.class);
 			Navigator navigator = MyUI.getCurrentUI().getNavigator();
             navigator.navigateTo(navigator.getState());
     	});

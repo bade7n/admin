@@ -78,7 +78,7 @@ public class NavigationView extends JPAEntityViewBase<NavigationDO> {
 	}
 	
 	@Override
-	public void saveEntity(NavigationDO obj) {
+	public void preSaveEntity(NavigationDO obj) {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		if(imageSource  != null)
 		try {
