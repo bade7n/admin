@@ -42,7 +42,7 @@
 		<profile>
 			<id>gbd</id>
 			<properties>
-				<tmpDir>/home/vi/.m2</tmpDir>
+				<tmpDir>/home/rm/.m2</tmpDir>
 				<archiveDir>/home/rm/old</archiveDir>
 				<workDir>/home/rm/webapps</workDir>
 				<contextName>vadmin</contextName>
